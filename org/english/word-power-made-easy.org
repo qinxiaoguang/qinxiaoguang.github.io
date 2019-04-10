@@ -1,6 +1,4 @@
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 #+TITLE: word power made easy学习笔记
-
 * some tips
 1. ns读z
 
@@ -134,3 +132,4 @@ ascetic 禁欲的，苦行僧 从希腊单词asketes(隐士、僧侣)
 | geras   | Greek | old age             | geriatrics(老人病学),geriatrician(老年医学专家),geriatric(老年医学的)                                                                                              |
 
 * session 7
+

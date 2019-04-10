@@ -1,3 +1,6 @@
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
-#+TITLE: 主页
+#+TITLE: index
 
+* study
+  * [[file:study/双拼学习.org][双拼学习]]
+* english
+  * [[file:english/word-power-made-easy.org][word power made easy学习笔记]]

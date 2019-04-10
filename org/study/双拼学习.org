@@ -1,0 +1,4 @@
+#+TITLE: 双拼学习
+
+练习地址：https://api.ihint.me/shuang/
+桌面背景: [[https://qinxiaoguang.github.io/blog/static/img/sp_study.jpg]]
