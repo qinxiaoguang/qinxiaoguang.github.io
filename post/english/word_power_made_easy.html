@@ -1,0 +1,874 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-04-10 Wed 12:45 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>word power made easy学习笔记</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Qin" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href=""> UP </a>
+ |
+ <a accesskey="H" href="https://qinxiaoguang.github.io/blog/post/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">word power made easy学习笔记</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org6a9c2cb">some tips</a></li>
+<li><a href="#org86b4d74">session 1</a></li>
+<li><a href="#org1e5a80f">session 2</a></li>
+<li><a href="#orgcb82c74">session 3</a>
+<ul>
+<li><a href="#orgb9b6bea">part 1</a></li>
+<li><a href="#org6ba5ad3">part 2</a></li>
+</ul>
+</li>
+<li><a href="#org52d6e23">session 4</a></li>
+<li><a href="#orge60a4d7">session 5</a></li>
+<li><a href="#org59f51b8">session 6</a></li>
+<li><a href="#orgead8280">session 7</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6a9c2cb" class="outline-2">
+<h2 id="org6a9c2cb">some tips</h2>
+<div class="outline-text-2" id="text-org6a9c2cb">
+<ol class="org-ol">
+<li>ns读z</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org86b4d74" class="outline-2">
+<h2 id="org86b4d74">session 1</h2>
+<div class="outline-text-2" id="text-org86b4d74">
+<ol class="org-ol">
+<li>egoist 利己主义者</li>
+<li>egotist 利己主义者，自负</li>
+<li>altruist 利他主义者</li>
+<li>introvert 内向者</li>
+<li>extrovert 外向者</li>
+<li>ambivert 中向性格者（既内向又外向）</li>
+<li>misanthrope 厌人者(厌世者)</li>
+<li>misogynist 厌女人者</li>
+<li>misogamist 厌结婚的女人者</li>
+<li>ascetic 苦行僧 禁欲者</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org1e5a80f" class="outline-2">
+<h2 id="org1e5a80f">session 2</h2>
+<div class="outline-text-2" id="text-org1e5a80f">
+<ol class="org-ol">
+<li>`egocentric` 利己主义者，以自我为中心，自负的。</li>
+<li>`egomaniac` 利己到病态(mania)的地步了，极端利己主义者，加上-al变成adj : `egomaniacal`</li>
+<li>词根 alter (与other相关，如本意改变，就是改成other thing) =&gt; altruist(利他主义者)、altruism(利他主义)、altruistic(利他的)、alternate(替代的)、alteration(变更改变)、altercation(与other争吵)、alter ego(密友、至交)</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgcb82c74" class="outline-2">
+<h2 id="orgcb82c74">session 3</h2>
+<div class="outline-text-2" id="text-orgcb82c74">
+</div>
+<div id="outline-container-orgb9b6bea" class="outline-3">
+<h3 id="orgb9b6bea">part 1</h3>
+<div class="outline-text-3" id="text-orgb9b6bea">
+<ol class="org-ol">
+<li>词根 verto =&gt; introvert, extrovert,ambivert.</li>
+<li>ambi- 前缀，表both,如ambidextrous</li>
+<li>dexterous:表示skillful, dextrity:表示skill</li>
+<li>ous是常见的形容词后缀(eg:famous, dangerous)，ity是常见的名词后缀(eg:vanity,quality,simplicity)</li>
+<li>注意dexterous和ambidextrous的拼写不同。</li>
+<li>dexter在拉丁文中表示right hand（右手较灵活)</li>
+<li>left-handed 是awkward的同义词</li>
+<li>sinister在拉丁文中表示left hand,但是意为危险的，邪恶的</li>
+<li>gauche 在法语中是left hand,gaucherie 为noun</li>
+<li>droit 在法语中是right hand,  用他来建造了一个英语单词叫adroit,表示灵巧的敏捷的</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org6ba5ad3" class="outline-3">
+<h3 id="org6ba5ad3">part 2</h3>
+<div class="outline-text-3" id="text-org6ba5ad3">
+<ol class="org-ol">
+<li>misanthrope、misogynist、misogamist等出自希腊语misein(表hate),即mis- 表hate</li>
+<li>anthrope在希腊语中表示mankind,所以misanthrope表示hate mankind.</li>
+<li>gyne在希腊语中表示women,所以misogynist表示hate women.</li>
+<li>gamos在希腊语中表示marriage,所以misgamist表示hate marriaged</li>
+<li>anthropology中可以找到anthrope,表示人类学</li>
+<li>philanthropist 中也有anthrope,表示慈善家</li>
+<li>词根gyne(表woman)=&gt; gynecologist(妇科医生)、</li>
+<li>词根gamos(表结婚的)=&gt; monogamy(一夫一妻制),bigamy(重婚),polygamy(多配偶制)</li>
+<li>mono-表示一个，bi-表示2个，poly-表示多个</li>
+<li>古代的一夫多妻制度正确的且实际上的用polygyny来表示，但是很少使用。而一妻多夫制的正确说法是polyandry(poly + andros,希腊语中andros表示male)</li>
+</ol>
+
+<p>
+英语有很多形式，可以导来导去，如从跟人有关的名词(xxx者)加上后缀导出其心理方面、态度方面或者实践方面的名词或形容词等，如：
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">与人有关的名词</th>
+<th scope="col" class="org-left">心理、实践、态度等名词</th>
+<th scope="col" class="org-left">形容词</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">misanthrope、misanthropist 厌世者、厌人者</td>
+<td class="org-left">misanthropy 厌恶人类</td>
+<td class="org-left">misanthropic 厌恶人物的、愤世嫉俗的</td>
+</tr>
+
+<tr>
+<td class="org-left">misogynist 厌女人者</td>
+<td class="org-left">misogyny 厌恶女人</td>
+<td class="org-left">misogynous、misogynistic 厌恶女人的</td>
+</tr>
+
+<tr>
+<td class="org-left">gynecologist 妇科医生</td>
+<td class="org-left">gynecology 妇科医学</td>
+<td class="org-left">gynecological 妇科医学的</td>
+</tr>
+
+<tr>
+<td class="org-left">monogamist 遵守一夫一妻制的人</td>
+<td class="org-left">monogamy 一夫一妻制</td>
+<td class="org-left">monogamous 一夫一妻的、单配的</td>
+</tr>
+
+<tr>
+<td class="org-left">bigamist 重婚者</td>
+<td class="org-left">bigamy 重婚</td>
+<td class="org-left">bigamous 重婚的</td>
+</tr>
+
+<tr>
+<td class="org-left">polygamist 一夫多妻、多配偶</td>
+<td class="org-left">polygamy 一夫多妻制</td>
+<td class="org-left">polygamous 一夫多妻的、一妻多夫的、多配偶的</td>
+</tr>
+
+<tr>
+<td class="org-left">polygynist 多妻的人、主张一夫多妻的人</td>
+<td class="org-left">polygyny 一夫多妻制</td>
+<td class="org-left">polygynous 一夫多妻的、多雌蕊的</td>
+</tr>
+
+<tr>
+<td class="org-left">polyandrist 多夫的人、主张一妻多夫的人</td>
+<td class="org-left">polyandry 一妻多夫制</td>
+<td class="org-left">polyandrous 一妻多夫的、一雌多雄的</td>
+</tr>
+
+<tr>
+<td class="org-left">philanthropist 慈善家</td>
+<td class="org-left">philanthropy 慈善</td>
+<td class="org-left">philanthropic 慈善的</td>
+</tr>
+
+<tr>
+<td class="org-left">anthropologist 人类学家</td>
+<td class="org-left">anthropology 人类学</td>
+<td class="org-left">anthropological 人类学的</td>
+</tr>
+
+<tr>
+<td class="org-left">ascetic 苦行的人</td>
+<td class="org-left">asceticism禁欲主义、苦行主义</td>
+<td class="org-left">ascetic 苦行的，禁欲的</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+ascetic 禁欲的，苦行僧 从希腊单词asketes(隐士、僧侣)
+</p>
+
+<p>
+&gt; 个人笔记：其实从这可以看出，xxx者其中一个后缀为-ist,变成相关名词则-ist变为-y即可，而n-&gt;adj,后缀的前一个字母如果是p,则去y加-ic，如果是g，则去y加-ical，r,m,n等去y加-ous。
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">词根，后缀等</th>
+<th scope="col" class="org-left">含义</th>
+<th scope="col" class="org-left">example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">ego</td>
+<td class="org-left">self,I</td>
+<td class="org-left">egoist</td>
+</tr>
+
+<tr>
+<td class="org-left">alter</td>
+<td class="org-left">other</td>
+<td class="org-left">altruist</td>
+</tr>
+
+<tr>
+<td class="org-left">intro-</td>
+<td class="org-left">inside</td>
+<td class="org-left">introvert</td>
+</tr>
+
+<tr>
+<td class="org-left">extro-</td>
+<td class="org-left">outside</td>
+<td class="org-left">extrovert</td>
+</tr>
+
+<tr>
+<td class="org-left">verto</td>
+<td class="org-left">turn</td>
+<td class="org-left">introvert</td>
+</tr>
+
+<tr>
+<td class="org-left">ambi-</td>
+<td class="org-left">both</td>
+<td class="org-left">ambivert</td>
+</tr>
+
+<tr>
+<td class="org-left">misein/mis-</td>
+<td class="org-left">hate</td>
+<td class="org-left">misanthrope</td>
+</tr>
+
+<tr>
+<td class="org-left">anthropos</td>
+<td class="org-left">mankind</td>
+<td class="org-left">misanthrope</td>
+</tr>
+
+<tr>
+<td class="org-left">gyne</td>
+<td class="org-left">woman</td>
+<td class="org-left">misogyny</td>
+</tr>
+
+<tr>
+<td class="org-left">gamos</td>
+<td class="org-left">marriage</td>
+<td class="org-left">misogamist</td>
+</tr>
+
+<tr>
+<td class="org-left">asketes</td>
+<td class="org-left">monk</td>
+<td class="org-left">ascetic</td>
+</tr>
+
+<tr>
+<td class="org-left">centrum</td>
+<td class="org-left">center</td>
+<td class="org-left">egocentric</td>
+</tr>
+
+<tr>
+<td class="org-left">mania</td>
+<td class="org-left">madness</td>
+<td class="org-left">egomaniac</td>
+</tr>
+
+<tr>
+<td class="org-left">dexter</td>
+<td class="org-left">right hand</td>
+<td class="org-left">dexterous</td>
+</tr>
+
+<tr>
+<td class="org-left">sinister</td>
+<td class="org-left">left hand</td>
+<td class="org-left">-</td>
+</tr>
+
+<tr>
+<td class="org-left">gauche</td>
+<td class="org-left">left hand</td>
+<td class="org-left">gaucherie</td>
+</tr>
+
+<tr>
+<td class="org-left">droit</td>
+<td class="org-left">right hand</td>
+<td class="org-left">adroit</td>
+</tr>
+
+<tr>
+<td class="org-left">monos</td>
+<td class="org-left">one</td>
+<td class="org-left">monogamy</td>
+</tr>
+
+<tr>
+<td class="org-left">bi-</td>
+<td class="org-left">two</td>
+<td class="org-left">bigamy</td>
+</tr>
+
+<tr>
+<td class="org-left">polys</td>
+<td class="org-left">many</td>
+<td class="org-left">polygamy</td>
+</tr>
+
+<tr>
+<td class="org-left">andros</td>
+<td class="org-left">male</td>
+<td class="org-left">polyandry</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org52d6e23" class="outline-2">
+<h2 id="org52d6e23">session 4</h2>
+<div class="outline-text-2" id="text-org52d6e23">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">name</th>
+<th scope="col" class="org-left">des</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">internist</td>
+<td class="org-left">内科医生</td>
+</tr>
+
+<tr>
+<td class="org-left">gynecologist</td>
+<td class="org-left">妇科医生</td>
+</tr>
+
+<tr>
+<td class="org-left">obstetrician</td>
+<td class="org-left">产科医师</td>
+</tr>
+
+<tr>
+<td class="org-left">pediatrician</td>
+<td class="org-left">儿科医师</td>
+</tr>
+
+<tr>
+<td class="org-left">dermatologist</td>
+<td class="org-left">皮肤科医生</td>
+</tr>
+
+<tr>
+<td class="org-left">ophthalmologist</td>
+<td class="org-left">眼科医师</td>
+</tr>
+
+<tr>
+<td class="org-left">orthopedist</td>
+<td class="org-left">骨科、整形外科医师</td>
+</tr>
+
+<tr>
+<td class="org-left">cardiologist</td>
+<td class="org-left">心脏病专家</td>
+</tr>
+
+<tr>
+<td class="org-left">neurologist</td>
+<td class="org-left">神经科医生</td>
+</tr>
+
+<tr>
+<td class="org-left">psychiatrist</td>
+<td class="org-left">精神病医生</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orge60a4d7" class="outline-2">
+<h2 id="orge60a4d7">session 5</h2>
+<div class="outline-text-2" id="text-orge60a4d7">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">root</th>
+<th scope="col" class="org-left">which</th>
+<th scope="col" class="org-left">mean</th>
+<th scope="col" class="org-left">eg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">internus</td>
+<td class="org-left">Latin</td>
+<td class="org-left">inside</td>
+<td class="org-left">internist、internal</td>
+</tr>
+
+<tr>
+<td class="org-left">gyne</td>
+<td class="org-left">Greek</td>
+<td class="org-left">woman</td>
+<td class="org-left">(plus logos:sciences)gynecologoist</td>
+</tr>
+
+<tr>
+<td class="org-left">obstetrix</td>
+<td class="org-left">Latin</td>
+<td class="org-left">midwife</td>
+<td class="org-left">obstetrician,obstetrics(产科学),obstetric/obstetrical(adj,产科的)</td>
+</tr>
+
+<tr>
+<td class="org-left">padios</td>
+<td class="org-left">Greek</td>
+<td class="org-left">child</td>
+<td class="org-left">pediatrician, pediatrics(小儿科) pediatric(adj ,小儿科的)</td>
+</tr>
+
+<tr>
+<td class="org-left">pedis</td>
+<td class="org-left">*</td>
+<td class="org-left">foot</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">iatreia</td>
+<td class="org-left">Greek</td>
+<td class="org-left">medical healing</td>
+<td class="org-left">pediatrician</td>
+</tr>
+
+<tr>
+<td class="org-left">agogos</td>
+<td class="org-left">Greek</td>
+<td class="org-left">leading</td>
+<td class="org-left">pedagoy(教育学，the leading of child ，refer to ..),pedagogical(教师的，教学的),pedagogue(卖弄学问的教师)</td>
+</tr>
+
+<tr>
+<td class="org-left">demos</td>
+<td class="org-left">unknown</td>
+<td class="org-left">people</td>
+<td class="org-left">demagogue(煽动者，蛊惑民心的政客),demagoguery(n、煽动行为),demagogic(煽动的t)</td>
+</tr>
+
+<tr>
+<td class="org-left">derma</td>
+<td class="org-left">Greek</td>
+<td class="org-left">skin</td>
+<td class="org-left">dermatologist(皮肤科医生)、dermatology(皮肤科)、dermatological(皮肤学的)、hypodermic(皮下注射的)、epidermis(表皮)、taxidermist(标本制作师)、pachyderm(大的厚皮动物，迟钝的人，厚脸皮的人)、dermatitis(皮炎)</td>
+</tr>
+
+<tr>
+<td class="org-left">hypos</td>
+<td class="org-left">*</td>
+<td class="org-left">under</td>
+<td class="org-left">hypodermic（皮下注射的）</td>
+</tr>
+
+<tr>
+<td class="org-left">ophthalmos</td>
+<td class="org-left">Greek</td>
+<td class="org-left">eye</td>
+<td class="org-left">(plus logos)Ophthalmologist(眼科专家)</td>
+</tr>
+
+<tr>
+<td class="org-left">oculus</td>
+<td class="org-left">Latin</td>
+<td class="org-left">eye</td>
+<td class="org-left">ocular(眼睛的，视觉的)，monocle(单片眼镜)，binoculars( 双筒望远镜)，oculist(眼科医生),inoculate(给..预防注射)</td>
+</tr>
+
+<tr>
+<td class="org-left">opsis,optikos</td>
+<td class="org-left">Greek</td>
+<td class="org-left">sight or vision</td>
+<td class="org-left">opticians(眼镜技师),optometrist(验光师),optometry(验光业)</td>
+</tr>
+
+<tr>
+<td class="org-left">metron</td>
+<td class="org-left">Greek</td>
+<td class="org-left">measurement</td>
+<td class="org-left">optometrist(验光师)</td>
+</tr>
+</tbody>
+</table>
+
+<ol class="org-ol">
+<li>the suffix -ician,as obstetrician,physician,musician,magician,electrician, means  expert.</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org59f51b8" class="outline-2">
+<h2 id="org59f51b8">session 6</h2>
+<div class="outline-text-2" id="text-org59f51b8">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">root</th>
+<th scope="col" class="org-left">which</th>
+<th scope="col" class="org-left">mean</th>
+<th scope="col" class="org-left">eg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">orthos</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">straight or correct</td>
+<td class="org-left">orthopedist(整形外科医生)，orthodontia(牙齿矫正),orthodontic(牙正常的)</td>
+</tr>
+
+<tr>
+<td class="org-left">odontos</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">tooth</td>
+<td class="org-left">orthodontia(牙齿矫正),orthodontist(矫形牙医)</td>
+</tr>
+
+<tr>
+<td class="org-left">kardia</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">heart</td>
+<td class="org-left">cardiologist(心脏病专家),cardiology(心脏学),cardiological(心脏学的),cardiogram(心电图),cardiograph(心电图仪)</td>
+</tr>
+
+<tr>
+<td class="org-left">neuron</td>
+<td class="org-left">Greek</td>
+<td class="org-left">nerve</td>
+<td class="org-left">neurologist(神经学家),neurology,neurological,neuralgia(神经痛),neuritis(神经炎),neurosis(神经机能病),neurotic(患neurosis的病人 也是形容词，神经质的，神经过敏的等)</td>
+</tr>
+
+<tr>
+<td class="org-left">algos</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">pain</td>
+<td class="org-left">neuralgia(神经痛)</td>
+</tr>
+
+<tr>
+<td class="org-left">psyche</td>
+<td class="org-left">Greek</td>
+<td class="org-left">spirit,soul or mind</td>
+<td class="org-left">psychosis(精神错乱的)，psychotic(精神病的，注意与神经区分开),psychiatrist(精神病专家),psychiatry(精神病学)</td>
+</tr>
+
+<tr>
+<td class="org-left">geras</td>
+<td class="org-left">Greek</td>
+<td class="org-left">old age</td>
+<td class="org-left">geriatrics(老人病学),geriatrician(老年医学专家),geriatric(老年医学的)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgead8280" class="outline-2">
+<h2 id="orgead8280">session 7</h2>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Qin</p>
+<p class="date">Created: 2019-04-10 Wed 12:45</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>
