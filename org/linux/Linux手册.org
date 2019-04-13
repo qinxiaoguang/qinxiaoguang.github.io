@@ -1,0 +1,46 @@
+#+TITLE: Linux手册
+
+* 常用
+- =grep -RiP ./ "something"= 在当前目录中查找有something自研的文件，可配合less使用
+- =ps aux | head -1; ps aux | grep -v "PID" | sort -nr -k3 | head -1= 查看cpu最高的进程
+- =echo "hei" | cat -= ,其中 =-= 符号表示从标准输入中读取内容，而不是从文件中读取。
+- =echo -n > filename= 清空文件，不加-n则有换行符, =-e= 会处理输入中的转移字符，所以 =echo -en "\n"= 和 =echo= 的效果一样
+- =jobs -l= 显示nohup后台任务
+- =paste file1 file2= 将两个文件相同的行合并到一行，并用 =\t= 分割
+- =cwd=$(cd `dirname $0`;pwd)= 获取当前文件的绝对路径，不能直接使用  =pwd= 获取,若在其他路径执行，则路径就变成了其他路径
+* 数组
+- 创建数组 =nums=()= 
+- 添加成员 =nums=(${nums[*]} 2)= 注意没有逗号,or =len=${#nums[*]};nums[len+1]=2=
+- 数组长度 =length=${#nums[*]}= or =length=${#nums[@]}=
+- 删除元素
+  1. =unset nums[1]= 删除下标为1的元素
+  2. =unset nums= 清除整个数组
+- 分片访问 =${nums[@]:1:4}= 从下标1开始，访问4个元素
+- 遍历数组 =for ((i=0; i<${#nums[*]}; i++);do echo ${nums[$I]}; done= or =for v in ${nums[@]}; do echo $v; done= 
+* map
+- 创建map =declare -A map=()= ,老版本创建方式可能是 =declare -a map=()=
+- 添加成员 =map["a"]="hei"= 
+- 输出所有key =echo ${map[@]}= 
+- 遍历map =for key in ${!map[*]}= 
+* 字符串
+- 去掉最后一个字符: =test=${test%?}=
+- 删除前5个字符: =test=${test:5}=
+- 删除右边的字符: =test=${test:0-5}=
+- 保留指定间隔字符: =test=${test:n1:n2}=
+* 循环
+- for: =for j in {1..100..2}= 、 =for j in {1..100}=
+- for循环按行读取
+  1. =while read line ;do cmd ;done < $filename=
+  2. =cat $filename | while read line; do cmd ;done=
+  3. =IFS=$(echo -en "\n");for line in $(cat filename);do cmd;done)= ,如果IFS不起作用，则换成下面这种
+     #+BEGIN_SRC shell
+IFS='
+'
+     #+END_SRC
+* 常用if
+- 数字相等判断 =if (( $a==$b ))=
+- 字符串是否为空 =if [ -z "$a" ]= 记得加 ="=
+- 字符串不为空 =if [ -n "$a" ]= 记得加 ="=
+- 文件是否存在 =if [ -f "/data/filename" ]= 
+* 后记
+本来想把linux的笔记从简书搬运过来，但是太多内容了，还是算了吧，以后再说吧

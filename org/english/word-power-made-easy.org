@@ -132,4 +132,10 @@ ascetic 禁欲的，苦行僧 从希腊单词asketes(隐士、僧侣)
 | geras   | Greek | old age             | geriatrics(老人病学),geriatrician(老年医学专家),geriatric(老年医学的)                                                                                              |
 
 * session 7
-
+| name          | des          |
+|---------------+--------------|
+| phychologist  | 心理学家     |
+| psychoanalyst | 心理分析学家 |
+| orthodontist  | 矫形牙医     |
+| optometrist   | 验光师       |
+| optician      | 眼镜制造商   |

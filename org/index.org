@@ -1,6 +1,14 @@
 #+TITLE: index
 
-* study
-  * [[file:study/双拼学习.org][双拼学习]]
+* 吉他
+  * [[file:吉他/吉他笔记.org][吉他笔记]]
 * english
   * [[file:english/word-power-made-easy.org][word power made easy学习笔记]]
+* 工作心得
+  * [[file:工作心得/沟通.org][沟通心得]]
+* linux
+  * [[file:linux/Linux手册.org][Linux手册]]
+* study
+  * [[file:study/双拼学习.org][双拼学习]]
+* 人生杂谈
+  * [[file:人生杂谈/工作上的那些事情.org][工作上的那些事情]]

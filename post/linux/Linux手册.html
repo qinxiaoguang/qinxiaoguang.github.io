@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-04-11 Thu 18:49 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Linux手册</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/blog/post/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/blog/post/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Linux手册</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgca0ab86">常用</a></li>
+<li><a href="#org857580c">数组</a></li>
+<li><a href="#org5aab9f6">map</a></li>
+<li><a href="#org5e8e85c">字符串</a></li>
+<li><a href="#orgefd1e99">循环</a></li>
+<li><a href="#org20437b9">常用if</a></li>
+<li><a href="#orgd066eb8">后记</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgca0ab86" class="outline-2">
+<h2 id="orgca0ab86">常用</h2>
+<div class="outline-text-2" id="text-orgca0ab86">
+<ul class="org-ul">
+<li><code>grep -RiP ./ "something"</code> 在当前目录中查找有something自研的文件，可配合less使用</li>
+<li><code>ps aux | head -1; ps aux | grep -v "PID" | sort -nr -k3 | head -1</code> 查看cpu最高的进程</li>
+<li><code>echo "hei" | cat -</code> ,其中 <code>-</code> 符号表示从标准输入中读取内容，而不是从文件中读取。</li>
+<li><code>echo -n &gt; filename</code> 清空文件，不加-n则有换行符, <code>-e</code> 会处理输入中的转移字符，所以 <code>echo -en "\n"</code> 和 <code>echo</code> 的效果一样</li>
+<li><code>jobs -l</code> 显示nohup后台任务</li>
+<li><code>paste file1 file2</code> 将两个文件相同的行合并到一行，并用 <code>\t</code> 分割</li>
+<li><code>cwd=$(cd `dirname $0`;pwd)</code> 获取当前文件的绝对路径，不能直接使用  <code>pwd</code> 获取,若在其他路径执行，则路径就变成了其他路径</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org857580c" class="outline-2">
+<h2 id="org857580c">数组</h2>
+<div class="outline-text-2" id="text-org857580c">
+<ul class="org-ul">
+<li>创建数组 <code>nums=()</code></li>
+<li>添加成员 <code>nums=(${nums[*]} 2)</code> 注意没有逗号,or <code>len=${#nums[*]};nums[len+1]=2</code></li>
+<li>数组长度 <code>length=${#nums[*]}</code> or <code>length=${#nums[@]}</code></li>
+<li>删除元素
+<ol class="org-ol">
+<li><code>unset nums[1]</code> 删除下标为1的元素</li>
+<li><code>unset nums</code> 清除整个数组</li>
+</ol></li>
+<li>分片访问 <code>${nums[@]:1:4}</code> 从下标1开始，访问4个元素</li>
+<li>遍历数组 <code>for ((i=0; i&lt;${#nums[*]}; i++);do echo ${nums[$I]}; done</code> or <code>for v in ${nums[@]}; do echo $v; done</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5aab9f6" class="outline-2">
+<h2 id="org5aab9f6">map</h2>
+<div class="outline-text-2" id="text-org5aab9f6">
+<ul class="org-ul">
+<li>创建map <code>declare -A map=()</code> ,老版本创建方式可能是 <code>declare -a map=()</code></li>
+<li>添加成员 <code>map["a"]</code>"hei"=</li>
+<li>输出所有key <code>echo ${map[@]}</code></li>
+<li>遍历map <code>for key in ${!map[*]}</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5e8e85c" class="outline-2">
+<h2 id="org5e8e85c">字符串</h2>
+<div class="outline-text-2" id="text-org5e8e85c">
+<ul class="org-ul">
+<li>去掉最后一个字符: <code>test=${test%?}</code></li>
+<li>删除前5个字符: <code>test=${test:5}</code></li>
+<li>删除右边的字符: <code>test=${test:0-5}</code></li>
+<li>保留指定间隔字符: <code>test=${test:n1:n2}</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgefd1e99" class="outline-2">
+<h2 id="orgefd1e99">循环</h2>
+<div class="outline-text-2" id="text-orgefd1e99">
+<ul class="org-ul">
+<li>for: <code>for j in {1..100..2}</code> 、 <code>for j in {1..100}</code></li>
+<li>for循环按行读取
+<ol class="org-ol">
+<li><code>while read line ;do cmd ;done &lt; $filename</code></li>
+<li><code>cat $filename | while read line; do cmd ;done</code></li>
+<li><p>
+<code>IFS=$(echo -en "\n");for line in $(cat filename);do cmd;done)</code> ,如果IFS不起作用，则换成下面这种
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #FD971F;">IFS</span>=<span style="color: #E6DB74;">'</span>
+<span style="color: #E6DB74;">'</span>
+</pre>
+</div></li>
+</ol></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org20437b9" class="outline-2">
+<h2 id="org20437b9">常用if</h2>
+<div class="outline-text-2" id="text-org20437b9">
+<ul class="org-ul">
+<li>数字相等判断 <code>if (( $a==$b ))</code></li>
+<li>字符串是否为空 <code>if [ -z "$a" ]</code> 记得加 <code>"</code></li>
+<li>字符串不为空 <code>if [ -n "$a" ]</code> 记得加 <code>"</code></li>
+<li>文件是否存在 <code>if [ -f "/data/filename" ]</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd066eb8" class="outline-2">
+<h2 id="orgd066eb8">后记</h2>
+<div class="outline-text-2" id="text-orgd066eb8">
+<p>
+本来想把linux的笔记从简书搬运过来，但是太多内容了，还是算了吧，以后再说吧
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-04-11 Thu 18:49</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>
