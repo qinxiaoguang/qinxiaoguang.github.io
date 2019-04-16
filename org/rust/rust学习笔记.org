@@ -1,0 +1,33 @@
+* 书籍
+https://rustcc.gitbooks.io/rustprimer/content/
+* install
+1. =curl https://sh.rustup.rs -sSf | sh=
+2. =rustup toolchain add nightly=
+3. =cargo +nightly install racer=
+4. =git clone https://github.com/rust-lang/rust.git ~/.rust=
+* emacs配置
+#+BEGIN_SRC elisp
+(use-package company-racer :ensure t)
+(use-package racer :ensure t
+  :config
+  (setq racer-cmd "~/.cargo/bin/racer")
+  (setq racer-rust-src-path "/Users/qinxiaoguang01/.rust/src"))
+(use-package flycheck-rust :ensure t)
+(use-package rust-mode :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+  (add-hook 'rust-mode-hook
+            '(lambda ()
+               ;; Enable racer
+               (racer-activate)
+               ;; Hook in racer with eldoc to provide documentation
+               (racer-turn-on-eldoc)
+               ;; Use flycheck-rust in rust-mode
+               (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+               ;; Use company-racer in rust mode
+               (set (make-local-variable 'company-backends) '(company-racer))
+               ;; Key binding to jump to method definition
+               (local-set-key (kbd "M-.") #'racer-find-definition)
+               ;; Key binding to auto complete and indent
+               (local-set-key (kbd "TAB") #'racer-complete-or-indent))))
+#+END_SRC

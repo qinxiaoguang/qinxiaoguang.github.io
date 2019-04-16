@@ -1,14 +1,20 @@
 #+TITLE: index
 
+* rust
+  * [[file:rust/rust学习笔记.org][rust学习笔记]]
+* linux
+  * [[file:linux/vim简版.org][vim简版]]
+  * [[file:linux/Linux手册.org][Linux手册]]
+* 规划
+  * [[file:规划/2019年度规划.org][2019年度规划]]
+* 人生杂谈
+  * [[file:人生杂谈/失眠.org][失眠]]
+  * [[file:人生杂谈/工作上的那些事情.org][工作上的那些事情]]
 * 吉他
   * [[file:吉他/吉他笔记.org][吉他笔记]]
 * english
   * [[file:english/word-power-made-easy.org][word power made easy学习笔记]]
 * 工作心得
   * [[file:工作心得/沟通.org][沟通心得]]
-* linux
-  * [[file:linux/Linux手册.org][Linux手册]]
 * study
   * [[file:study/双拼学习.org][双拼学习]]
-* 人生杂谈
-  * [[file:人生杂谈/工作上的那些事情.org][工作上的那些事情]]
