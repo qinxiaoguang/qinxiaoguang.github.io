@@ -31,3 +31,4 @@ https://rustcc.gitbooks.io/rustprimer/content/
                ;; Key binding to auto complete and indent
                (local-set-key (kbd "TAB") #'racer-complete-or-indent))))
 #+END_SRC
+
