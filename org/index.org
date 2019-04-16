@@ -1,20 +1,20 @@
 #+TITLE: index
 
-* 规划
-  * [[file:规划/2019年度规划.org][2019年度规划]]
-* 工作心得
-  * [[file:工作心得/沟通.org][沟通心得]]
-* 吉他
-  * [[file:吉他/吉他笔记.org][吉他笔记]]
-* 人生杂谈
-  * [[file:人生杂谈/工作上的那些事情.org][工作上的那些事情]]
-  * [[file:人生杂谈/失眠.org][失眠]]
-* study
-  * [[file:study/双拼学习.org][双拼学习]]
-* rust
-  * [[file:rust/rust学习笔记.org][rust学习笔记]]
-* linux
-  * [[file:linux/vim简版.org][vim简版]]
-  * [[file:linux/Linux手册.org][Linux手册]]
 * english
-  * [[file:english/word-power-made-easy.org][word power made easy学习笔记]]
+  * [2019-04-16 Tue] [[file:english/word-power-made-easy.org][word power made easy学习笔记]]
+* linux
+  * [2019-04-16 Tue] [[file:linux/Linux手册.org][Linux手册]]
+  * [2019-04-16 Tue] [[file:linux/vim简版.org][vim简版]]
+* rust
+  * [2019-04-16 Tue] [[file:rust/rust学习笔记.org][rust学习笔记]]
+* study
+  * [2019-04-16 Tue] [[file:study/双拼学习.org][双拼学习]]
+* 人生杂谈
+  * [2019-04-16 Tue] [[file:人生杂谈/失眠.org][失眠]]
+  * [2019-04-16 Tue] [[file:人生杂谈/工作上的那些事情.org][工作上的那些事情]]
+* 吉他
+  * [2019-04-16 Tue] [[file:吉他/吉他笔记.org][吉他笔记]]
+* 工作心得
+  * [2019-04-16 Tue] [[file:工作心得/沟通.org][沟通心得]]
+* 规划
+  * [2019-04-16 Tue] [[file:规划/2019年度规划.org][2019年度规划]]

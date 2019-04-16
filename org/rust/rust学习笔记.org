@@ -5,16 +5,19 @@ https://rustcc.gitbooks.io/rustprimer/content/
 2. =rustup toolchain add nightly=
 3. =cargo +nightly install racer=
 4. =git clone https://github.com/rust-lang/rust.git ~/.rust=
+5. ~export RUST_SRC_PATH\="/path/to/rust/src"~
 * emacs配置
 #+BEGIN_SRC elisp
-(use-package company-racer :ensure t)
-(use-package racer :ensure t
+(use-package rust-mode :ensure t :defer t
   :config
-  (setq racer-cmd "~/.cargo/bin/racer")
-  (setq racer-rust-src-path "/Users/qinxiaoguang01/.rust/src"))
-(use-package flycheck-rust :ensure t)
-(use-package rust-mode :ensure t
-  :config
+  (use-package racer :ensure t
+    :config
+    (setq racer-cmd "/Users/qinxiaoguang01/.cargo/bin/racer")
+    (setq racer-rust-src-path "/Users/qinxiaoguang01/.rust/src"))
+  (use-package company-racer :ensure t
+    :config
+    (setq company-racer-executable "/Users/qinxiaoguang01/.cargo/bin/racer"))
+  (use-package flycheck-rust :ensure t)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
   (add-hook 'rust-mode-hook
             '(lambda ()
@@ -30,4 +33,348 @@ https://rustcc.gitbooks.io/rustprimer/content/
                (local-set-key (kbd "M-.") #'racer-find-definition)
                ;; Key binding to auto complete and indent
                (local-set-key (kbd "TAB") #'racer-complete-or-indent))))
+
 #+END_SRC
+* Hello world
+#+BEGIN_SRC rust
+fn main(){
+    println!("hello world");
+}
+#+END_SRC
+编译: =rustc file.rs= 
+运行: =./file= 
+* Hello Rust
+- 创建项目 =cargo new hellorust --bin= 
+- 项目目录
+#+BEGIN_VERSE
+.
+├── Cargo.toml
+└── src
+    └── main.rs
+#+END_VERSE
+- 编译 =cargo build= ,优化编译 =cargo build --release= 
+- 运行 =./target/debug/hellorust= 
+- 编译并运行: =cargo run= or =cargo run --release= 
+* 变量
+#+BEGIN_SRC rust
+    //varable
+    let a1 = 5; // int32类型，rust会做类型推断, 没有mut关键字，都是不可变变量
+    //a1 = 6 ; 不可变变量，若改变其值会报错
+    let a2:i32 = 5; // int32类型,注: rust中的变量名都很短
+    let b1:u32 = 5; // unsign int32类型
+
+    let mut a11:f64 = 1.0; // 可变变量
+    a11 = 2.0; // 不会报错
+    let a11 = a11; // 可重新绑定为不可变
+    let b12 = 1.2f32; // rust中的value + type写法
+
+    let (a, mut b):(bool, bool) = (true, false); // 多个变量赋值
+#+END_SRC
+* 类型
+- 布尔类型：有两个值true和false。
+- 字符类型：表示单个Unicode字符，存储为4个字节。可将来任何字符赋值, 如 ~let c='秦'~ 
+- 数值类型：分为有符号整数 (i8, i16, i32, i64, isize)、 无符号整数 (u8, u16, u32, u64, usize) 以及浮点数 (f32, f64)。其中iszie,usize则是自适应类型，其大小取决于操作系统。
+- 字符串类型：最底层的是不定长类型str，更常用的是字符串切片&str和堆分配字符串String， 其中字符串切片是静态分配的，有固定的大小，并且不可变，而堆分配字符串是可变的。
+  #+BEGIN_SRC rust
+ let hello = "hello world"; // 双引号中的字符串类型为&'static str, 即其不可变
+ let hello : &'static str = "hello world"; // 两种方式等价
+
+ // String 类型，类比[T]和Vec<T>的关系，str和String就是这种关系
+ let mut s = String::new();
+ let mut hello = String::from("hello");
+ hello.push('w'); // 压入字符
+ hello.push_str("orld"); // 压入字符串
+ hello.pop(); // 弹出
+
+// str转String
+let x:&'static str="hello";
+let mut y:String = x.to_string();
+// String 转str
+let s = "Hello".to_string();
+let ss = &*s;
+
+// 可使用r来避免字符串转义
+let d &'static str = r"abc/nabc";
+
+// 下标访问
+let c="hello".to_string();
+c.chars().nth(2); // 访问第2个 
+
+// 字符串切片，很危险，不建议使用
+  #+END_SRC
+- 数组：具有固定大小，并且元素都是同种类型，可表示为[T; N]。
+  #+BEGIN_SRC rust
+    let array : [i32; 3] = [0; 3]; // 数组大小是固定的，[T; N]用来表示数组N个T类型,[0;3]表示3个0构成的数组
+    for x in &array {
+        println!("{}", x)
+    }
+
+    // vector
+    let v:Vec<i32> = Vec::new(); // 空vector, 不可变，不可压入数据
+    let v:Vec<i32> = Vec![]; // 宏创建
+    let v = Vec![1,2,3,4,5];
+    let v = vec![0;10];
+    let mut v = vec![1,2]; // 可变vector,可压入数据
+    v.push(3); // 压入数据
+    let res = v.pop(); // 弹出数据
+  #+END_SRC
+- 切片：引用一个数组的部分数据并且不需要拷贝，可表示为&[T]。&符号不要考虑成引用，会给自己增加负担，相反，应考虑为切片的必要的一部分。
+  #+BEGIN_SRC rust
+let arr = [1,2,3,4,5];
+let slice_1 = &arr[..]; // 获取全部元素
+let slice_2 = &arr[1..4]; // 获取下标[1,4]的元素
+let slice_3 = &arr[1..]; // 获取下标1之后的所有元素
+let slice_4 = &arr[..3]; // 获取下标3之前的所有元素
+
+// 有关slice的函数
+fn show(arr: &[u8]){
+    for i in arr {
+        print!("{} ",i);
+    }
+}
+// 调用
+show(&arr[..]);
+show(slice_1);
+#+END_SRC
+- 元组：具有固定大小的有序列表，每个元素都有自己的类型，通过解构或者索引来获得每个元素的值。
+  #+BEGIN_SRC rust
+let y = (0, "1234");
+let x :(i32, &str) = (3, "123456")
+// 访问
+let (w, z) = y;
+// 下标访问
+let f = x.0;
+let e = x.1;
+  #+END_SRC
+- 指针：最底层的是裸指针*const T和*mut T，但解引用它们是不安全的，必须放到unsafe块里。
+- 函数：具有函数类型的变量实质上是一个函数指针。
+- 元类型：即()，其唯一的值也是()。
+- 结构体
+  #+BEGIN_SRC rust
+// 1. 通常驼峰命名
+// 2. 结构体的中的值默认不可变,且不支持域类型为可变,可通过Cell来模拟
+// 3. 结构体域的结尾是逗号,
+// 4. 结构体的域默认私有, 可通过pub关键字公开
+struct Point{
+    x:i32,
+    y:i32,
+}
+
+// 1. 元组结构体,用()来包裹域,且域无名字
+// 2. 通常驼峰命名
+// 3. 元组结构体的构造方法可被当做函数传入
+struct Color(u8,u8,u8);
+// 4. 若元组结构体只有一个域，则其为newtype
+struct NewInt(i32);
+// 5. 空结构体占用空间为0
+struct D;
+
+fn main() {
+    let point = Point{x:1, y:2};
+    let point2 = Point{..point}; // .. 表达式可以表示copy
+    let point3 = Point{x:2,..point}; // .. 表达式可以表示copy
+    println!("{}",point.y)
+}
+  #+END_SRC
+* 控制流
+** if
+#+BEGIN_SRC rust
+// 形式1 
+if expr1 {
+
+}
+
+// 形式2
+if expr1 {
+
+} else if expr2 {
+
+} else
+
+// 形式3
+if expr1 {
+
+} else {
+
+}
+
+// rust 中if是一个表达式,so可以这么写
+let x = 5;
+let y = if x == 5 {10} else {15};
+// rust基于表达式的语言，有且仅有两种语句，1. 声明语句:如let, 2. 表达式语句,在表达式后加';',将表达式变成语句。
+// 以;结尾的为语句,语句的返回值为unit (),如 x=5 是一条表达式，而x=5; 是一条语句
+
+// if let是match的简化用法
+let x = Some(5);
+if let Some(y) = x{
+    println!("{}", y);
+}
+let z = if let Some(y) = x {y} else {0}; // 若x中有值，则赋给z
+#+END_SRC
+** for
+#+BEGIN_SRC rust
+// expression 是一个迭代器,如0..10,or [0,1,2].iter()
+for var in iterator {
+
+}
+eg :
+for x in 0..10 {
+
+}
+
+// 获取索引，使用enumerate()函数
+for (i,j) in (0..10).enumerate() {
+    println!("i is {}, j is {}", i, j);
+}
+#+END_SRC
+** while
+#+BEGIN_SRC rust
+// expr是一个bool的表达式
+while expr{
+
+}
+
+// loop类似 while true
+loop {
+
+}
+#+END_SRC
+** match
+#+BEGIN_SRC rust
+    // match 类比switch,需符合一下要求
+    // 1. 语句以,结尾
+    // 2. 若要获取匹配值，使用@符号,通常用于模式匹配中
+    // 3. 必须要有_符合来穷举剩余匹配，因rust要求覆盖所有可能
+    let mut cnt = 0;
+    match cnt {
+        0|6 => println!("ha"),
+        e @ 1 ... 5 => println!("hei"),
+        _ => println!("huhu"),
+    }
+    // 4. 可通过ref关键字得到某值的引用
+    match cnt {
+        ref r => println!("got a ref {}", r),
+    }
+    // 5. 可模糊匹配元组
+    let pair = (0, -2);
+    match pair {
+        (0, y) => println!("y is {:?}", y),
+        (x, 0) => println!("x is {:?}", x),
+        _ => println!("doesnt match anything"),
+    }
+    // 6. 可匹配结构体,及枚举
+    let origin = Point {x:0, y:0};
+    match origin {
+        Point{x, ..} => println!("x is {}", x),
+    }
+    // 也可对struct中的域进行重命名
+    match origin {
+        Point{x:x1, y:y1} => println!("x is", x1),
+    }
+    // 7. 除了panic,所有分支的表达式的结果必须相同
+    // 后置条件
+    let y = false;
+    match x {
+        4|5 if y => println!("yes"), // 其实就是 (x in 4|5) && (if y)
+        _ => println!("no"),
+    }
+    // 其实上述内容和haskell中的模式匹配基本一样
+    // 也可通过let和while进行模式匹配
+    let number = Some(7);
+    if let Some(i) = number {
+        println!("i is {}", i);
+    } else {
+        println!("doesnt match a number");
+    }
+    // while let
+    while let Some(i) = number {
+        if i > 5 {
+            println!("i is gt 5");
+            break;
+        } else {
+            println!("i is small than t");
+        }
+    }
+#+END_SRC
+* 函数
+#+BEGIN_SRC rust
+// fn 开头，可以多个参数，最多一个返回值
+fn add_one(x: i32) -> i32 {
+    // 若以;结尾，则返回()
+    x + 1
+}
+
+// 但是可以利用元组来达到返回多个值的效果
+fn get_two() -> (i32,i32){
+    (1, 2)
+}
+
+// 发散函数，使用!作为返回类型,其实和golang的panic或者java的exception一个意思
+fn diverging() -> !{
+    panic!("this function will never return");
+}
+//发散函数返回值可以赋值给任何类型
+fn test() -> i32{
+    diverging()
+}
+
+// 函数也可以使用模式匹配
+fn print_id((_, age):(&str, i32)) {
+    println!("my age is {}",age);
+}
+
+// 若函数不加返回值，则其返回(), 即fn main() 和 fn main() -> () 是等价的。
+fn main(){
+    // 匿名函数
+    // rust中的函数，最后一个表达式的值默认作为返回值。
+    let plus_num = |x:i32| x+num;
+}
+
+// 使用impl关键字来为enum,struct等类型创建方法
+struct Person {
+    name :String,
+}
+
+impl Person {
+    fn new(n: &str) -> Person{
+        Person {
+            name: n.to_string(),
+        }
+    }
+
+    fn greeting (&self){
+        println!("{} say hello.", self.name);
+    }
+}
+
+// 函数作为一等公民，可通过type为某个函数类型定义别名
+fn inc (n : i32) -> i32{
+    n + 1
+}
+type IncType = fn(i32) -> i32;
+let func: IncType = inc;
+func(3);
+
+// 函数作为返回值
+fn get_func(n: i32) -> fn(i32) -> i32{
+    // rust 支持在函数中定义函数，但是不能使用该函数外的变量，若要使用，则需要使用闭包
+    fn inc(n:i32) -> i32{
+        n+1
+    }
+    inc
+}
+#+END_SRC
+
+* cargo
+cargo为项目管理工具，类比java的maven,c++的cmake等。
+cargo的默认规则:
+- cargo.toml和cargo.lock文件总是位于项目根目录下。
+- 源代码位于src目录下。
+- 默认的库入口文件是src/lib.rs。
+- 默认的可执行程序入口文件是src/main.rs。
+- 其他可选的可执行文件位于src/bin/*.rs(这里每一个rs文件均对应一个可执行文件)。
+- 外部测试源代码文件位于tests目录下。
+- 示例程序源代码文件位于examples。
+- 基准测试源代码文件位于benches目录下。
+** cargo.toml和cargo.lock
+开发只需关心cargo.toml不需要关心cargo.lock,cargo.toml中是项目依赖的信息及版本，可对该文件进行自定义的更改。

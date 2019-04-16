@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-16 Tue 13:39 -->
+<!-- 2019-04-16 Tue 22:56 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -30,6 +30,24 @@
 <li><a href="#org62f8b49">书籍</a></li>
 <li><a href="#orge2c5217">install</a></li>
 <li><a href="#org4d909d4">emacs配置</a></li>
+<li><a href="#orgf62bd76">Hello world</a></li>
+<li><a href="#orgf32a504">Hello Rust</a></li>
+<li><a href="#orgabdd848">变量</a></li>
+<li><a href="#orgdfda532">类型</a></li>
+<li><a href="#org92c03a9">控制流</a>
+<ul>
+<li><a href="#org2c32c53">if</a></li>
+<li><a href="#org2d081e8">for</a></li>
+<li><a href="#orgc26a41d">while</a></li>
+<li><a href="#orgc0ad136">match</a></li>
+</ul>
+</li>
+<li><a href="#org63165ff">函数</a></li>
+<li><a href="#orge6f8f1c">cargo</a>
+<ul>
+<li><a href="#org3dc790c">cargo.toml和cargo.lock</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -49,6 +67,7 @@
 <li><code>rustup toolchain add nightly</code></li>
 <li><code>cargo +nightly install racer</code></li>
 <li><code>git clone https://github.com/rust-lang/rust.git ~/.rust</code></li>
+<li><code>export RUST_SRC_PATH\="/path/to/rust/src"</code></li>
 </ol>
 </div>
 </div>
@@ -56,37 +75,467 @@
 <h2 id="org4d909d4">emacs配置</h2>
 <div class="outline-text-2" id="text-org4d909d4">
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #F92672;">use-package</span> <span style="color: #AE81FF;">company-racer</span> <span style="color: #F92672;">:ensure</span> t)
-(<span style="color: #F92672;">use-package</span> <span style="color: #AE81FF;">racer</span> <span style="color: #F92672;">:ensure</span> t
-  <span style="color: #F92672;">:config</span>
-  (<span style="color: #F92672;">setq</span> racer-cmd <span style="color: #E6DB74;">"~/.cargo/bin/racer"</span>)
-  (<span style="color: #F92672;">setq</span> racer-rust-src-path <span style="color: #E6DB74;">"/Users/qinxiaoguang01/.rust/src"</span>))
-(<span style="color: #F92672;">use-package</span> <span style="color: #AE81FF;">flycheck-rust</span> <span style="color: #F92672;">:ensure</span> t)
-(<span style="color: #F92672;">use-package</span> <span style="color: #AE81FF;">rust-mode</span> <span style="color: #F92672;">:ensure</span> t
-  <span style="color: #F92672;">:config</span>
-  (add-to-list 'auto-mode-alist '(<span style="color: #E6DB74;">"\\.rs\\'"</span> . rust-mode))
+<pre class="src src-elisp">(<span style="color: #FF1493;">use-package</span> <span style="color: #AF87FF;">rust-mode</span> <span style="color: #FF1493;">:ensure</span> t <span style="color: #FF1493;">:defer</span> t
+  <span style="color: #FF1493;">:config</span>
+  (<span style="color: #FF1493;">use-package</span> <span style="color: #AF87FF;">racer</span> <span style="color: #FF1493;">:ensure</span> t
+    <span style="color: #FF1493;">:config</span>
+    (<span style="color: #FF1493;">setq</span> racer-cmd <span style="color: #CDC673;">"/Users/qinxiaoguang01/.cargo/bin/racer"</span>)
+    (<span style="color: #FF1493;">setq</span> racer-rust-src-path <span style="color: #CDC673;">"/Users/qinxiaoguang01/.rust/src"</span>))
+  (<span style="color: #FF1493;">use-package</span> <span style="color: #AF87FF;">company-racer</span> <span style="color: #FF1493;">:ensure</span> t
+    <span style="color: #FF1493;">:config</span>
+    (<span style="color: #FF1493;">setq</span> company-racer-executable <span style="color: #CDC673;">"/Users/qinxiaoguang01/.cargo/bin/racer"</span>))
+  (<span style="color: #FF1493;">use-package</span> <span style="color: #AF87FF;">flycheck-rust</span> <span style="color: #FF1493;">:ensure</span> t)
+  (add-to-list 'auto-mode-alist '(<span style="color: #CDC673;">"\\.rs\\'"</span> . rust-mode))
   (add-hook 'rust-mode-hook
             '(lambda ()
-               <span style="color: #75715E;">;; </span><span style="color: #75715E;">Enable racer</span>
+               <span style="color: #8B8878;">;; </span><span style="color: #8B8878;">Enable racer</span>
                (racer-activate)
-               <span style="color: #75715E;">;; </span><span style="color: #75715E;">Hook in racer with eldoc to provide documentation</span>
+               <span style="color: #8B8878;">;; </span><span style="color: #8B8878;">Hook in racer with eldoc to provide documentation</span>
                (racer-turn-on-eldoc)
-               <span style="color: #75715E;">;; </span><span style="color: #75715E;">Use flycheck-rust in rust-mode</span>
+               <span style="color: #8B8878;">;; </span><span style="color: #8B8878;">Use flycheck-rust in rust-mode</span>
                (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-               <span style="color: #75715E;">;; </span><span style="color: #75715E;">Use company-racer in rust mode</span>
+               <span style="color: #8B8878;">;; </span><span style="color: #8B8878;">Use company-racer in rust mode</span>
                (set (make-local-variable 'company-backends) '(company-racer))
-               <span style="color: #75715E;">;; </span><span style="color: #75715E;">Key binding to jump to method definition</span>
-               (local-set-key (kbd <span style="color: #E6DB74;">"M-."</span>) #'racer-find-definition)
-               <span style="color: #75715E;">;; </span><span style="color: #75715E;">Key binding to auto complete and indent</span>
-               (local-set-key (kbd <span style="color: #E6DB74;">"TAB"</span>) #'racer-complete-or-indent))))
+               <span style="color: #8B8878;">;; </span><span style="color: #8B8878;">Key binding to jump to method definition</span>
+               (local-set-key (kbd <span style="color: #CDC673;">"M-."</span>) #'racer-find-definition)
+               <span style="color: #8B8878;">;; </span><span style="color: #8B8878;">Key binding to auto complete and indent</span>
+               (local-set-key (kbd <span style="color: #CDC673;">"TAB"</span>) #'racer-complete-or-indent))))
+
 </pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf62bd76" class="outline-2">
+<h2 id="orgf62bd76">Hello world</h2>
+<div class="outline-text-2" id="text-orgf62bd76">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #FF1493;">fn</span> <span style="color: #87D700;">main</span>(){
+    <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"hello world"</span>);
+}
+</pre>
+</div>
+<p>
+编译: <code>rustc file.rs</code> 
+运行: <code>./file</code> 
+</p>
+</div>
+</div>
+<div id="outline-container-orgf32a504" class="outline-2">
+<h2 id="orgf32a504">Hello Rust</h2>
+<div class="outline-text-2" id="text-orgf32a504">
+<ul class="org-ul">
+<li>创建项目 <code>cargo new hellorust --bin</code></li>
+<li>项目目录</li>
+</ul>
+<p class="verse">
+.<br />
+├── Cargo.toml<br />
+└── src<br />
+&#xa0;&#xa0;&#xa0;&#xa0;└── main.rs<br />
+</p>
+<ul class="org-ul">
+<li>编译 <code>cargo build</code> ,优化编译 <code>cargo build --release</code></li>
+<li>运行 <code>./target/debug/hellorust</code></li>
+<li>编译并运行: <code>cargo run</code> or <code>cargo run --release</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgabdd848" class="outline-2">
+<h2 id="orgabdd848">变量</h2>
+<div class="outline-text-2" id="text-orgabdd848">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #8B8878;">//</span><span style="color: #8B8878;">varable</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">a1</span> = 5; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">int32&#31867;&#22411;&#65292;rust&#20250;&#20570;&#31867;&#22411;&#25512;&#26029;, &#27809;&#26377;mut&#20851;&#38190;&#23383;&#65292;&#37117;&#26159;&#19981;&#21487;&#21464;&#21464;&#37327;</span>
+<span style="color: #8B8878;">//</span><span style="color: #8B8878;">a1 = 6 ; &#19981;&#21487;&#21464;&#21464;&#37327;&#65292;&#33509;&#25913;&#21464;&#20854;&#20540;&#20250;&#25253;&#38169;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">a2</span>:<span style="color: #5FD7FF;">i32</span> = 5; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">int32&#31867;&#22411;,&#27880;: rust&#20013;&#30340;&#21464;&#37327;&#21517;&#37117;&#24456;&#30701;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">b1</span>:<span style="color: #5FD7FF;">u32</span> = 5; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">unsign int32&#31867;&#22411;</span>
+
+<span style="color: #FF1493;">let</span> <span style="color: #FF1493;">mut</span> <span style="color: #FF8C00;">a11</span>:<span style="color: #5FD7FF;">f64</span> = 1.0; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21487;&#21464;&#21464;&#37327;</span>
+a11 = 2.0; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#19981;&#20250;&#25253;&#38169;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">a11</span> = a11; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21487;&#37325;&#26032;&#32465;&#23450;&#20026;&#19981;&#21487;&#21464;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">b12</span> = 1.2f32; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">rust&#20013;&#30340;value + type&#20889;&#27861;</span>
+
+<span style="color: #FF1493;">let</span> (a, <span style="color: #FF1493;">mut</span> b):(<span style="color: #5FD7FF;">bool</span>, <span style="color: #5FD7FF;">bool</span>) = (<span style="color: #FF1493;">true</span>, <span style="color: #FF1493;">false</span>); <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#22810;&#20010;&#21464;&#37327;&#36171;&#20540;</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdfda532" class="outline-2">
+<h2 id="orgdfda532">类型</h2>
+<div class="outline-text-2" id="text-orgdfda532">
+<ul class="org-ul">
+<li>布尔类型：有两个值true和false。</li>
+<li>字符类型：表示单个Unicode字符，存储为4个字节。可将来任何字符赋值, 如 <code>let c='秦'</code></li>
+<li>数值类型：分为有符号整数 (i8, i16, i32, i64, isize)、 无符号整数 (u8, u16, u32, u64, usize) 以及浮点数 (f32, f64)。其中iszie,usize则是自适应类型，其大小取决于操作系统。</li>
+<li><p>
+字符串类型：最底层的是不定长类型str，更常用的是字符串切片&amp;str和堆分配字符串String， 其中字符串切片是静态分配的，有固定的大小，并且不可变，而堆分配字符串是可变的。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"> <span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">hello</span> = <span style="color: #CDC673;">"hello world"</span>; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21452;&#24341;&#21495;&#20013;&#30340;&#23383;&#31526;&#20018;&#31867;&#22411;&#20026;&amp;'static str, &#21363;&#20854;&#19981;&#21487;&#21464;</span>
+ <span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">hello</span> : &amp;'<span style="color: #FF1493;">static</span> <span style="color: #5FD7FF;">str</span> = <span style="color: #CDC673;">"hello world"</span>; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20004;&#31181;&#26041;&#24335;&#31561;&#20215;</span>
+
+ <span style="color: #8B8878;">// </span><span style="color: #8B8878;">String &#31867;&#22411;&#65292;&#31867;&#27604;[T]&#21644;Vec&lt;T&gt;&#30340;&#20851;&#31995;&#65292;str&#21644;String&#23601;&#26159;&#36825;&#31181;&#20851;&#31995;</span>
+ <span style="color: #FF1493;">let</span> <span style="color: #FF1493;">mut</span> <span style="color: #FF8C00;">s</span> = <span style="color: #5FD7FF;">String</span>::new();
+ <span style="color: #FF1493;">let</span> <span style="color: #FF1493;">mut</span> <span style="color: #FF8C00;">hello</span> = <span style="color: #5FD7FF;">String</span>::from(<span style="color: #CDC673;">"hello"</span>);
+ hello.push(<span style="color: #CDC673;">'w'</span>); <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21387;&#20837;&#23383;&#31526;</span>
+ hello.push_str(<span style="color: #CDC673;">"orld"</span>); <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21387;&#20837;&#23383;&#31526;&#20018;</span>
+ hello.pop(); <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#24377;&#20986;</span>
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">str&#36716;String</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">x</span>:&amp;'<span style="color: #FF1493;">static</span> str=<span style="color: #CDC673;">"hello"</span>;
+<span style="color: #FF1493;">let</span> <span style="color: #FF1493;">mut</span> <span style="color: #FF8C00;">y</span>:<span style="color: #5FD7FF;">String</span> = x.to_string();
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">String &#36716;str</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">s</span> = <span style="color: #CDC673;">"Hello"</span>.to_string();
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">ss</span> = &amp;*s;
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21487;&#20351;&#29992;r&#26469;&#36991;&#20813;&#23383;&#31526;&#20018;&#36716;&#20041;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">d</span> &amp;'<span style="color: #FF1493;">static</span> <span style="color: #5FD7FF;">str</span> = <span style="color: #CDC673;">r"abc/nabc"</span>;
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#19979;&#26631;&#35775;&#38382;</span>
+<span style="color: #FF1493;">let</span> c=<span style="color: #CDC673;">"hello"</span>.to_string();
+c.chars().nth(2); <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#35775;&#38382;&#31532;2&#20010; </span>
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#23383;&#31526;&#20018;&#20999;&#29255;&#65292;&#24456;&#21361;&#38505;&#65292;&#19981;&#24314;&#35758;&#20351;&#29992;</span>
+</pre>
+</div></li>
+<li><p>
+数组：具有固定大小，并且元素都是同种类型，可表示为[T; N]。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">array</span> : [<span style="color: #5FD7FF;">i32</span>; 3] = [0; 3]; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#25968;&#32452;&#22823;&#23567;&#26159;&#22266;&#23450;&#30340;&#65292;[T; N]&#29992;&#26469;&#34920;&#31034;&#25968;&#32452;N&#20010;T&#31867;&#22411;,[0;3]&#34920;&#31034;3&#20010;0&#26500;&#25104;&#30340;&#25968;&#32452;</span>
+<span style="color: #FF1493;">for</span> x <span style="color: #FF1493;">in</span> &amp;array {
+    <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"</span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;">"</span>, x)
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">vector</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">v</span>:<span style="color: #5FD7FF;">Vec</span>&lt;<span style="color: #5FD7FF;">i32</span>&gt; = <span style="color: #5FD7FF;">Vec</span>::new(); <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#31354;vector, &#19981;&#21487;&#21464;&#65292;&#19981;&#21487;&#21387;&#20837;&#25968;&#25454;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">v</span>:<span style="color: #5FD7FF;">Vec</span>&lt;<span style="color: #5FD7FF;">i32</span>&gt; = <span style="color: #FF1493;">Vec!</span>[]; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#23439;&#21019;&#24314;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">v</span> = <span style="color: #FF1493;">Vec!</span>[1,2,3,4,5];
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">v</span> = <span style="color: #FF1493;">vec!</span>[0;10];
+<span style="color: #FF1493;">let</span> <span style="color: #FF1493;">mut</span> <span style="color: #FF8C00;">v</span> = <span style="color: #FF1493;">vec!</span>[1,2]; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21487;&#21464;vector,&#21487;&#21387;&#20837;&#25968;&#25454;</span>
+v.push(3); <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21387;&#20837;&#25968;&#25454;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">res</span> = v.pop(); <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#24377;&#20986;&#25968;&#25454;</span>
+</pre>
+</div></li>
+<li><p>
+切片：引用一个数组的部分数据并且不需要拷贝，可表示为&amp;[T]。&amp;符号不要考虑成引用，会给自己增加负担，相反，应考虑为切片的必要的一部分。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">arr</span> = [1,2,3,4,5];
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">slice_1</span> = &amp;arr[..]; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#33719;&#21462;&#20840;&#37096;&#20803;&#32032;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">slice_2</span> = &amp;arr[1..4]; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#33719;&#21462;&#19979;&#26631;[1,4]&#30340;&#20803;&#32032;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">slice_3</span> = &amp;arr[1..]; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#33719;&#21462;&#19979;&#26631;1&#20043;&#21518;&#30340;&#25152;&#26377;&#20803;&#32032;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">slice_4</span> = &amp;arr[..3]; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#33719;&#21462;&#19979;&#26631;3&#20043;&#21069;&#30340;&#25152;&#26377;&#20803;&#32032;</span>
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#26377;&#20851;slice&#30340;&#20989;&#25968;</span>
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">show</span>(<span style="color: #FF8C00;">arr</span>: &amp;[<span style="color: #5FD7FF;">u8</span>]){
+    <span style="color: #FF1493;">for</span> i <span style="color: #FF1493;">in</span> arr {
+        <span style="color: #FF1493;">print!</span>(<span style="color: #CDC673;">"</span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;"> "</span>,i);
+    }
+}
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#35843;&#29992;</span>
+show(&amp;arr[..]);
+show(slice_1);
+</pre>
+</div></li>
+<li><p>
+元组：具有固定大小的有序列表，每个元素都有自己的类型，通过解构或者索引来获得每个元素的值。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">y</span> = (0, <span style="color: #CDC673;">"1234"</span>);
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">x</span> :(<span style="color: #5FD7FF;">i32</span>, &amp;<span style="color: #5FD7FF;">str</span>) = (3, <span style="color: #CDC673;">"123456"</span>)
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#35775;&#38382;</span>
+<span style="color: #FF1493;">let</span> (w, z) = y;
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#19979;&#26631;&#35775;&#38382;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">f</span> = x.0;
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">e</span> = x.1;
+</pre>
+</div></li>
+<li>指针：最底层的是裸指针*const T和*mut T，但解引用它们是不安全的，必须放到unsafe块里。</li>
+<li>函数：具有函数类型的变量实质上是一个函数指针。</li>
+<li>元类型：即()，其唯一的值也是()。</li>
+<li><p>
+结构体
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #8B8878;">// </span><span style="color: #8B8878;">1. &#36890;&#24120;&#39548;&#23792;&#21629;&#21517;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">2. &#32467;&#26500;&#20307;&#30340;&#20013;&#30340;&#20540;&#40664;&#35748;&#19981;&#21487;&#21464;,&#19988;&#19981;&#25903;&#25345;&#22495;&#31867;&#22411;&#20026;&#21487;&#21464;,&#21487;&#36890;&#36807;Cell&#26469;&#27169;&#25311;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">3. &#32467;&#26500;&#20307;&#22495;&#30340;&#32467;&#23614;&#26159;&#36887;&#21495;,</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">4. &#32467;&#26500;&#20307;&#30340;&#22495;&#40664;&#35748;&#31169;&#26377;, &#21487;&#36890;&#36807;pub&#20851;&#38190;&#23383;&#20844;&#24320;</span>
+<span style="color: #FF1493;">struct</span> <span style="color: #5FD7FF;">Point</span>{
+    <span style="color: #FF8C00;">x</span>:<span style="color: #5FD7FF;">i32</span>,
+    <span style="color: #FF8C00;">y</span>:<span style="color: #5FD7FF;">i32</span>,
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">1. &#20803;&#32452;&#32467;&#26500;&#20307;,&#29992;()&#26469;&#21253;&#35065;&#22495;,&#19988;&#22495;&#26080;&#21517;&#23383;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">2. &#36890;&#24120;&#39548;&#23792;&#21629;&#21517;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">3. &#20803;&#32452;&#32467;&#26500;&#20307;&#30340;&#26500;&#36896;&#26041;&#27861;&#21487;&#34987;&#24403;&#20570;&#20989;&#25968;&#20256;&#20837;</span>
+<span style="color: #FF1493;">struct</span> <span style="color: #5FD7FF;">Color</span>(<span style="color: #5FD7FF;">u8</span>,<span style="color: #5FD7FF;">u8</span>,<span style="color: #5FD7FF;">u8</span>);
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">4. &#33509;&#20803;&#32452;&#32467;&#26500;&#20307;&#21482;&#26377;&#19968;&#20010;&#22495;&#65292;&#21017;&#20854;&#20026;newtype</span>
+<span style="color: #FF1493;">struct</span> <span style="color: #5FD7FF;">NewInt</span>(<span style="color: #5FD7FF;">i32</span>);
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">5. &#31354;&#32467;&#26500;&#20307;&#21344;&#29992;&#31354;&#38388;&#20026;0</span>
+<span style="color: #FF1493;">struct</span> <span style="color: #5FD7FF;">D</span>;
+
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">main</span>() {
+    <span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">point</span> = <span style="color: #5FD7FF;">Point</span>{<span style="color: #FF8C00;">x</span>:1, <span style="color: #FF8C00;">y</span>:2};
+    <span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">point2</span> = <span style="color: #5FD7FF;">Point</span>{..point}; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">.. &#34920;&#36798;&#24335;&#21487;&#20197;&#34920;&#31034;copy</span>
+    <span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">point3</span> = <span style="color: #5FD7FF;">Point</span>{<span style="color: #FF8C00;">x</span>:2,..point}; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">.. &#34920;&#36798;&#24335;&#21487;&#20197;&#34920;&#31034;copy</span>
+    <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"</span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;">"</span>,point.y)
+}
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org92c03a9" class="outline-2">
+<h2 id="org92c03a9">控制流</h2>
+<div class="outline-text-2" id="text-org92c03a9">
+</div>
+<div id="outline-container-org2c32c53" class="outline-3">
+<h3 id="org2c32c53">if</h3>
+<div class="outline-text-3" id="text-org2c32c53">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#24418;&#24335;1 </span>
+<span style="color: #FF1493;">if</span> expr1 {
+
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#24418;&#24335;2</span>
+<span style="color: #FF1493;">if</span> expr1 {
+
+} <span style="color: #FF1493;">else</span> <span style="color: #FF1493;">if</span> expr2 {
+
+} <span style="color: #FF1493;">else</span>
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#24418;&#24335;3</span>
+<span style="color: #FF1493;">if</span> expr1 {
+
+} <span style="color: #FF1493;">else</span> {
+
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">rust &#20013;if&#26159;&#19968;&#20010;&#34920;&#36798;&#24335;,so&#21487;&#20197;&#36825;&#20040;&#20889;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">x</span> = 5;
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">y</span> = <span style="color: #FF1493;">if</span> x == 5 {10} <span style="color: #FF1493;">else</span> {15};
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">rust&#22522;&#20110;&#34920;&#36798;&#24335;&#30340;&#35821;&#35328;&#65292;&#26377;&#19988;&#20165;&#26377;&#20004;&#31181;&#35821;&#21477;&#65292;1. &#22768;&#26126;&#35821;&#21477;:&#22914;let, 2. &#34920;&#36798;&#24335;&#35821;&#21477;,&#22312;&#34920;&#36798;&#24335;&#21518;&#21152;';',&#23558;&#34920;&#36798;&#24335;&#21464;&#25104;&#35821;&#21477;&#12290;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20197;;&#32467;&#23614;&#30340;&#20026;&#35821;&#21477;,&#35821;&#21477;&#30340;&#36820;&#22238;&#20540;&#20026;unit (),&#22914; x=5 &#26159;&#19968;&#26465;&#34920;&#36798;&#24335;&#65292;&#32780;x=5; &#26159;&#19968;&#26465;&#35821;&#21477;</span>
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">if let&#26159;match&#30340;&#31616;&#21270;&#29992;&#27861;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">x</span> = <span style="color: #5FD7FF;">Some</span>(5);
+<span style="color: #FF1493;">if</span> <span style="color: #FF1493;">let</span> <span style="color: #5FD7FF;">Some</span>(y) = x{
+    <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"</span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;">"</span>, y);
+}
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">z</span> = <span style="color: #FF1493;">if</span> <span style="color: #FF1493;">let</span> <span style="color: #5FD7FF;">Some</span>(y) = x {y} <span style="color: #FF1493;">else</span> {0}; <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#33509;x&#20013;&#26377;&#20540;&#65292;&#21017;&#36171;&#32473;z</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2d081e8" class="outline-3">
+<h3 id="org2d081e8">for</h3>
+<div class="outline-text-3" id="text-org2d081e8">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #8B8878;">// </span><span style="color: #8B8878;">expression &#26159;&#19968;&#20010;&#36845;&#20195;&#22120;,&#22914;0..10,or [0,1,2].iter()</span>
+<span style="color: #FF1493;">for</span> var <span style="color: #FF1493;">in</span> iterator {
+
+}
+eg :
+<span style="color: #FF1493;">for</span> x <span style="color: #FF1493;">in</span> 0..10 {
+
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#33719;&#21462;&#32034;&#24341;&#65292;&#20351;&#29992;enumerate()&#20989;&#25968;</span>
+<span style="color: #FF1493;">for</span> (i,j) <span style="color: #FF1493;">in</span> (0..10).enumerate() {
+    <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"i is </span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;">, j is </span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;">"</span>, i, j);
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc26a41d" class="outline-3">
+<h3 id="orgc26a41d">while</h3>
+<div class="outline-text-3" id="text-orgc26a41d">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #8B8878;">// </span><span style="color: #8B8878;">expr&#26159;&#19968;&#20010;bool&#30340;&#34920;&#36798;&#24335;</span>
+<span style="color: #FF1493;">while</span> expr{
+
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">loop&#31867;&#20284; while true</span>
+<span style="color: #FF1493;">loop</span> {
+
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc0ad136" class="outline-3">
+<h3 id="orgc0ad136">match</h3>
+<div class="outline-text-3" id="text-orgc0ad136">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #8B8878;">// </span><span style="color: #8B8878;">match &#31867;&#27604;switch,&#38656;&#31526;&#21512;&#19968;&#19979;&#35201;&#27714;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">1. &#35821;&#21477;&#20197;,&#32467;&#23614;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">2. &#33509;&#35201;&#33719;&#21462;&#21305;&#37197;&#20540;&#65292;&#20351;&#29992;@&#31526;&#21495;,&#36890;&#24120;&#29992;&#20110;&#27169;&#24335;&#21305;&#37197;&#20013;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">3. &#24517;&#39035;&#35201;&#26377;_&#31526;&#21512;&#26469;&#31351;&#20030;&#21097;&#20313;&#21305;&#37197;&#65292;&#22240;rust&#35201;&#27714;&#35206;&#30422;&#25152;&#26377;&#21487;&#33021;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF1493;">mut</span> <span style="color: #FF8C00;">cnt</span> = 0;
+<span style="color: #FF1493;">match</span> cnt {
+    0|6 =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"ha"</span>),
+    e @ 1 ... 5 =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"hei"</span>),
+    _ =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"huhu"</span>),
+}
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">4. &#21487;&#36890;&#36807;ref&#20851;&#38190;&#23383;&#24471;&#21040;&#26576;&#20540;&#30340;&#24341;&#29992;</span>
+<span style="color: #FF1493;">match</span> cnt {
+    <span style="color: #FF1493;">ref</span> <span style="color: #FF8C00;">r</span> =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"got a ref </span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;">"</span>, r),
+}
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">5. &#21487;&#27169;&#31946;&#21305;&#37197;&#20803;&#32452;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">pair</span> = (0, -2);
+<span style="color: #FF1493;">match</span> pair {
+    (0, y) =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"y is </span><span style="color: #CDC673; font-style: italic;">{:?}</span><span style="color: #CDC673;">"</span>, y),
+    (x, 0) =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"x is </span><span style="color: #CDC673; font-style: italic;">{:?}</span><span style="color: #CDC673;">"</span>, x),
+    _ =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"doesnt match anything"</span>),
+}
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">6. &#21487;&#21305;&#37197;&#32467;&#26500;&#20307;,&#21450;&#26522;&#20030;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">origin</span> = <span style="color: #5FD7FF;">Point</span> {<span style="color: #FF8C00;">x</span>:0, <span style="color: #FF8C00;">y</span>:0};
+<span style="color: #FF1493;">match</span> origin {
+    <span style="color: #5FD7FF;">Point</span>{x, ..} =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"x is </span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;">"</span>, x),
+}
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20063;&#21487;&#23545;struct&#20013;&#30340;&#22495;&#36827;&#34892;&#37325;&#21629;&#21517;</span>
+<span style="color: #FF1493;">match</span> origin {
+    <span style="color: #5FD7FF;">Point</span>{<span style="color: #FF8C00;">x</span>:x1, <span style="color: #FF8C00;">y</span>:y1} =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"x is"</span>, x1),
+}
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">7. &#38500;&#20102;panic,&#25152;&#26377;&#20998;&#25903;&#30340;&#34920;&#36798;&#24335;&#30340;&#32467;&#26524;&#24517;&#39035;&#30456;&#21516;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21518;&#32622;&#26465;&#20214;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">y</span> = <span style="color: #FF1493;">false</span>;
+<span style="color: #FF1493;">match</span> x {
+    4|5 <span style="color: #FF1493;">if</span> y =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"yes"</span>), <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20854;&#23454;&#23601;&#26159; (x in 4|5) &amp;&amp; (if y)</span>
+    _ =&gt; <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"no"</span>),
+}
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20854;&#23454;&#19978;&#36848;&#20869;&#23481;&#21644;haskell&#20013;&#30340;&#27169;&#24335;&#21305;&#37197;&#22522;&#26412;&#19968;&#26679;</span>
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20063;&#21487;&#36890;&#36807;let&#21644;while&#36827;&#34892;&#27169;&#24335;&#21305;&#37197;</span>
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">number</span> = <span style="color: #5FD7FF;">Some</span>(7);
+<span style="color: #FF1493;">if</span> <span style="color: #FF1493;">let</span> <span style="color: #5FD7FF;">Some</span>(i) = number {
+    <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"i is </span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;">"</span>, i);
+} <span style="color: #FF1493;">else</span> {
+    <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"doesnt match a number"</span>);
+}
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">while let</span>
+<span style="color: #FF1493;">while</span> <span style="color: #FF1493;">let</span> <span style="color: #5FD7FF;">Some</span>(i) = number {
+    <span style="color: #FF1493;">if</span> i &gt; 5 {
+        <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"i is gt 5"</span>);
+        <span style="color: #FF1493;">break</span>;
+    } <span style="color: #FF1493;">else</span> {
+        <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"i is small than t"</span>);
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org63165ff" class="outline-2">
+<h2 id="org63165ff">函数</h2>
+<div class="outline-text-2" id="text-org63165ff">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #8B8878;">// </span><span style="color: #8B8878;">fn &#24320;&#22836;&#65292;&#21487;&#20197;&#22810;&#20010;&#21442;&#25968;&#65292;&#26368;&#22810;&#19968;&#20010;&#36820;&#22238;&#20540;</span>
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">add_one</span>(<span style="color: #FF8C00;">x</span>: <span style="color: #5FD7FF;">i32</span>) -&gt; <span style="color: #5FD7FF;">i32</span> {
+    <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#33509;&#20197;;&#32467;&#23614;&#65292;&#21017;&#36820;&#22238;()</span>
+    x + 1
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20294;&#26159;&#21487;&#20197;&#21033;&#29992;&#20803;&#32452;&#26469;&#36798;&#21040;&#36820;&#22238;&#22810;&#20010;&#20540;&#30340;&#25928;&#26524;</span>
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">get_two</span>() -&gt; (<span style="color: #5FD7FF;">i32</span>,<span style="color: #5FD7FF;">i32</span>){
+    (1, 2)
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21457;&#25955;&#20989;&#25968;&#65292;&#20351;&#29992;!&#20316;&#20026;&#36820;&#22238;&#31867;&#22411;,&#20854;&#23454;&#21644;golang&#30340;panic&#25110;&#32773;java&#30340;exception&#19968;&#20010;&#24847;&#24605;</span>
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">diverging</span>() -&gt; !{
+    <span style="color: #FF1493;">panic!</span>(<span style="color: #CDC673;">"this function will never return"</span>);
+}
+<span style="color: #8B8878;">//</span><span style="color: #8B8878;">&#21457;&#25955;&#20989;&#25968;&#36820;&#22238;&#20540;&#21487;&#20197;&#36171;&#20540;&#32473;&#20219;&#20309;&#31867;&#22411;</span>
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">test</span>() -&gt; <span style="color: #5FD7FF;">i32</span>{
+    diverging()
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20989;&#25968;&#20063;&#21487;&#20197;&#20351;&#29992;&#27169;&#24335;&#21305;&#37197;</span>
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">print_id</span>((_, age):(&amp;<span style="color: #5FD7FF;">str</span>, <span style="color: #5FD7FF;">i32</span>)) {
+    <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"my age is </span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;">"</span>,age);
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#33509;&#20989;&#25968;&#19981;&#21152;&#36820;&#22238;&#20540;&#65292;&#21017;&#20854;&#36820;&#22238;(), &#21363;fn main() &#21644; fn main() -&gt; () &#26159;&#31561;&#20215;&#30340;&#12290;</span>
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">main</span>(){
+    <span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#21311;&#21517;&#20989;&#25968;</span>
+    <span style="color: #8B8878;">// </span><span style="color: #8B8878;">rust&#20013;&#30340;&#20989;&#25968;&#65292;&#26368;&#21518;&#19968;&#20010;&#34920;&#36798;&#24335;&#30340;&#20540;&#40664;&#35748;&#20316;&#20026;&#36820;&#22238;&#20540;&#12290;</span>
+    <span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">plus_num</span> = |<span style="color: #FF8C00;">x</span>:<span style="color: #5FD7FF;">i32</span>| x+num;
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20351;&#29992;impl&#20851;&#38190;&#23383;&#26469;&#20026;enum,struct&#31561;&#31867;&#22411;&#21019;&#24314;&#26041;&#27861;</span>
+<span style="color: #FF1493;">struct</span> <span style="color: #5FD7FF;">Person</span> {
+    name :<span style="color: #5FD7FF;">String</span>,
+}
+
+<span style="color: #FF1493;">impl</span> <span style="color: #5FD7FF;">Person</span> {
+    <span style="color: #FF1493;">fn</span> <span style="color: #87D700;">new</span>(<span style="color: #FF8C00;">n</span>: &amp;<span style="color: #5FD7FF;">str</span>) -&gt; <span style="color: #5FD7FF;">Person</span>{
+        <span style="color: #5FD7FF;">Person</span> {
+            <span style="color: #FF8C00;">name</span>: n.to_string(),
+        }
+    }
+
+    <span style="color: #FF1493;">fn</span> <span style="color: #87D700;">greeting</span> (&amp;<span style="color: #FF1493;">self</span>){
+        <span style="color: #FF1493;">println!</span>(<span style="color: #CDC673;">"</span><span style="color: #CDC673; font-style: italic;">{}</span><span style="color: #CDC673;"> say hello."</span>, <span style="color: #FF1493;">self</span>.name);
+    }
+}
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20989;&#25968;&#20316;&#20026;&#19968;&#31561;&#20844;&#27665;&#65292;&#21487;&#36890;&#36807;type&#20026;&#26576;&#20010;&#20989;&#25968;&#31867;&#22411;&#23450;&#20041;&#21035;&#21517;</span>
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">inc</span> (n : <span style="color: #5FD7FF;">i32</span>) -&gt; <span style="color: #5FD7FF;">i32</span>{
+    n + 1
+}
+<span style="color: #FF1493;">type</span> <span style="color: #5FD7FF;">IncType</span> = <span style="color: #FF1493;">fn</span>(<span style="color: #5FD7FF;">i32</span>) -&gt; <span style="color: #5FD7FF;">i32</span>;
+<span style="color: #FF1493;">let</span> <span style="color: #FF8C00;">func</span>: <span style="color: #5FD7FF;">IncType</span> = inc;
+func(3);
+
+<span style="color: #8B8878;">// </span><span style="color: #8B8878;">&#20989;&#25968;&#20316;&#20026;&#36820;&#22238;&#20540;</span>
+<span style="color: #FF1493;">fn</span> <span style="color: #87D700;">get_func</span>(<span style="color: #FF8C00;">n</span>: <span style="color: #5FD7FF;">i32</span>) -&gt; <span style="color: #FF1493;">fn</span>(<span style="color: #5FD7FF;">i32</span>) -&gt; <span style="color: #5FD7FF;">i32</span>{
+    <span style="color: #8B8878;">// </span><span style="color: #8B8878;">rust &#25903;&#25345;&#22312;&#20989;&#25968;&#20013;&#23450;&#20041;&#20989;&#25968;&#65292;&#20294;&#26159;&#19981;&#33021;&#20351;&#29992;&#35813;&#20989;&#25968;&#22806;&#30340;&#21464;&#37327;&#65292;&#33509;&#35201;&#20351;&#29992;&#65292;&#21017;&#38656;&#35201;&#20351;&#29992;&#38381;&#21253;</span>
+    <span style="color: #FF1493;">fn</span> <span style="color: #87D700;">inc</span>(<span style="color: #FF8C00;">n</span>:<span style="color: #5FD7FF;">i32</span>) -&gt; <span style="color: #5FD7FF;">i32</span>{
+        n+1
+    }
+    inc
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge6f8f1c" class="outline-2">
+<h2 id="orge6f8f1c">cargo</h2>
+<div class="outline-text-2" id="text-orge6f8f1c">
+<p>
+cargo为项目管理工具，类比java的maven,c++的cmake等。
+cargo的默认规则:
+</p>
+<ul class="org-ul">
+<li>cargo.toml和cargo.lock文件总是位于项目根目录下。</li>
+<li>源代码位于src目录下。</li>
+<li>默认的库入口文件是src/lib.rs。</li>
+<li>默认的可执行程序入口文件是src/main.rs。</li>
+<li>其他可选的可执行文件位于src/bin/*.rs(这里每一个rs文件均对应一个可执行文件)。</li>
+<li>外部测试源代码文件位于tests目录下。</li>
+<li>示例程序源代码文件位于examples。</li>
+<li>基准测试源代码文件位于benches目录下。</li>
+</ul>
+</div>
+<div id="outline-container-org3dc790c" class="outline-3">
+<h3 id="org3dc790c">cargo.toml和cargo.lock</h3>
+<div class="outline-text-3" id="text-org3dc790c">
+<p>
+开发只需关心cargo.toml不需要关心cargo.lock,cargo.toml中是项目依赖的信息及版本，可对该文件进行自定义的更改。
+</p>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-04-16 Tue 13:39</p>
+<p class="date">Created: 2019-04-16 Tue 22:56</p>
 <p class="validation"></p>
 </div>
 </body>
