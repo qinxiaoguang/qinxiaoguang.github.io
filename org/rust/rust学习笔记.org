@@ -365,6 +365,17 @@ fn get_func(n: i32) -> fn(i32) -> i32{
 }
 #+END_SRC
 
+* trait
+类似golang的interface
+#+BEGIN_SRC rust
+trait HasArea {
+    fn area(&self) -> f64;
+}
+// 实现
+struct Circle {
+    x: f64
+}
+#+END_SRC
 * cargo
 cargo为项目管理工具，类比java的maven,c++的cmake等。
 cargo的默认规则:
