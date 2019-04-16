@@ -139,3 +139,4 @@ ascetic 禁欲的，苦行僧 从希腊单词asketes(隐士、僧侣)
 | orthodontist  | 矫形牙医     |
 | optometrist   | 验光师       |
 | optician      | 眼镜制造商   |
+
