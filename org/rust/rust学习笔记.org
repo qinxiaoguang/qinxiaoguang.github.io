@@ -1,3 +1,4 @@
+#+TITLE: rust学习笔记
 * 书籍
 https://rustcc.gitbooks.io/rustprimer/content/
 * install

@@ -1,5 +1,4 @@
 #+TITLE: Linux手册
-
 * 常用
 - =grep -RiP ./ "something"= 在当前目录中查找有something自研的文件，可配合less使用
 - =ps aux | head -1; ps aux | grep -v "PID" | sort -nr -k3 | head -1= 查看cpu最高的进程
@@ -27,6 +26,15 @@
 - 删除前5个字符: =test=${test:5}=
 - 删除右边的字符: =test=${test:0-5}=
 - 保留指定间隔字符: =test=${test:n1:n2}=
+- shell原样打印字符串到指定文件
+  #+BEGIN_SRC shell
+  #!/bin/sh
+  (
+  cat <<EOF
+  // 文件内容
+  EOF
+  ) >/tmp/filename.txt
+  #+END_SRC
 * 循环
 - for: =for j in {1..100..2}= 、 =for j in {1..100}=
 - for循环按行读取

@@ -6,7 +6,7 @@
 <!-- 2019-04-17 Wed 17:02 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>双拼学习</title>
+<title>&lrm;</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="qxg" />
 <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
@@ -24,34 +24,32 @@
  |
  <a accesskey="H" href="/index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">双拼学习</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgbd84c26">练习地址</a></li>
-<li><a href="#org39116d8">桌面背景</a></li>
+<li><a href="#org2013383">背景</a></li>
+<li><a href="#orge210751">方法</a></li>
 </ul>
 </div>
 </div>
-
-<div id="outline-container-orgbd84c26" class="outline-2">
-<h2 id="orgbd84c26">练习地址</h2>
-<div class="outline-text-2" id="text-orgbd84c26">
+<div id="outline-container-org2013383" class="outline-2">
+<h2 id="org2013383">背景</h2>
+<div class="outline-text-2" id="text-org2013383">
 <p>
-<a href="https://api.ihint.me/shuang/">https://api.ihint.me/shuang/</a>
+使用gitpage搭建了个人网站，并利用域名q.qxgzone.com进行重定向，但是国内访问的时候速度非常慢，于是采用国内重定向coding,国外重定向github的方式。
 </p>
 </div>
 </div>
-
-<div id="outline-container-org39116d8" class="outline-2">
-<h2 id="org39116d8">桌面背景</h2>
-<div class="outline-text-2" id="text-org39116d8">
-
-<div class="figure">
-<p><img src="https://qinxiaoguang.github.io/static/img/sp_study.jpg" alt="sp_study.jpg" />
-</p>
-</div>
+<div id="outline-container-orge210751" class="outline-2">
+<h2 id="orge210751">方法</h2>
+<div class="outline-text-2" id="text-orge210751">
+<ol class="org-ol">
+<li>假设原仓库已经部署到github，现需要同时部署到coding上去，则 <code>git remote add coding &lt;coding-address&gt;</code> ,可通过 <code>git remote -vv</code> 或 <code>./git/config</code> 下查看添加后的效果。</li>
+<li><code>git pull coding master --allow-unrelated-historie</code> 将新的远程地址与本地同步。</li>
+<li>分别进行push <code>git push origin master</code> 、 <code>git push coding master</code></li>
+<li>若想要一次性都进行push,则需 <code>git remote set-url --add origin &lt;coding-address&gt;</code> 来为origin添加新的远程仓库。可在./git/config下的origin下查看效果。之后运行 <code>git push</code> 就同时push到两个远程仓库了。</li>
+</ol>
 </div>
 </div>
 </div>

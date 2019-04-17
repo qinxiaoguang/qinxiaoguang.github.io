@@ -1,12 +1,14 @@
-#+TITLE: index
+#+TITLE: 佛系少年
 
 * english
   * [2019-04-16 Tue] [[file:english/word-power-made-easy.org][word power made easy学习笔记]]
+* git
+  * [2019-04-17 Wed] [[file:git/git-push到多个仓库.org][git-push到多个仓库]]
 * linux
-  * [2019-04-16 Tue] [[file:linux/Linux手册.org][Linux手册]]
+  * [2019-04-17 Wed] [[file:linux/Linux手册.org][Linux手册]]
   * [2019-04-16 Tue] [[file:linux/vim简版.org][vim简版]]
 * rust
-  * [2019-04-16 Tue] [[file:rust/rust学习笔记.org][rust学习笔记]]
+  * [2019-04-17 Wed] [[file:rust/rust学习笔记.org][rust学习笔记]]
 * study
   * [2019-04-16 Tue] [[file:study/双拼学习.org][双拼学习]]
 * 人生杂谈

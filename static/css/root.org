@@ -1,5 +1,0 @@
-#+AUTHOR: qxg
-#+EMAIL: qinxiaoguang01 AT gmail DOT com
-#+LINK_HOME: index.html
-#+LINK_UP: index.html
-#+STYLE: <link href="https://qinxiaoguang.github.io/blog/static/css/orgstyle.css" rel="stylesheet" type="text/css">

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-16 Tue 23:46 -->
+<!-- 2019-04-17 Wed 17:02 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Linux手册</title>
@@ -11,11 +11,12 @@
 <meta name="author" content="qxg" />
 <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
 <script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -28,20 +29,19 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org8d864a6">常用</a></li>
-<li><a href="#org23995be">数组</a></li>
-<li><a href="#org6984aa7">map</a></li>
-<li><a href="#org32a671b">字符串</a></li>
-<li><a href="#org639b134">循环</a></li>
-<li><a href="#org92f7b0e">常用if</a></li>
-<li><a href="#org6633933">后记</a></li>
+<li><a href="#orga5d0929">常用</a></li>
+<li><a href="#orga10de39">数组</a></li>
+<li><a href="#org82abce8">map</a></li>
+<li><a href="#org3958578">字符串</a></li>
+<li><a href="#org9385a60">循环</a></li>
+<li><a href="#orgbc53587">常用if</a></li>
+<li><a href="#orgc9d28b3">后记</a></li>
 </ul>
 </div>
 </div>
-
-<div id="outline-container-org8d864a6" class="outline-2">
-<h2 id="org8d864a6">常用</h2>
-<div class="outline-text-2" id="text-org8d864a6">
+<div id="outline-container-orga5d0929" class="outline-2">
+<h2 id="orga5d0929">常用</h2>
+<div class="outline-text-2" id="text-orga5d0929">
 <ul class="org-ul">
 <li><code>grep -RiP ./ "something"</code> 在当前目录中查找有something自研的文件，可配合less使用</li>
 <li><code>ps aux | head -1; ps aux | grep -v "PID" | sort -nr -k3 | head -1</code> 查看cpu最高的进程</li>
@@ -53,9 +53,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org23995be" class="outline-2">
-<h2 id="org23995be">数组</h2>
-<div class="outline-text-2" id="text-org23995be">
+<div id="outline-container-orga10de39" class="outline-2">
+<h2 id="orga10de39">数组</h2>
+<div class="outline-text-2" id="text-orga10de39">
 <ul class="org-ul">
 <li>创建数组 <code>nums=()</code></li>
 <li>添加成员 <code>nums=(${nums[*]} 2)</code> 注意没有逗号,or <code>len=${#nums[*]};nums[len+1]=2</code></li>
@@ -70,9 +70,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org6984aa7" class="outline-2">
-<h2 id="org6984aa7">map</h2>
-<div class="outline-text-2" id="text-org6984aa7">
+<div id="outline-container-org82abce8" class="outline-2">
+<h2 id="org82abce8">map</h2>
+<div class="outline-text-2" id="text-org82abce8">
 <ul class="org-ul">
 <li>创建map <code>declare -A map=()</code> ,老版本创建方式可能是 <code>declare -a map=()</code></li>
 <li>添加成员 <code>map["a"]</code>"hei"=</li>
@@ -81,20 +81,32 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org32a671b" class="outline-2">
-<h2 id="org32a671b">字符串</h2>
-<div class="outline-text-2" id="text-org32a671b">
+<div id="outline-container-org3958578" class="outline-2">
+<h2 id="org3958578">字符串</h2>
+<div class="outline-text-2" id="text-org3958578">
 <ul class="org-ul">
 <li>去掉最后一个字符: <code>test=${test%?}</code></li>
 <li>删除前5个字符: <code>test=${test:5}</code></li>
 <li>删除右边的字符: <code>test=${test:0-5}</code></li>
 <li>保留指定间隔字符: <code>test=${test:n1:n2}</code></li>
+<li><p>
+shell原样打印字符串到指定文件
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #75715E;">#</span><span style="color: #75715E;">!/bin/</span><span style="color: #F92672;">sh</span>
+(
+cat &lt;&lt;EOF
+<span style="color: #E6DB74; font-weight: bold;">// &#25991;&#20214;&#20869;&#23481;</span>
+<span style="color: #E6DB74; font-weight: bold;">EOF</span>
+) &gt;/tmp/filename.txt
+</pre>
+</div></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org639b134" class="outline-2">
-<h2 id="org639b134">循环</h2>
-<div class="outline-text-2" id="text-org639b134">
+<div id="outline-container-org9385a60" class="outline-2">
+<h2 id="org9385a60">循环</h2>
+<div class="outline-text-2" id="text-org9385a60">
 <ul class="org-ul">
 <li>for: <code>for j in {1..100..2}</code> 、 <code>for j in {1..100}</code></li>
 <li>for循环按行读取
@@ -105,17 +117,17 @@
 <code>IFS=$(echo -en "\n");for line in $(cat filename);do cmd;done)</code> ,如果IFS不起作用，则换成下面这种
 </p>
 <div class="org-src-container">
-<pre class="src src-shell"><span style="color: #FF8C00;">IFS</span>=<span style="color: #CDC673;">'</span>
-<span style="color: #CDC673;">'</span>
+<pre class="src src-shell"><span style="color: #FD971F;">IFS</span>=<span style="color: #E6DB74;">'</span>
+<span style="color: #E6DB74;">'</span>
 </pre>
 </div></li>
 </ol></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org92f7b0e" class="outline-2">
-<h2 id="org92f7b0e">常用if</h2>
-<div class="outline-text-2" id="text-org92f7b0e">
+<div id="outline-container-orgbc53587" class="outline-2">
+<h2 id="orgbc53587">常用if</h2>
+<div class="outline-text-2" id="text-orgbc53587">
 <ul class="org-ul">
 <li>数字相等判断 <code>if (( $a==$b ))</code></li>
 <li>字符串是否为空 <code>if [ -z "$a" ]</code> 记得加 <code>"</code></li>
@@ -124,9 +136,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org6633933" class="outline-2">
-<h2 id="org6633933">后记</h2>
-<div class="outline-text-2" id="text-org6633933">
+<div id="outline-container-orgc9d28b3" class="outline-2">
+<h2 id="orgc9d28b3">后记</h2>
+<div class="outline-text-2" id="text-orgc9d28b3">
 <p>
 本来想把linux的笔记从简书搬运过来，但是太多内容了，还是算了吧，以后再说吧
 </p>
@@ -135,7 +147,7 @@
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-04-16 Tue 23:46</p>
+<p class="date">Created: 2019-04-17 Wed 17:02</p>
 <p class="validation"></p>
 </div>
 </body>
