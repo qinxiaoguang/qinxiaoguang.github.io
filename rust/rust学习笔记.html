@@ -3,19 +3,19 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-17 Wed 17:02 -->
+<!-- 2019-04-17 Wed 17:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>rust学习笔记</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="qxg" />
 <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
 <script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
 <script type="text/javascript" src="/static/js/orgscript.js"></script>
 </head>
 <body>
@@ -29,42 +29,42 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org9eb9615">书籍</a></li>
-<li><a href="#org1a1f708">install</a></li>
-<li><a href="#orgb81720d">emacs配置</a></li>
-<li><a href="#org8ed5f7b">Hello world</a></li>
-<li><a href="#orgc404dea">Hello Rust</a></li>
-<li><a href="#org04cc686">变量</a></li>
-<li><a href="#org150e2b7">类型</a></li>
-<li><a href="#orgc9fe130">控制流</a>
+<li><a href="#org24f8dc1">书籍</a></li>
+<li><a href="#orgdcf49f1">install</a></li>
+<li><a href="#org28b213b">emacs配置</a></li>
+<li><a href="#org6b052e2">Hello world</a></li>
+<li><a href="#org9811429">Hello Rust</a></li>
+<li><a href="#orgd069b86">变量</a></li>
+<li><a href="#org2f19f6e">类型</a></li>
+<li><a href="#orgce289f6">控制流</a>
 <ul>
-<li><a href="#org270c974">if</a></li>
-<li><a href="#org06c874f">for</a></li>
-<li><a href="#org566ec17">while</a></li>
-<li><a href="#org10d1592">match</a></li>
+<li><a href="#org6c7c7e3">if</a></li>
+<li><a href="#org0c0c6d9">for</a></li>
+<li><a href="#org13187a8">while</a></li>
+<li><a href="#orgbeea5f2">match</a></li>
 </ul>
 </li>
-<li><a href="#orgef36747">函数</a></li>
-<li><a href="#org8e6ad82">trait</a></li>
-<li><a href="#org9b33d68">cargo</a>
+<li><a href="#org575fe24">函数</a></li>
+<li><a href="#orgad713e8">trait</a></li>
+<li><a href="#org5198671">cargo</a>
 <ul>
-<li><a href="#org99079f2">cargo.toml和cargo.lock</a></li>
+<li><a href="#org6b43412">cargo.toml和cargo.lock</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org9eb9615" class="outline-2">
-<h2 id="org9eb9615">书籍</h2>
-<div class="outline-text-2" id="text-org9eb9615">
+<div id="outline-container-org24f8dc1" class="outline-2">
+<h2 id="org24f8dc1">书籍</h2>
+<div class="outline-text-2" id="text-org24f8dc1">
 <p>
 <a href="https://rustcc.gitbooks.io/rustprimer/content/">https://rustcc.gitbooks.io/rustprimer/content/</a>
 </p>
 </div>
 </div>
-<div id="outline-container-org1a1f708" class="outline-2">
-<h2 id="org1a1f708">install</h2>
-<div class="outline-text-2" id="text-org1a1f708">
+<div id="outline-container-orgdcf49f1" class="outline-2">
+<h2 id="orgdcf49f1">install</h2>
+<div class="outline-text-2" id="text-orgdcf49f1">
 <ol class="org-ol">
 <li><code>curl https://sh.rustup.rs -sSf | sh</code></li>
 <li><code>rustup toolchain add nightly</code></li>
@@ -74,9 +74,9 @@
 </ol>
 </div>
 </div>
-<div id="outline-container-orgb81720d" class="outline-2">
-<h2 id="orgb81720d">emacs配置</h2>
-<div class="outline-text-2" id="text-orgb81720d">
+<div id="outline-container-org28b213b" class="outline-2">
+<h2 id="org28b213b">emacs配置</h2>
+<div class="outline-text-2" id="text-org28b213b">
 <div class="org-src-container">
 <pre class="src src-elisp">(<span style="color: #F92672;">use-package</span> <span style="color: #AE81FF;">rust-mode</span> <span style="color: #F92672;">:ensure</span> t <span style="color: #F92672;">:defer</span> t
   <span style="color: #F92672;">:config</span>
@@ -108,9 +108,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8ed5f7b" class="outline-2">
-<h2 id="org8ed5f7b">Hello world</h2>
-<div class="outline-text-2" id="text-org8ed5f7b">
+<div id="outline-container-org6b052e2" class="outline-2">
+<h2 id="org6b052e2">Hello world</h2>
+<div class="outline-text-2" id="text-org6b052e2">
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>(){
     <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"hello world"</span>);
@@ -123,9 +123,9 @@
 </p>
 </div>
 </div>
-<div id="outline-container-orgc404dea" class="outline-2">
-<h2 id="orgc404dea">Hello Rust</h2>
-<div class="outline-text-2" id="text-orgc404dea">
+<div id="outline-container-org9811429" class="outline-2">
+<h2 id="org9811429">Hello Rust</h2>
+<div class="outline-text-2" id="text-org9811429">
 <ul class="org-ul">
 <li>创建项目 <code>cargo new hellorust --bin</code></li>
 <li>项目目录</li>
@@ -143,9 +143,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org04cc686" class="outline-2">
-<h2 id="org04cc686">变量</h2>
-<div class="outline-text-2" id="text-org04cc686">
+<div id="outline-container-orgd069b86" class="outline-2">
+<h2 id="orgd069b86">变量</h2>
+<div class="outline-text-2" id="text-orgd069b86">
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #75715E;">//</span><span style="color: #75715E;">varable</span>
 <span style="color: #F92672;">let</span> <span style="color: #FD971F;">a1</span> = 5; <span style="color: #75715E;">// </span><span style="color: #75715E;">int32&#31867;&#22411;&#65292;rust&#20250;&#20570;&#31867;&#22411;&#25512;&#26029;, &#27809;&#26377;mut&#20851;&#38190;&#23383;&#65292;&#37117;&#26159;&#19981;&#21487;&#21464;&#21464;&#37327;</span>
@@ -163,9 +163,9 @@ a11 = 2.0; <span style="color: #75715E;">// </span><span style="color: #75715E;"
 </div>
 </div>
 </div>
-<div id="outline-container-org150e2b7" class="outline-2">
-<h2 id="org150e2b7">类型</h2>
-<div class="outline-text-2" id="text-org150e2b7">
+<div id="outline-container-org2f19f6e" class="outline-2">
+<h2 id="org2f19f6e">类型</h2>
+<div class="outline-text-2" id="text-org2f19f6e">
 <ul class="org-ul">
 <li>布尔类型：有两个值true和false。</li>
 <li>字符类型：表示单个Unicode字符，存储为4个字节。可将来任何字符赋值, 如 <code>let c='秦'</code></li>
@@ -290,13 +290,13 @@ show(slice_1);
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc9fe130" class="outline-2">
-<h2 id="orgc9fe130">控制流</h2>
-<div class="outline-text-2" id="text-orgc9fe130">
+<div id="outline-container-orgce289f6" class="outline-2">
+<h2 id="orgce289f6">控制流</h2>
+<div class="outline-text-2" id="text-orgce289f6">
 </div>
-<div id="outline-container-org270c974" class="outline-3">
-<h3 id="org270c974">if</h3>
-<div class="outline-text-3" id="text-org270c974">
+<div id="outline-container-org6c7c7e3" class="outline-3">
+<h3 id="org6c7c7e3">if</h3>
+<div class="outline-text-3" id="text-org6c7c7e3">
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">&#24418;&#24335;1 </span>
 <span style="color: #F92672;">if</span> expr1 {
@@ -333,9 +333,9 @@ show(slice_1);
 </div>
 </div>
 </div>
-<div id="outline-container-org06c874f" class="outline-3">
-<h3 id="org06c874f">for</h3>
-<div class="outline-text-3" id="text-org06c874f">
+<div id="outline-container-org0c0c6d9" class="outline-3">
+<h3 id="org0c0c6d9">for</h3>
+<div class="outline-text-3" id="text-org0c0c6d9">
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">expression &#26159;&#19968;&#20010;&#36845;&#20195;&#22120;,&#22914;0..10,or [0,1,2].iter()</span>
 <span style="color: #F92672;">for</span> var <span style="color: #F92672;">in</span> iterator {
@@ -354,9 +354,9 @@ eg :
 </div>
 </div>
 </div>
-<div id="outline-container-org566ec17" class="outline-3">
-<h3 id="org566ec17">while</h3>
-<div class="outline-text-3" id="text-org566ec17">
+<div id="outline-container-org13187a8" class="outline-3">
+<h3 id="org13187a8">while</h3>
+<div class="outline-text-3" id="text-org13187a8">
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">expr&#26159;&#19968;&#20010;bool&#30340;&#34920;&#36798;&#24335;</span>
 <span style="color: #F92672;">while</span> expr{
@@ -371,9 +371,9 @@ eg :
 </div>
 </div>
 </div>
-<div id="outline-container-org10d1592" class="outline-3">
-<h3 id="org10d1592">match</h3>
-<div class="outline-text-3" id="text-org10d1592">
+<div id="outline-container-orgbeea5f2" class="outline-3">
+<h3 id="orgbeea5f2">match</h3>
+<div class="outline-text-3" id="text-orgbeea5f2">
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">match &#31867;&#27604;switch,&#38656;&#31526;&#21512;&#19968;&#19979;&#35201;&#27714;</span>
 <span style="color: #75715E;">// </span><span style="color: #75715E;">1. &#35821;&#21477;&#20197;,&#32467;&#23614;</span>
@@ -434,9 +434,9 @@ eg :
 </div>
 </div>
 </div>
-<div id="outline-container-orgef36747" class="outline-2">
-<h2 id="orgef36747">函数</h2>
-<div class="outline-text-2" id="text-orgef36747">
+<div id="outline-container-org575fe24" class="outline-2">
+<h2 id="org575fe24">函数</h2>
+<div class="outline-text-2" id="text-org575fe24">
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">fn &#24320;&#22836;&#65292;&#21487;&#20197;&#22810;&#20010;&#21442;&#25968;&#65292;&#26368;&#22810;&#19968;&#20010;&#36820;&#22238;&#20540;</span>
 <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">add_one</span>(<span style="color: #FD971F;">x</span>: <span style="color: #66D9EF;">i32</span>) -&gt; <span style="color: #66D9EF;">i32</span> {
@@ -508,9 +508,9 @@ func(3);
 </div>
 </div>
 
-<div id="outline-container-org8e6ad82" class="outline-2">
-<h2 id="org8e6ad82">trait</h2>
-<div class="outline-text-2" id="text-org8e6ad82">
+<div id="outline-container-orgad713e8" class="outline-2">
+<h2 id="orgad713e8">trait</h2>
+<div class="outline-text-2" id="text-orgad713e8">
 <p>
 类似golang的interface
 </p>
@@ -526,9 +526,9 @@ func(3);
 </div>
 </div>
 </div>
-<div id="outline-container-org9b33d68" class="outline-2">
-<h2 id="org9b33d68">cargo</h2>
-<div class="outline-text-2" id="text-org9b33d68">
+<div id="outline-container-org5198671" class="outline-2">
+<h2 id="org5198671">cargo</h2>
+<div class="outline-text-2" id="text-org5198671">
 <p>
 cargo为项目管理工具，类比java的maven,c++的cmake等。
 cargo的默认规则:
@@ -544,9 +544,9 @@ cargo的默认规则:
 <li>基准测试源代码文件位于benches目录下。</li>
 </ul>
 </div>
-<div id="outline-container-org99079f2" class="outline-3">
-<h3 id="org99079f2">cargo.toml和cargo.lock</h3>
-<div class="outline-text-3" id="text-org99079f2">
+<div id="outline-container-org6b43412" class="outline-3">
+<h3 id="org6b43412">cargo.toml和cargo.lock</h3>
+<div class="outline-text-3" id="text-org6b43412">
 <p>
 开发只需关心cargo.toml不需要关心cargo.lock,cargo.toml中是项目依赖的信息及版本，可对该文件进行自定义的更改。
 </p>
@@ -556,7 +556,7 @@ cargo的默认规则:
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-04-17 Wed 17:02</p>
+<p class="date">Created: 2019-04-17 Wed 17:09</p>
 <p class="validation"></p>
 </div>
 </body>
