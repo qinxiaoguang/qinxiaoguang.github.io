@@ -6,7 +6,8 @@ https://rustcc.gitbooks.io/rustprimer/content/
 2. =rustup toolchain add nightly=
 3. =cargo +nightly install racer=
 4. =git clone https://github.com/rust-lang/rust.git ~/.rust=
-5. ~export RUST_SRC_PATH\="/path/to/rust/src"~
+5. ~export RUST_SRC_PATH="/path/to/rust/src"~
+6. emacs环境: ~(setenv "RUST_SRC_PATH" "/path/to/rust/src")~
 * emacs配置
 #+BEGIN_SRC elisp
 (use-package rust-mode :ensure t :defer t
@@ -75,7 +76,7 @@ fn main(){
 - 布尔类型：有两个值true和false。
 - 字符类型：表示单个Unicode字符，存储为4个字节。可将来任何字符赋值, 如 ~let c='秦'~ 
 - 数值类型：分为有符号整数 (i8, i16, i32, i64, isize)、 无符号整数 (u8, u16, u32, u64, usize) 以及浮点数 (f32, f64)。其中iszie,usize则是自适应类型，其大小取决于操作系统。
-- 字符串类型：最底层的是不定长类型str，更常用的是字符串切片&str和堆分配字符串String， 其中字符串切片是静态分配的，有固定的大小，并且不可变，而堆分配字符串是可变的。
+- 字符串类型：最底层的是不定长类型str，更常用的是字符串切片&str和堆分配字符串String， 其中字符串切片是静态分配的，有固定的大小，并且不可变，而堆分配字符串(String)是可变的。
   #+BEGIN_SRC rust
  let hello = "hello world"; // 双引号中的字符串类型为&'static str, 即其不可变
  let hello : &'static str = "hello world"; // 两种方式等价
@@ -123,9 +124,10 @@ c.chars().nth(2); // 访问第2个
   #+BEGIN_SRC rust
 let arr = [1,2,3,4,5];
 let slice_1 = &arr[..]; // 获取全部元素
-let slice_2 = &arr[1..4]; // 获取下标[1,4]的元素
+let slice_2 = &arr[1..4]; // 获取下标[1,4)的元素
 let slice_3 = &arr[1..]; // 获取下标1之后的所有元素
 let slice_4 = &arr[..3]; // 获取下标3之前的所有元素
+let slice_5 = &arr[1..=4]; // 获取[1,4]的元素
 
 // 有关slice的函数
 fn show(arr: &[u8]){
@@ -313,7 +315,7 @@ fn get_two() -> (i32,i32){
 // 发散函数，使用!作为返回类型,其实和golang的panic或者java的exception一个意思
 fn diverging() -> !{
     panic!("this function will never return");
-}
+    }
 //发散函数返回值可以赋值给任何类型
 fn test() -> i32{
     diverging()
@@ -373,10 +375,123 @@ trait HasArea {
     fn area(&self) -> f64;
 }
 // 实现
-struct Circle {
-    x: f64
+struct Cycle{
+    x : f64,
+    y : f64,
+    radius: f64,
 }
+
+impl HasArea for Cycle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+
+use std::fmt::Debug;
+// 泛型约束,T必须实现Debug
+fn foo<T: Debug>(s: T) {
+    println!("{:?}", s);
+}
+
+use std::fmt::Debug;
+// 泛型约束, T必须实现Debug和Clone两个trait
+fn foo<T: Debug + Clone>(s: T) {
+    s.clone();
+    println!("{:?}", s);
+}
+
+//利用 where 从句简化/美化代码
+fn foo<T, K>(x: T, y: K) where T: Clone, K: Clone + Debug {
+    x.clone();
+    y.clone();
+    println!("{:?}", y);
+}
+
+// 或者
+fn foo<T, K>(x: T, y: K)
+    where T: Clone,
+          K: Clone + Debug {
+    x.clone();
+    y.clone();
+    println!("{:?}", y);
+}
+
+// trait 继承
+trait Foo {
+    fn foo(&self);
+}
+
+trait FooBar : Foo {
+    fn foobar(&self);
+}
+
+// 但实现时比较特殊
+struct Baz;
+
+// 只能实现自己里面有的方法
+impl Foo for Baz {
+    fn foo(&self) { println!("foo"); }
+}
+
+impl FooBar for Baz {
+    fn foobar(&self) { println!("foobar"); }
+}
+
+// derive 和haskell中一样
+// 能被derive的trait有:Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd
+#[derive(Debug)]
+struct Foo;
 #+END_SRC
+* 所有权
+1. rust中没有变量的概念，而是标识符和资源的概念
+2. rust中变量不会初始化默认值
+3. ~a=100~ ,表示让100这个资源和a这个标识符进行绑定
+4. 离开作用域后，作用域中的变量绑定的内存(无论是否是常量),以及所有者变量一起被销毁.
+5. 使用let可以把资源所以权从一个绑定转移到另一个绑定, ~let 标识符A = 标识符B~ 表示把B绑定的资源的所有权转移给A,转移后,A不绑定任何内容, 若继续使用就会报错.如:
+  #+BEGIN_SRC rust
+  let a = 1i32;
+  let b = a; // 1i32此时被绑定给b， a无绑定值
+  println!("{}",a); // 报错
+
+  // 第二个例子
+  let v = vec![1,2,3];
+  fn take(v:Vec<i32){}
+  take(v);
+  println!("{}",v); // 报错, v指向的资源所有权已经被重定向给函数take中的变量。可以理解为执行take(v)时候，先进行了资源绑定
+  #+END_SRC
+  #+BEGIN_VERSE
+ Before move:
+ a <=> 内存(地址：A，内容："xyz")
+ After move:
+ a
+ b <=> 内存(地址：A，内容："xyz")
+ #+END_VERSE
+6. rust中规定，一个资源同一时刻只有一个owner.
+7. 若被move的变量实现了Copy，那么move时候会拷贝资源到新的内存取余，并把新的内存区域内容binding给新变量, 在rust中,基本数据类型均实现了Copy特性.
+ #+BEGIN_VERSE
+ Before move:
+ a <=> 内存(地址：A，内容：100)
+ After move:
+ a <=> 内存(地址：A，内容：100)
+ b <=> 内存(地址：B，内容：100)
+ #+END_VERSE
+8. 基本类型的浅拷贝和深拷贝的作用一样, 浅拷贝可以理解为仅仅拷贝了内存地址。而String类型若要实现深拷贝，则需要使用Clone特性。
+   #+BEGIN_SRC rust
+   let a: String = String::from("xyz");
+   let b = a.clone();  // <-注意此处的clone
+   #+END_SRC
+9. rust中不使用mut修饰的变量为不可变变量，这个不可变变量的意思是绑定不可变。绑定不可变的变量不允许再次绑定且不允许修改资源内容。使用mut可以将其变更为可变变量，可变变量允许重新绑定，且允许修改绑定的内容。
+10. 若一个struct中的所有域的类型都实现了Copy特性，那么此类型就可以实现Copy特性,否则不能通过derive派生实现。
+11. move关键字常用在闭包中，强制闭包获取所有权
+12. &符号表示borrowing,其不会发生所有权move,如 ~let x:Vec<i32> = vec!(1i32,2,3); let y = &x~, borrowing的规则为
+    - 同一作用域，特定数据最多只有一个可变借用（&mut T），或者2。
+    - 同一作用域，特定数据可有0个或多个不可变借用（&T），但不能有任何可变借用。
+    - 借用在离开作用域后释放。
+    - 在可变借用释放前不可访问源变量。
+13. borrowing也分不可变借用(&T)和可变借用(&mut T)，不可变借用只读,而可变借用可读写，但其借用的对象也要有可变性.
+14. 可变借用未释放时，原变量无法访问
+15. ~let y = &mut x~ 和 ~let mut y = &mut x~ 的区别是，第二个y还可以被可变借用，而第一个则不可被可变借用。
+16. ='a= 是lifetime的标识符,类比泛型中的T名字。,w
 * cargo
 cargo为项目管理工具，类比java的maven,c++的cmake等。
 cargo的默认规则:

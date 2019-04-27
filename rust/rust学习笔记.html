@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-17 Wed 17:09 -->
+<!-- 2019-04-24 Wed 10:38 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>rust学习笔记</title>
@@ -46,6 +46,7 @@
 </li>
 <li><a href="#org575fe24">函数</a></li>
 <li><a href="#orgad713e8">trait</a></li>
+<li><a href="#orge28df4b">所有权</a></li>
 <li><a href="#org5198671">cargo</a>
 <ul>
 <li><a href="#org6b43412">cargo.toml和cargo.lock</a></li>
@@ -70,7 +71,8 @@
 <li><code>rustup toolchain add nightly</code></li>
 <li><code>cargo +nightly install racer</code></li>
 <li><code>git clone https://github.com/rust-lang/rust.git ~/.rust</code></li>
-<li><code>export RUST_SRC_PATH\="/path/to/rust/src"</code></li>
+<li><code>export RUST_SRC_PATH="/path/to/rust/src"</code></li>
+<li>emacs环境: <code>(setenv "RUST_SRC_PATH" "/path/to/rust/src")</code></li>
 </ol>
 </div>
 </div>
@@ -452,7 +454,7 @@ eg :
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21457;&#25955;&#20989;&#25968;&#65292;&#20351;&#29992;!&#20316;&#20026;&#36820;&#22238;&#31867;&#22411;,&#20854;&#23454;&#21644;golang&#30340;panic&#25110;&#32773;java&#30340;exception&#19968;&#20010;&#24847;&#24605;</span>
 <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">diverging</span>() -&gt; !{
     <span style="color: #F92672;">panic!</span>(<span style="color: #E6DB74;">"this function will never return"</span>);
-}
+    }
 <span style="color: #75715E;">//</span><span style="color: #75715E;">&#21457;&#25955;&#20989;&#25968;&#36820;&#22238;&#20540;&#21487;&#20197;&#36171;&#20540;&#32473;&#20219;&#20309;&#31867;&#22411;</span>
 <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>() -&gt; <span style="color: #66D9EF;">i32</span>{
     diverging()
@@ -519,11 +521,140 @@ func(3);
     <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">area</span>(&amp;<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">f64</span>;
 }
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#23454;&#29616;</span>
-<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Circle</span> {
-    <span style="color: #FD971F;">x</span>: <span style="color: #66D9EF;">f64</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Cycle</span>{
+    x : <span style="color: #66D9EF;">f64</span>,
+    y : <span style="color: #66D9EF;">f64</span>,
+    <span style="color: #FD971F;">radius</span>: <span style="color: #66D9EF;">f64</span>,
 }
+
+<span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">HasArea</span> <span style="color: #F92672;">for</span> <span style="color: #66D9EF;">Cycle</span> {
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">area</span>(&amp;<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">f64</span> {
+        <span style="color: #AE81FF;">std</span>::<span style="color: #66D9EF;">f64</span>::<span style="color: #AE81FF;">consts</span>::<span style="color: #66D9EF;">PI</span> * (<span style="color: #F92672;">self</span>.radius * <span style="color: #F92672;">self</span>.radius)
+    }
+}
+
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">fmt</span>::<span style="color: #66D9EF;">Debug</span>;
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#27867;&#22411;&#32422;&#26463;,T&#24517;&#39035;&#23454;&#29616;Debug</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">foo</span>&lt;<span style="color: #FD971F;">T</span>: <span style="color: #66D9EF;">Debug</span>&gt;(<span style="color: #FD971F;">s</span>: <span style="color: #66D9EF;">T</span>) {
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>, s);
+}
+
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">fmt</span>::<span style="color: #66D9EF;">Debug</span>;
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#27867;&#22411;&#32422;&#26463;, T&#24517;&#39035;&#23454;&#29616;Debug&#21644;Clone&#20004;&#20010;trait</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">foo</span>&lt;<span style="color: #FD971F;">T</span>: <span style="color: #66D9EF;">Debug</span> + <span style="color: #66D9EF;">Clone</span>&gt;(<span style="color: #FD971F;">s</span>: <span style="color: #66D9EF;">T</span>) {
+    s.clone();
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>, s);
+}
+
+<span style="color: #75715E;">//</span><span style="color: #75715E;">&#21033;&#29992; where &#20174;&#21477;&#31616;&#21270;/&#32654;&#21270;&#20195;&#30721;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">foo</span>&lt;<span style="color: #66D9EF;">T</span>, <span style="color: #66D9EF;">K</span>&gt;(<span style="color: #FD971F;">x</span>: <span style="color: #66D9EF;">T</span>, <span style="color: #FD971F;">y</span>: <span style="color: #66D9EF;">K</span>) <span style="color: #F92672;">where</span> <span style="color: #FD971F;">T</span>: <span style="color: #66D9EF;">Clone</span>, <span style="color: #FD971F;">K</span>: <span style="color: #66D9EF;">Clone</span> + <span style="color: #66D9EF;">Debug</span> {
+    x.clone();
+    y.clone();
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>, y);
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#25110;&#32773;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">foo</span>&lt;<span style="color: #66D9EF;">T</span>, <span style="color: #66D9EF;">K</span>&gt;(<span style="color: #FD971F;">x</span>: <span style="color: #66D9EF;">T</span>, <span style="color: #FD971F;">y</span>: <span style="color: #66D9EF;">K</span>)
+    <span style="color: #F92672;">where</span> <span style="color: #FD971F;">T</span>: <span style="color: #66D9EF;">Clone</span>,
+          <span style="color: #FD971F;">K</span>: <span style="color: #66D9EF;">Clone</span> + <span style="color: #66D9EF;">Debug</span> {
+    x.clone();
+    y.clone();
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>, y);
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">trait &#32487;&#25215;</span>
+<span style="color: #F92672;">trait</span> <span style="color: #66D9EF;">Foo</span> {
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">foo</span>(&amp;<span style="color: #F92672;">self</span>);
+}
+
+<span style="color: #F92672;">trait</span> <span style="color: #66D9EF;">FooBar</span> : <span style="color: #66D9EF;">Foo</span> {
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">foobar</span>(&amp;<span style="color: #F92672;">self</span>);
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20294;&#23454;&#29616;&#26102;&#27604;&#36739;&#29305;&#27530;</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Baz</span>;
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21482;&#33021;&#23454;&#29616;&#33258;&#24049;&#37324;&#38754;&#26377;&#30340;&#26041;&#27861;</span>
+<span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Foo</span> <span style="color: #F92672;">for</span> <span style="color: #66D9EF;">Baz</span> {
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">foo</span>(&amp;<span style="color: #F92672;">self</span>) { <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"foo"</span>); }
+}
+
+<span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">FooBar</span> <span style="color: #F92672;">for</span> <span style="color: #66D9EF;">Baz</span> {
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">foobar</span>(&amp;<span style="color: #F92672;">self</span>) { <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"foobar"</span>); }
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">derive &#21644;haskell&#20013;&#19968;&#26679;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#33021;&#34987;derive&#30340;trait&#26377;:Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd</span>
+<span style="color: #F92672;">#[derive(Debug)]</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Foo</span>;
 </pre>
 </div>
+</div>
+</div>
+<div id="outline-container-orge28df4b" class="outline-2">
+<h2 id="orge28df4b">所有权</h2>
+<div class="outline-text-2" id="text-orge28df4b">
+<ol class="org-ol">
+<li>rust中没有变量的概念，而是标识符和资源的概念</li>
+<li>rust中变量不会初始化默认值</li>
+<li><code>a=100</code> ,表示让100这个资源和a这个标识符进行绑定</li>
+<li>离开作用域后，作用域中的变量绑定的内存(无论是否是常量),以及所有者变量一起被销毁.</li>
+<li><p>
+使用let可以把资源所以权从一个绑定转移到另一个绑定, <code>let 标识符A = 标识符B</code> 表示把B绑定的资源的所有权转移给A,转移后,A不绑定任何内容, 若继续使用就会报错.如:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">a</span> = 1i32;
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">b</span> = a; <span style="color: #75715E;">// </span><span style="color: #75715E;">1i32&#27492;&#26102;&#34987;&#32465;&#23450;&#32473;b&#65292; a&#26080;&#32465;&#23450;&#20540;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>,a); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#25253;&#38169;</span>
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#31532;&#20108;&#20010;&#20363;&#23376;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">v</span> = <span style="color: #F92672;">vec!</span>[1,2,3];
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">take</span>(<span style="color: #FD971F;">v</span>:<span style="color: #66D9EF;">Vec</span>&lt;<span style="color: #66D9EF;">i32</span>){}
+take(v);
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>,v); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#25253;&#38169;, v&#25351;&#21521;&#30340;&#36164;&#28304;&#25152;&#26377;&#26435;&#24050;&#32463;&#34987;&#37325;&#23450;&#21521;&#32473;&#20989;&#25968;take&#20013;&#30340;&#21464;&#37327;&#12290;&#21487;&#20197;&#29702;&#35299;&#20026;&#25191;&#34892;take(v)&#26102;&#20505;&#65292;&#20808;&#36827;&#34892;&#20102;&#36164;&#28304;&#32465;&#23450;</span>
+</pre>
+</div>
+<p class="verse">
+Before move:<br />
+a &lt;=&gt; 内存(地址：A，内容："xyz")<br />
+After move:<br />
+a<br />
+b &lt;=&gt; 内存(地址：A，内容："xyz")<br />
+</p></li>
+<li>rust中规定，一个资源同一时刻只有一个owner.</li>
+<li><p>
+若被move的变量实现了Copy，那么move时候会拷贝资源到新的内存取余，并把新的内存区域内容binding给新变量, 在rust中,基本数据类型均实现了Copy特性.
+</p>
+<p class="verse">
+Before move:<br />
+a &lt;=&gt; 内存(地址：A，内容：100)<br />
+After move:<br />
+a &lt;=&gt; 内存(地址：A，内容：100)<br />
+b &lt;=&gt; 内存(地址：B，内容：100)<br />
+</p></li>
+<li><p>
+基本类型的浅拷贝和深拷贝的作用一样, 浅拷贝可以理解为仅仅拷贝了内存地址。而String类型若要实现深拷贝，则需要使用Clone特性。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">a</span>: <span style="color: #66D9EF;">String</span> = <span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"xyz"</span>);
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">b</span> = a.clone();  <span style="color: #75715E;">// </span><span style="color: #75715E;">&lt;-&#27880;&#24847;&#27492;&#22788;&#30340;clone</span>
+</pre>
+</div></li>
+<li>rust中不使用mut修饰的变量为不可变变量，这个不可变变量的意思是绑定不可变。绑定不可变的变量不允许再次绑定且不允许修改资源内容。使用mut可以将其变更为可变变量，可变变量允许重新绑定，且允许修改绑定的内容。</li>
+<li>若一个struct中的所有域的类型都实现了Copy特性，那么此类型就可以实现Copy特性,否则不能通过derive派生实现。</li>
+<li>move关键字常用在闭包中，强制闭包获取所有权</li>
+<li>&amp;符号表示borrowing,其不会发生所有权move,如 <code>let x:Vec&lt;i32&gt; = vec!(1i32,2,3); let y = &amp;x</code>, borrowing的规则为
+<ul class="org-ul">
+<li>同一作用域，特定数据最多只有一个可变借用（&amp;mut T），或者2。</li>
+<li>同一作用域，特定数据可有0个或多个不可变借用（&amp;T），但不能有任何可变借用。</li>
+<li>借用在离开作用域后释放。</li>
+<li>在可变借用释放前不可访问源变量。</li>
+</ul></li>
+<li>borrowing也分不可变借用(&amp;T)和可变借用(&amp;mut T)，不可变借用只读,而可变借用可读写，但其借用的对象也要有可变性.</li>
+<li>可变借用未释放时，原变量无法访问</li>
+<li><code>let y = &amp;mut x</code> 和 <code>let mut y = &amp;mut x</code> 的区别是，第二个y还可以被可变借用，而第一个则不可被可变借用。</li>
+<li><code>'a</code> 是lifetime的标识符,类比泛型中的T名字。,w</li>
+</ol>
 </div>
 </div>
 <div id="outline-container-org5198671" class="outline-2">
@@ -556,7 +687,7 @@ cargo的默认规则:
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-04-17 Wed 17:09</p>
+<p class="date">Created: 2019-04-24 Wed 10:38</p>
 <p class="validation"></p>
 </div>
 </body>

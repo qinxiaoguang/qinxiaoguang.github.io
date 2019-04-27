@@ -7,6 +7,7 @@
 - =jobs -l= 显示nohup后台任务
 - =paste file1 file2= 将两个文件相同的行合并到一行，并用 =\t= 分割
 - =cwd=$(cd `dirname $0`;pwd)= 获取当前文件的绝对路径，不能直接使用  =pwd= 获取,若在其他路径执行，则路径就变成了其他路径
+- =export LESSCHARSET=utf-8= 解决less乱码
 * 数组
 - 创建数组 =nums=()= 
 - 添加成员 =nums=(${nums[*]} 2)= 注意没有逗号,or =len=${#nums[*]};nums[len+1]=2=
@@ -50,6 +51,12 @@ IFS='
 - 字符串是否为空 =if [ -z "$a" ]= 记得加 ="=
 - 字符串不为空 =if [ -n "$a" ]= 记得加 ="=
 - 文件是否存在 =if [ -f "/data/filename" ]= 
+* sleep
+- =sleep 0.01=  睡眠1毫秒
+- =sleep 1= 睡眠1s
+- =sleep 1s= 睡眠1秒
+- =sleep 1m= 睡眠1分
+- =sleep 1h= 睡眠1小时
 * 后记
 本来想把linux的笔记从简书搬运过来，但是太多内容了，还是算了吧，以后再说吧
 
