@@ -4,15 +4,18 @@
   * [2019-04-16 Tue] [[file:english/word-power-made-easy.org][word power made easy学习笔记]]
 * git
   * [2019-04-17 Wed] [[file:git/git-push到多个仓库.org][git-push到多个仓库]]
+* go
+  * [2019-04-24 Wed] [[file:go/time包.org][time包相关方法]]
 * linux
-  * [2019-04-24 Wed] [[file:linux/Linux手册.org][Linux手册]]
+  * [2019-04-26 Fri] [[file:linux/Linux手册.org][Linux手册]]
+  * [2019-04-29 Mon] [[file:linux/shell并发.org][shell 并发]]
   * [2019-04-16 Tue] [[file:linux/vim简版.org][vim简版]]
 * rust
-  * [2019-04-18 Thu] [[file:rust/rust学习笔记.org][rust学习笔记]]
+  * [2019-05-02 Thu] [[file:rust/rust学习笔记.org][rust学习笔记]]
 * study
   * [2019-04-16 Tue] [[file:study/双拼学习.org][双拼学习]]
 * 书籍
-  * [2019-04-23 Tue] [[file:书籍/书籍推荐.org][书籍推荐]]
+  * [2019-04-28 Sun] [[file:书籍/书籍推荐.org][书籍推荐]]
 * 人生杂谈
   * [2019-04-18 Thu] [[file:人生杂谈/失眠.org][失眠]]
   * [2019-04-16 Tue] [[file:人生杂谈/工作上的那些事情.org][工作上的那些事情]]

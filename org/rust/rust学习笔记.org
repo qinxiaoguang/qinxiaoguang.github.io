@@ -58,23 +58,41 @@ fn main(){
 - 运行 =./target/debug/hellorust= 
 - 编译并运行: =cargo run= or =cargo run --release= 
 * 变量
+- rust中变量赋值强调的是变量绑定，而非赋值
+- rust中的变量必须有初始值,其无默认值
+- rust 中允许声明同样名字的变量，后面的会将前面的遮挡，不过此时内存中有两个变量，只不过只能使用一个。
 #+BEGIN_SRC rust
-    //varable
-    let a1 = 5; // int32类型，rust会做类型推断, 没有mut关键字，都是不可变变量
-    //a1 = 6 ; 不可变变量，若改变其值会报错
-    let a2:i32 = 5; // int32类型,注: rust中的变量名都很短
-    let b1:u32 = 5; // unsign int32类型
+//varable
+let a1 = 5; // int32类型，rust会做类型推断, 没有mut关键字，都是不可变变量
+//a1 = 6 ; 不可变变量，若改变其值会报错
+let a2:i32 = 5; // int32类型,注: rust中的变量名都很短
+let b1:u32 = 5; // unsign int32类型
 
-    let mut a11:f64 = 1.0; // 可变变量
-    a11 = 2.0; // 不会报错
-    let a11 = a11; // 可重新绑定为不可变
-    let b12 = 1.2f32; // rust中的value + type写法
+let mut a11:f64 = 1.0; // 可变变量
+a11 = 2.0; // 不会报错
+let a11 = a11; // 可重新绑定为不可变
+let b12 = 1.2f32; // rust中的value + type写法
 
-    let (a, mut b):(bool, bool) = (true, false); // 多个变量赋值
+let (a, mut b):(bool, bool) = (true, false); // 多个变量赋值
+let (mut a, mut b) = (1,2) // 声明多个可变变量
+
+let v = vec![1,2,3];
+let mut v = v; // 可以通过创建同名变量的方式改变其可变性
+
+// 静态变量/全局变量
+// 必须初始化,且必须是可确定的常量
+static GLOBAL : i32 = 0;
+// 带有mut的全局变量，改变的时候必须有unsafe关键字修饰
+static mut G2 : i32 = 1;
+unsafe {
+    G2 = 5;
+}
+// 常量, 因为其为常量，所以不允许有mut关键字修饰
+const GLOBAL : i32 = 0;
 #+END_SRC
 * 类型
 - 布尔类型：有两个值true和false。
-- 字符类型：表示单个Unicode字符，存储为4个字节。可将来任何字符赋值, 如 ~let c='秦'~ 
+- 字符类型：表示单个Unicode字符，存储为4个字节。可将来任何字符赋值, 如 ~let c='秦'~,也可以使用u8来类型来存储ASCII字符，如 ~let x :u8=b'A'~
 - 数值类型：分为有符号整数 (i8, i16, i32, i64, isize)、 无符号整数 (u8, u16, u32, u64, usize) 以及浮点数 (f32, f64)。其中iszie,usize则是自适应类型，其大小取决于操作系统。
 - 字符串类型：最底层的是不定长类型str，更常用的是字符串切片&str和堆分配字符串String， 其中字符串切片是静态分配的，有固定的大小，并且不可变，而堆分配字符串(String)是可变的。
   #+BEGIN_SRC rust
@@ -143,6 +161,8 @@ show(slice_1);
   #+BEGIN_SRC rust
 let y = (0, "1234");
 let x :(i32, &str) = (3, "123456")
+// 若元组只包含一个元素，需要在元素末尾添加逗号，以区分括号表达式
+let z = (0,);
 // 访问
 let (w, z) = y;
 // 下标访问
@@ -151,7 +171,7 @@ let e = x.1;
   #+END_SRC
 - 指针：最底层的是裸指针*const T和*mut T，但解引用它们是不安全的，必须放到unsafe块里。
 - 函数：具有函数类型的变量实质上是一个函数指针。
-- 元类型：即()，其唯一的值也是()。
+- 元类型：即()，其唯一的值也是(), 也称单元类型。
 - 结构体
   #+BEGIN_SRC rust
 // 1. 通常驼峰命名
@@ -179,6 +199,35 @@ fn main() {
     println!("{}",point.y)
 }
   #+END_SRC
+** 类型别名
+- 可以使用type为一个类型起一个别名,且这两个类型一模一样，只不过名字不一样，不要和golang混淆
+- 泛型其实就是使用类型别名的方式实现的。
+#+BEGIN_SRC rust
+type Age = u32;
+#+END_SRC
+** 类型转换
+- 类型转换的方式是通过as关键字
+- 如果转换是合理的，则编译通过，否则编译不通过
+#+BEGIN_SRC rust
+let var1 : i8 = 41;
+let var2 : i16 = var1 as i16;
+
+let i = "haha";
+let b = i as u32; // 不合理，编译错误
+#+END_SRC
+* 输出格式化
+#+BEGIN_SRC rust
+println!("{}", 1);
+println!("{:o}", 9); // 8进制
+println!("{:x}", 255); // 16进制
+println!("{:X}", 255); //16进制大写
+println!("{:p}",&0); // 指针
+println!("{:b}",15); // 2进制
+println!("{:e}",100000f32); //科学计数
+println!("{:?}","test"); //打印Debug trait
+println!("{:#?}", ("test1","test2")); // 带换行和缩进的Debug打印
+println!("{a} {b} {b}", a="x", b="y"); // 带命名参数的打印
+#+END_SRC
 * 控制流
 ** if
 #+BEGIN_SRC rust
@@ -201,6 +250,13 @@ if expr1 {
 
 }
 
+// 如果使用if-else作为表达式，则其分支中返回的类型必须一致，若else分支省略了，则编译器默认认为else分支的类型为(), 所以下面的写法是错误的
+fn test(flag:bool)->i32{
+    if flag {
+        42
+    }
+}
+
 // rust 中if是一个表达式,so可以这么写
 let x = 5;
 let y = if x == 5 {10} else {15};
@@ -214,13 +270,13 @@ if let Some(y) = x{
 }
 let z = if let Some(y) = x {y} else {0}; // 若x中有值，则赋给z
 #+END_SRC
-** for
+**  for
 #+BEGIN_SRC rust
 // expression 是一个迭代器,如0..10,or [0,1,2].iter()
 for var in iterator {
 
 }
-eg :
+// eg :
 for x in 0..10 {
 
 }
@@ -241,6 +297,9 @@ while expr{
 loop {
 
 }
+
+// loop中的break后跟一个表达式，则该表达式的值就为loop表达式的值,如
+let v = loop { break 10;}; //此时v的值为10
 #+END_SRC
 ** match
 #+BEGIN_SRC rust
@@ -366,13 +425,24 @@ fn get_func(n: i32) -> fn(i32) -> i32{
     }
     inc
 }
+
+// 函数可以用const关键字修饰，这样函数可以在编译阶段执行，返回值也被视为编译器常量,如
+#![feature(consts_fn)]
+const fn cube(num :usize) -> usize {
+    num*num*num
+}
 #+END_SRC
 
 * trait
-类似golang的interface
+类似golang的interface,但有很大不同
 #+BEGIN_SRC rust
 trait HasArea {
-    fn area(&self) -> f64;
+    fn area(&self) -> f64; // 第一个参数使用&self,则其称为方法，可以使用小数点调用，若没有&self，则为静态函数，可以使用::来调用
+    // self, Self都是关键字，其中Self是类型，self是变量名, 
+    // self 也分几种类型，如self, &self, &mut self，他们都是self:Self， self:&Self, self &mut Self 的简化版本
+
+    // 默认方法，无须实现,也可重写
+    fn default(&self) -> f64{3.14f64}
 }
 // 实现
 struct Cycle{
@@ -437,11 +507,66 @@ impl FooBar for Baz {
     fn foobar(&self) { println!("foobar"); }
 }
 
+// 可以为内置类型添加一些方法，如为i32添加方法
+impl SomeTrait for i32 {
+    fn xxx
+}
+
+// trait不可被当做参数传递,如下列代码是错误的
+fn test(args: HasAres) -> i32{}
+// 若想实现以上效果，需要使用泛型来实现
 // derive 和haskell中一样
+// 可以不必手动的实现一些trait，通过derive来派生
 // 能被derive的trait有:Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd
 #[derive(Debug)]
 struct Foo;
 #+END_SRC
+* 泛型
+- 泛型可以有默认值
+  #+BEGIN_SRC rust
+ struct S<T=i32>{
+     data:T
+ }  
+  #+END_SRC
+- 如果指定泛型参数，就必须被使用，否则编译不通过
+- 泛型用于函数中
+  #+BEGIN_SRC rust
+  fn test<T>(args:T) -> bool{}
+  fn test<T1,T2> (args1 :T1, arg2:T2) -> bool {} // 多个泛型参数
+  #+END_SRC
+- 可以通过泛型来实现函数重载功能，但是rust中没有同一个函数不同数量参数的函数重载
+- impl中的泛型, 在impl块中出现的泛型参数，需要在impl关键字后边用尖括号声明
+ #+BEGIN_SRC rust
+impl<T,U> Into<U> for T
+    where U: From<T>
+{
+    fn into(self) -> U {
+        U::from(self)
+    }
+}
+ #+END_SRC
+- 泛型参数约束有两种方式，1. 在泛型参数声明时使用冒号 2. 使用where子句, 使用冒号的方式一定可以转成where，但使用where的却不一定能转成冒号
+ #+BEGIN_SRC rust
+ // 1.
+ fn max<T: Ord>(a: T, b:T)->T{}
+ // 2.
+ fn max<T>(a:T, b:T)->T
+    where T: Ord
+ #+END_SRC
+- 关联类型，也是泛型参数如Iterator中有一个关联类型为Item，在使用的时候可以通过名字进行关联
+  #+BEGIN_SRC rust
+trait Test{
+    type N; // N即为一个关联类型
+    fn test(&self) -> Self::N;
+}
+
+// 如果要实现的话
+impl Test for i32{
+    type N = i32;
+    fn test(&self) -> i32 {}
+}
+ #+END_SRC
+- 一般来说，在尖括号里存在的是输入类型参数，在trait内部存在的关联类型是输出类型参数
 * 所有权
 1. rust中没有变量的概念，而是标识符和资源的概念
 2. rust中变量不会初始化默认值
@@ -488,11 +613,287 @@ struct Foo;
     - 同一作用域，特定数据可有0个或多个不可变借用（&T），但不能有任何可变借用。
     - 借用在离开作用域后释放。
     - 在可变借用释放前不可访问源变量。
-13. borrowing也分不可变借用(&T)和可变借用(&mut T)，不可变借用只读,而可变借用可读写，但其借用的对象也要有可变性.
+13. borrowing也分不可变借用(&T)和可变借用(&mut T)，不可变借用只读,而可变借用可读写，但其借用的对象也要有可变性.但要注意区分mut修饰变量和修饰借用时的区别
+    #+BEGIN_SRC rust
+    let p = &mut v; // 表示p是对v的可变借用,但是p无法重新绑定
+    let mut p = v; //表示p是可以重新绑定的
+    // mut修饰变量时强调的是绑定关系。
+    #+END_SRC
 14. 可变借用未释放时，原变量无法访问
+    #+BEGIN_SRC rust
+    let mut x = 1_i32;
+    let p = &mut x;
+    x = 2;  // 编译报错，因x已被借用，无法访问和修改
+    println!("{}", x);
+    #+END_SRC
 15. ~let y = &mut x~ 和 ~let mut y = &mut x~ 的区别是，第二个y还可以被可变借用，而第一个则不可被可变借用。
-16. ='a= 是lifetime的标识符,类比泛型中的T名字。,w
-* cargo
+16. ='a= 是lifetime的标识符,类比泛型中的T名字。
+* 生命周期
+1. 生命周期符号使用单引号开头，与泛型类型的参数是一样的，都是先声明后使用。
+   #+BEGIN_SRC rust
+   fn test<'a>(arg: &'a T) -> &'a i32{
+   
+   }
+   #+END_SRC
+2. 若生命周期a比生命周期b长，则记为 ='a:'b=  
+3. 'static是一个特殊的生命周期，表示程序从开始到结束的整个阶段
+4. 在实际调用的时候，生命周期会被特化为对应的参数，如
+   #+BEGIN_SRC rust
+   fn test<'a>(arg1:&'a i32, arg2 : &'a i32) -> &'a i32{}
+   let x = 1;
+   let y = 2;
+   test(&x, &y); // 虽然x和y的生命周期不相等，但是其只要满足 x:'a, y:'a即可行
+   #+END_SRC
+5. 若自定义类型中的成员包含生命周期参数，那么该类型也必须有生命周期参数
+   #+BEGIN_SRC rust
+   struct Test<'a> {
+         member :&'a str
+   }
+   // 实现的时候也要先声明生命周期,其中impl后跟的泛型是声明，而Test后跟的泛型是使用
+   impl <'a> Test<'a> {
+        fn Test<'a>()
+   }
+   #+END_SRC
+6. 生命周期是可以省略的，其对省略的生命周期会自动补全，补全规则为
+   1. 每个带生命周期参数的输入参数，对应不同的生命周期参数
+   2. 如果只有一个参数带生命周期参数，那么返回值的生命周期也被指定为该参数
+   3. 如果有多个参数，但其中有&self, &mut self,那么返回值的生命周期被指定为该参数
+   4. 若以上都不满足，则不能补全
+   #+BEGIN_SRC rust
+   fn get_str(s: &String) -> &str // 可自动补全，符合条件2, 所以其补全为
+   fn get_str<'a>(s:&'a String) -> &'a str
+   #+END_SRC
+
+* 析构
+- 两种方式执行析构.1. 手动调用std::mem::drop()方法 2. 实现std::mem::Drop trait.
+- 其中std::mem::drop()方法是一个空的函数体,其执行时实际是调用move语义。且参数只能是T类型，而不是&T类型。
+- 实现std::mem::Drop的trait后，生命周期结束后会自动执行对应的方法。不允许手动调用。且该trait的drop方法的参数类型是&mut Self
+- 使用下划线绑定一个变量，这个下划线对应的变量会当场执行析构
+- 实现Drop的同时不能实现Copy
+* 内部可变性
+rust在不使用mut来修饰变量时候，其内部是不能发生改变的，比如 ~let v = vec![1,2,4]~ 此时对v使用v.push方法是会报错的，而内部可变性是说，在不使用mut来修饰变量时，也可改变内部状态，如Cell 
+** Cell
+- Cell类似一个壳,把数据包裹在里面，所有指针只能指向Cell，不能指向数据,修改数据只能通过Cell来完成,用户无法创建一个直接指向数据的指针
+-  以下代码是可以编译通过的
+#+BEGIN_SRC rust
+use std::cell::Cell;
+
+fn main() {
+    let data = Cell::new(1); // 没有使用mut修饰
+    data.set(2); // 可改变内部状态
+    let _p = &data; 
+    println!("{:?}",data); // 在存在p引用的时候也可访问
+}
+#+END_SRC
+** RefCell
+- RefCell是另外一个提供内部可变性的类型,Cell无法提供一个直接指向内部数据的指针，而RefCell可以
+- 如代码
+#+BEGIN_SRC rust
+use std::cell::RefCell;
+
+fn main() {
+    let data = RefCell::new(vec![1,2,3]);
+    let p1 = &data;
+    let p2 = &data;
+    p1.borrow_mut().push(4); // borrow_mut可以获取一个指向内部数据的可变指针，向vec这样的数据，只有获取到了指针才能做修改
+    p2.borrow_mut().push(5);
+    println!("{:?}",data);
+}
+#+END_SRC
+** 解引用
+- 实现std::ops::Deref或std::ops::DerefMut
+- 解引用是编译器的一种自动机制,在某些场景会隐式的启动
+- 通过解引用可以方便的直接对其内部的数据进行操作，而不用先获取内部数据的指针再进行操作
+- deref方法返回的是&T而不是T。
+- 如String类型实现了向目标类型str的解引用的转换
+  #+BEGIN_SRC rust
+  fn main() {
+      let s = "hello";
+      println!("{:?}",s.len());
+      println!("{:?}",(&s).len());
+      println!("{:?}",(&&s).len());  //均能打印出结果
+  }
+
+  // len的函数是
+  fn len(&self) -> usize
+  // 那么为什么使用 (&&&&s).len()也能调用呢，原因是在(&&&&s)中找不到len()方法，则尝试他的deref,变成(&&&s)，再寻找len方法，依次类推，直到找到为止。
+  #+END_SRC
+-  如Rc实现了Deref
+  #+BEGIN_SRC rust
+  use std::rc::Rc;
+  
+  fn main() {
+      let s = Rc::new(String::from("haha"));
+      println!("{:?}",s.bytes());  // 此处进行了解引用,获取到了String类型，而String类型没有bytes方法，所以其也进行解引用，获取到了&str类型，接着就可以调用bytes方法
+  }
+  #+END_SRC
+- Vec<T>也实现了Deref,目标类型是[T]，所以可以通过deref来获取&[T]的切片
+- 若s实现了Deref，则 ~&*s~ 等效与s.deref()
+- 若某个结构存在方法A(),而其deref也存在方法A()，那么要调用deref的方法A()，只能手动调用
+  #+BEGIN_SRC rust
+// 以下代码是编译不通过的,原因是&s是String类型，而分支中的"hehe"是&'static str类型,此时编译器并没有对s进行自动deref
+let s = String::from("hehe");
+match &s {
+    "hehe" => println!("{:?}","hehe"),
+    _ => println!("{:?}","heihei"),
+}
+// 此时需要我们自己deref,deref的方式有如下
+// 1. s.deref()
+// 2. &*s
+// 3. s.as_ref()
+// 4. s.borrow()
+// 5. &s[..]
+// 所以实现字符串匹配可以这么写
+match s.deref(){
+    "hehe" => println!("{:?}","hehe"),
+    _ => println!("{:?}","heihei"),
+}
+  #+END_SRC
+** 引用计数
+- std::rc::Rc和std::rc::Arc类型都提供了引用计数功能，一块数据当所有引用都消亡时，该数据的内存才会释放
+- Rc类型的引用计数是普通整数操作，只能在单线程中，而Arc的引用计数是原子操作，可以在多线程中
+- 其创建引用的方式使用clone，如
+  #+BEGIN_SRC rust
+    let s = Rc::new(String::from("hehe"));
+    let r1 = s.clone();
+    let r2 = s.clone();
+
+    println!("{:p} {:p}",&*r1, &*r2);  // &*s 相当于s.deref() ,打印出来的地址是一样的,说明r1和r2指向的数据是同一个
+  #+END_SRC
+* unsafe
+- unsafe可用于修饰函数fn, 代码块，trait,impl等
+- unsafe具有传递性，具有unsafe性质的函数，其调用者也必须有unsafe修饰
+- Rust中提供了两种裸指针，*mut T和*const T，可以通过*mut T修改所指向的数据，而*const T不能，但在unsafe中，这两个指针可以互换
+  - 裸指针可以为空，且不保证裸指针一定指向一个合法的地址
+  - 裸指针不会执行任何自动化清理工作
+  - 裸指针复制操作执行的是简单的内存浅复制
+  - 创建裸指针是安全的，只有在对裸指针解引用才是不安全的，如
+    #+BEGIN_SRC rust
+    let mut y : u32 = 1;
+    let raw_mut = &mut y as *mut u32 as *mut i32 as *mut i64; //安全的, 可以通过as来进行类型转换，转换后就可以当做另一种类型来进行操作, 但是需要注意的是，如果将u32强转为i64,在对其进行赋值的时候，就会影响到本来不属于u32的内存地址
+    unsafe {*raw_mut = 2;} // 不安全的，必须在unsafe块中
+    println!("{:?}",y);
+    #+END_SRC
+- 标准库中有个std::intrinsics模块，该模块的函数是在编译器内部实现，在使用的时候需要使用unsafe来修饰，这些函数不是准备直接提供给用户使用的
+  - transmute函数可以执行强制类型转换，把一个T类型参数转换为U类型返回值,但其内部的二进制值不变,且必须满足两者的size是一样的。其实我们也可以通过as来进行实现，但是不能实现size一样的约束条件
+  - transmute_copy函数是对引用进行的copy操作，其参数是引用类型，而transmute参数是T类型,且有move语义,如查看Vec的内存表示
+    #+BEGIN_SRC rust
+    let v = vec![1,2,3];
+    unsafe {
+        let t : (usize,usize, usize) = std::mem::transmute_copy(&v);
+        println!("{} {} {}", t.0, t.1, t.2);
+    }
+    #+END_SRC
+* 闭包
+- 匿名函数，具有捕获外部变量的能力,也被称为lambda表达式
+- 其特点是访问外部变量，而函数不可访问外部变量
+- 匿名函数可以省略类型，编译器会根据上下文环境自动推倒，但是同一个匿名函数不能有两种语义。
+ #+BEGIN_SRC rust
+let add = |x:i32, y:i32|->i32 {return x + y};
+let add = |x,y|x+y;
+ #+END_SRC
+- 使用move关键字来修饰闭包，可以将闭包中使用的外部变量自动move，并可以将对应的闭包传递到函数外部,通常用于将变量传递到函数外部
+- Fn/FnMut/FnOnce, FnOnce对应的self是self,FnMut是&mut self, Fn是&self，对于一个闭包，他会尽量impl Fn，依次尝试impl FnMut, FnOnce,这些都是编译器自动分析出来的。
+- 举个例子
+  #+BEGIN_SRC rust
+let v = vec![1,3,3];
+let d = ||drop(v);// 其中std::mem::drop(d:T)中参数是T类型，所以v是会被move到闭包中,那么他对应的trait是FnOnce,因为Fn和FnMut都行不通(都需要&self引用，但是闭包中并没有v的引用),所以生成的闭包只能调用一次。
+d();
+d(); // 调用失败
+
+// 同理，生成Fn的方式也和闭包使用的外部变量的方式有关，如
+let v = vec![1,3,3];
+let d = || for i in &v{println!("{:?}",i)};
+d();
+d(); // d闭包使用的外部环境v是引用类型，所以其对应的trait是Fn，对应的self是&self,不存在move语义，所以其可以调用多次
+  #+END_SRC
+- 每个闭包，编译器都会为其生成一个匿名结构体类型
+- 静态分派/动态分派
+ #+BEGIN_SRC rust
+// trait可以返回，但是不能直接返回，如有trait Animal,那么函数不能这么写 fn test()->Animal
+// 因为编译器不知道Animal占用多少空间,即不知道trait占用多少空间，但是有以下两种写法
+// 1. 静态分派，表示返回的trait具体是哪个，在编译时期就确定了下来， 其使用泛型及impl trait来完成
+fn test(arg:Animal) // 入参可以直接使用Animal来表示，这种是静态分派·
+fn test() -> impl Animal // 表示返回的类型实现了Animal的trait
+// 2. 动态分派，表示具体调用的trait是在执行阶段才能确认
+fn test(arg:Box<dyn Animal>) // 虽然trait不知道空间，但是Box可以知道,Box中传入一个trait object,这种就属于动态分派，在运行期确定调用的哪个函数,dyn是一个关键字，目前未稳定，表示trait中的具体类型是动态的
+ #+END_SRC
+- trait object,例如trait Animal ,那么dyn Animal 就是一个动态大小类型(DST),而&dyn Animal, &mut dyn Animal, Box<dyn Animal>,Rc<dyn Animal> 都是trait object
+* 协程
+** 生成器
+- 生成器是协程的基础,生成器和闭包的语法很像，当闭包中有yield关键字的时候，它就不是一个闭包，而是一个生成器。
+- 但有yield关键字时，编译器自动为该闭包生成一个方法resume(),要运行该闭包(生成器)时，使用resume()方法
+- yield与return相似，会返回一个值，但是下次调用resume()方法时，会从yield的地方继续运行
+- yield 返回的值需要使用GenerateState::Yielded(v)来接收，而return的返回值使用GenarateState::Complete()接收,当返回了Complete时候，就不能在调用resume方法
+** 协程
+- async/await, async关键字可以修饰函数闭包和代码块:
+  #+BEGIN_SRC rust
+async fn f1(arg : u8) -> u8 {} 
+// 等同于,
+fn f1(arg : u8) -> impl Future<Output = u8>
+// await只能在async中出现，其表示的含义是，若异步的程序没有执行完毕，那么其会进行yield，暂时退出该Future,每当调度器恢复其执行，都会通过poll来查看异步程序运行状态，直到运行完毕,
+async fn fetch(client hyper::Client) -> io::Result<String> {
+    let res = await!(client.get("http://www.baidu.com"))?;
+    if !res.status().is_success(){
+        return Err(..);
+    }
+    Ok("something")
+}
+// 可以看到使用async/await写代码逻辑，与非异步的程序的代码逻辑是类似的
+  #+END_SRC
+- Future:基于生成器实现，他内部有一个方法是poll,该poll方法用于查看当前协程的运行状态, Future具有能在某个状态中断执行的特性，在某个时刻恢复执行的特性，其都是使用yield来实现的.
+* 线程
+#+BEGIN_SRC rust
+use std::thread;
+// 创建线程
+thread::spawn(move || {
+    // 线程内部逻辑
+});
+let t = thread::spawn(move || {});
+t.join() // join()方法可以等待线程执行完毕
+
+// Builder可以为线程指定更多参数信息
+thread::Builder::new().name("thread name".to_string()).spawn(move || {});
+
+// trait Send
+// 线程中的数据需要满足trait Send
+// 如果一个类型可以安全的从一个线程move到另一个线程，那它就是move类型。
+// 不包含引用的类型都是Send，因为在move的时候，它和原来的线程就没有什么关系了。
+// 典型的Rc就不是Send类型，因为其在被move的时候，不会进行引用+1，而相对的Arc则是Send类型。
+
+// trait Sync
+// 表示若T实现了Sync,则在不同的线程使用&T访问同一个变量时是安全的
+// 如i32等基础数据类型，都是Sync类型，因为&i32是只读的，多个线程访问没有问题。
+// 具有内部可变性且没有考虑线程同步的都是非Sync类型的，如Cell<T>,RefCell<T>
+#+END_SRC
+** 管道
+#+BEGIN_SRC rust
+use std::thread;
+use std::sync::mpsc::channel;
+
+fn main() {
+    // tx 是输入，发送者，rx是接收者
+    // 发送者可以有多个，接收者只能有一个,mpsc意为multiple provider single consumer
+    let (tx, rx) = channel(); // 使用channel创建的管道是异步管道，其可以无限制的塞数据
+    let (tx2,rx2) = sync_channel(0); // 使用sync_channel创建的管道是同步管道，参数指定管道队列的长度，若无法塞数据则阻塞， 和golang的channel的效果一样
+    let tx1 = tx.clone();  // 使用clone方法来增加一个发送者
+    thread::spawn(move ||{
+        for i in 1..10{
+            tx.send(i); // 使用tx.send发送值，且该管道没有大小限制，可以一直赛数据，到内存塞满都是可以的
+        }
+    });
+
+
+    // 使用rx.recv() 接收管道值，若无值则阻塞
+    while let Ok(r) = rx.recv(){
+        println!("{:?}",r);
+    }
+}
+#+END_SRC
+* 错误
+1. 问号运算符，如果结果是Err，则提前返回，否则继续执行
+2. 问号运算符返回的是Result<>类型，所以?无法在main函数中运行
+*  cargo
 cargo为项目管理工具，类比java的maven,c++的cmake等。
 cargo的默认规则:
 - cargo.toml和cargo.lock文件总是位于项目根目录下。
@@ -505,3 +906,44 @@ cargo的默认规则:
 - 基准测试源代码文件位于benches目录下。
 ** cargo.toml和cargo.lock
 开发只需关心cargo.toml不需要关心cargo.lock,cargo.toml中是项目依赖的信息及版本，可对该文件进行自定义的更改。
+* IO
+#+BEGIN_SRC rust
+// 读取命令行参数  use std::env;
+let args:Vec<String> = env::args().collect();
+// 读取无效的Unicode字符 
+let args:Vec<String> = env::args_os().collect();
+
+// 读取文件，返回String内容 use std::fs;
+let contents = fs.read_to_string(filename);
+
+#+END_SRC
+* 宏
+-  实现宏有两种方式，1使用标准库macro_rules!实现,2通过提供编译器扩展实现。
+#+BEGIN_SRC rust
+// 1. macro_rules
+macro_rules! hashmap{
+    // 第一个括号表示输入参数方式
+    // +表示一个或者多个，*表示0个或多个
+    ($($key: expr => $val: expr),*) => {
+        {
+            let mut map = std::collections::HashMap::new();
+            $(map.insert($key, $val);)*  // 也可通过*符号扩展
+            map
+        }
+    }
+}
+
+// 调用
+hashmap!['A'=>1,'B'=>2];
+
+// 实现println函数
+macro_rules! myPrintln{
+    ($format:expr, $input:expr)=>{
+        println!($format, $input);
+    }
+}
+// 调用
+myPrintln!("{:?}",someVal);
+
+// 定义函数
+#+END_SRC
