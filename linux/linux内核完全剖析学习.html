@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-05-26 Sun 16:12 -->
+<!-- 2019-05-26 Sun 16:36 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>linux 内核完全剖析学习笔记</title>
@@ -96,7 +96,7 @@
 <ol class="org-ol">
 <li>一个进程可以在内核态运行,也可以在用户态运行, 当进程在执行用户代码时,其就是运行态.</li>
 <li>内核程序通过进程表对进程进行管理,其表中的每个项是一个 task<sub>struct</sub> 的指针,指向的是 PCB(Process Control Block)</li>
-<li>进程的状态 <img src="file:///static/img/linux内核完全剖析学习笔记_linux_state.png" alt="linux内核完全剖析学习笔记_linux_state.png" /></li>
+<li>进程的状态 <img src="http://q.qxgzone.com/static/img/linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_linux_state.png" alt="linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E5%89%96%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0_linux_state.png" /></li>
 <li>内核态,用户态以及就绪态在系统中的表示都是 task<sub>runnin</sub></li>
 <li>可中断睡眠态可被中断唤醒,不可被调度,不可中断睡眠态,只能通过 wake<sub>up</sub> 函数唤醒</li>
 <li>暂停状态(task<sub>stopped</sub>)是用来进行调试,僵死状态是进程已运行结束,但是副进程还未访问其状态,当父进程调用 wait 方法获取了子进程的信息后,该状态的进程的数据就会被释放掉</li>
@@ -119,7 +119,7 @@
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-05-26 Sun 16:12</p>
+<p class="date">Created: 2019-05-26 Sun 16:36</p>
 <p class="validation"></p>
 </div>
 </body>

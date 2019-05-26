@@ -23,7 +23,7 @@
 ** 进程
 1. 一个进程可以在内核态运行,也可以在用户态运行, 当进程在执行用户代码时,其就是运行态.
 2. 内核程序通过进程表对进程进行管理,其表中的每个项是一个 task_struct 的指针,指向的是 PCB(Process Control Block)
-3. 进程的状态 [[/static/img/linux内核完全剖析学习笔记_linux_state.png]]
+3. 进程的状态 [[http://q.qxgzone.com/static/img/linux内核完全剖析学习笔记_linux_state.png]]
 4. 内核态,用户态以及就绪态在系统中的表示都是 task_runnin
 5. 可中断睡眠态可被中断唤醒,不可被调度,不可中断睡眠态,只能通过 wake_up 函数唤醒
 6. 暂停状态(task_stopped)是用来进行调试,僵死状态是进程已运行结束,但是副进程还未访问其状态,当父进程调用 wait 方法获取了子进程的信息后,该状态的进程的数据就会被释放掉
