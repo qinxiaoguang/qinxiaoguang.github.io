@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-24 Wed 10:38 -->
+<!-- 2019-05-26 Sun 16:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>rust学习笔记</title>
@@ -35,7 +35,13 @@
 <li><a href="#org6b052e2">Hello world</a></li>
 <li><a href="#org9811429">Hello Rust</a></li>
 <li><a href="#orgd069b86">变量</a></li>
-<li><a href="#org2f19f6e">类型</a></li>
+<li><a href="#org2f19f6e">类型</a>
+<ul>
+<li><a href="#orgd5e37bf">类型别名</a></li>
+<li><a href="#org5c5f6df">类型转换</a></li>
+</ul>
+</li>
+<li><a href="#orged332d7">输出格式化</a></li>
 <li><a href="#orgce289f6">控制流</a>
 <ul>
 <li><a href="#org6c7c7e3">if</a></li>
@@ -45,11 +51,52 @@
 </ul>
 </li>
 <li><a href="#org575fe24">函数</a></li>
+<li><a href="#org70cf73a">测试</a></li>
 <li><a href="#orgad713e8">trait</a></li>
+<li><a href="#org6026974">泛型</a></li>
 <li><a href="#orge28df4b">所有权</a></li>
+<li><a href="#org4eb3e6d">生命周期</a></li>
+<li><a href="#orgf67ea03">析构</a></li>
+<li><a href="#orge86aa14">智能指针</a>
+<ul>
+<li><a href="#org409fc78">内部可变性</a></li>
+<li><a href="#org35715da">Box</a></li>
+<li><a href="#orgae64e4a">Cell</a></li>
+<li><a href="#orgf960698">RefCell</a></li>
+<li><a href="#org06ecf38">解引用</a></li>
+<li><a href="#orgca4d406">引用计数</a></li>
+</ul>
+</li>
+<li><a href="#org60a8689">unsafe</a></li>
+<li><a href="#org60c4b79">闭包</a></li>
+<li><a href="#orgd6d404b">协程</a>
+<ul>
+<li><a href="#org3781e0c">生成器</a></li>
+<li><a href="#org7f55588">协程</a></li>
+</ul>
+</li>
+<li><a href="#org4040ba8">线程</a>
+<ul>
+<li><a href="#org90e271b">管道</a></li>
+</ul>
+</li>
+<li><a href="#org93dde1f">STD</a>
+<ul>
+<li><a href="#org8311471">Vec</a></li>
+<li><a href="#orga94c95d">HashMap</a></li>
+</ul>
+</li>
+<li><a href="#org48f7c22">错误</a></li>
 <li><a href="#org5198671">cargo</a>
 <ul>
 <li><a href="#org6b43412">cargo.toml和cargo.lock</a></li>
+</ul>
+</li>
+<li><a href="#org2e4b8ee">IO</a></li>
+<li><a href="#org7296173">宏</a></li>
+<li><a href="#orged73101">demo</a>
+<ul>
+<li><a href="#org0c9c5e4">编写minigrep</a></li>
 </ul>
 </li>
 </ul>
@@ -148,6 +195,11 @@
 <div id="outline-container-orgd069b86" class="outline-2">
 <h2 id="orgd069b86">变量</h2>
 <div class="outline-text-2" id="text-orgd069b86">
+<ul class="org-ul">
+<li>rust中变量赋值强调的是变量绑定，而非赋值</li>
+<li>rust中的变量必须有初始值,其无默认值</li>
+<li>rust 中允许声明同样名字的变量，后面的会将前面的遮挡，不过此时内存中有两个变量，只不过只能使用一个。</li>
+</ul>
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #75715E;">//</span><span style="color: #75715E;">varable</span>
 <span style="color: #F92672;">let</span> <span style="color: #FD971F;">a1</span> = 5; <span style="color: #75715E;">// </span><span style="color: #75715E;">int32&#31867;&#22411;&#65292;rust&#20250;&#20570;&#31867;&#22411;&#25512;&#26029;, &#27809;&#26377;mut&#20851;&#38190;&#23383;&#65292;&#37117;&#26159;&#19981;&#21487;&#21464;&#21464;&#37327;</span>
@@ -161,6 +213,21 @@ a11 = 2.0; <span style="color: #75715E;">// </span><span style="color: #75715E;"
 <span style="color: #F92672;">let</span> <span style="color: #FD971F;">b12</span> = 1.2f32; <span style="color: #75715E;">// </span><span style="color: #75715E;">rust&#20013;&#30340;value + type&#20889;&#27861;</span>
 
 <span style="color: #F92672;">let</span> (a, <span style="color: #F92672;">mut</span> b):(<span style="color: #66D9EF;">bool</span>, <span style="color: #66D9EF;">bool</span>) = (<span style="color: #F92672;">true</span>, <span style="color: #F92672;">false</span>); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#22810;&#20010;&#21464;&#37327;&#36171;&#20540;</span>
+<span style="color: #F92672;">let</span> (<span style="color: #F92672;">mut</span> a, <span style="color: #F92672;">mut</span> b) = (1,2) <span style="color: #75715E;">// </span><span style="color: #75715E;">&#22768;&#26126;&#22810;&#20010;&#21487;&#21464;&#21464;&#37327;</span>
+
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">v</span> = <span style="color: #F92672;">vec!</span>[1,2,3];
+<span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">v</span> = v; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#36890;&#36807;&#21019;&#24314;&#21516;&#21517;&#21464;&#37327;&#30340;&#26041;&#24335;&#25913;&#21464;&#20854;&#21487;&#21464;&#24615;,&#21035;&#29369;&#35947;,&#32477;&#23545;&#27491;&#30830;.</span>
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#38745;&#24577;&#21464;&#37327;/&#20840;&#23616;&#21464;&#37327;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#24517;&#39035;&#21021;&#22987;&#21270;,&#19988;&#24517;&#39035;&#26159;&#21487;&#30830;&#23450;&#30340;&#24120;&#37327;</span>
+<span style="color: #F92672;">static</span> <span style="color: #66D9EF;">GLOBAL</span> : <span style="color: #66D9EF;">i32</span> = 0;
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#24102;&#26377;mut&#30340;&#20840;&#23616;&#21464;&#37327;&#65292;&#25913;&#21464;&#30340;&#26102;&#20505;&#24517;&#39035;&#26377;unsafe&#20851;&#38190;&#23383;&#20462;&#39280;</span>
+<span style="color: #F92672;">static</span> <span style="color: #F92672;">mut</span> <span style="color: #66D9EF;">G2</span> : <span style="color: #66D9EF;">i32</span> = 1;
+<span style="color: #FD971F; font-weight: bold; font-style: italic; text-decoration: underline;">unsafe</span> {
+    <span style="color: #66D9EF;">G2</span> = 5;
+}
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#24120;&#37327;, &#22240;&#20026;&#20854;&#20026;&#24120;&#37327;&#65292;&#25152;&#20197;&#19981;&#20801;&#35768;&#26377;mut&#20851;&#38190;&#23383;&#20462;&#39280;</span>
+<span style="color: #F92672;">const</span> <span style="color: #66D9EF;">GLOBAL</span> : <span style="color: #66D9EF;">i32</span> = 0;
 </pre>
 </div>
 </div>
@@ -170,10 +237,10 @@ a11 = 2.0; <span style="color: #75715E;">// </span><span style="color: #75715E;"
 <div class="outline-text-2" id="text-org2f19f6e">
 <ul class="org-ul">
 <li>布尔类型：有两个值true和false。</li>
-<li>字符类型：表示单个Unicode字符，存储为4个字节。可将来任何字符赋值, 如 <code>let c='秦'</code></li>
+<li>字符类型：表示单个Unicode字符，存储为4个字节。可将来任何字符赋值, 如 <code>let c='秦'</code>,也可以使用u8来类型来存储ASCII字符，如 <code>let x :u8=b'A'</code></li>
 <li>数值类型：分为有符号整数 (i8, i16, i32, i64, isize)、 无符号整数 (u8, u16, u32, u64, usize) 以及浮点数 (f32, f64)。其中iszie,usize则是自适应类型，其大小取决于操作系统。</li>
 <li><p>
-字符串类型：最底层的是不定长类型str，更常用的是字符串切片&amp;str和堆分配字符串String， 其中字符串切片是静态分配的，有固定的大小，并且不可变，而堆分配字符串是可变的。
+字符串类型：最底层的是不定长类型str，更常用的是字符串切片&amp;str和堆分配字符串String， 其中字符串切片是静态分配的，有固定的大小，并且不可变，而堆分配字符串(String)是可变的。
 </p>
 <div class="org-src-container">
 <pre class="src src-rust"> <span style="color: #F92672;">let</span> <span style="color: #FD971F;">hello</span> = <span style="color: #E6DB74;">"hello world"</span>; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21452;&#24341;&#21495;&#20013;&#30340;&#23383;&#31526;&#20018;&#31867;&#22411;&#20026;&amp;'static str, &#21363;&#20854;&#19981;&#21487;&#21464;</span>
@@ -201,6 +268,36 @@ a11 = 2.0; <span style="color: #75715E;">// </span><span style="color: #75715E;"
 c.chars().nth(2); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#35775;&#38382;&#31532;2&#20010; </span>
 
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#23383;&#31526;&#20018;&#20999;&#29255;&#65292;&#24456;&#21361;&#38505;&#65292;&#19981;&#24314;&#35758;&#20351;&#29992;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s</span> = <span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"haha"</span>);
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s1</span> = &amp;s[1..2]; <span style="color: #75715E;">// </span><span style="color: #75715E;">s1&#26159;&amp;str&#31867;&#22411;&#65292;&amp;str&#23601;&#26159;&#20999;&#29255;&#31867;&#22411;, &#20351;&#29992;&amp;s[..]&#21487;&#20197;&#25226;String&#31867;&#22411;&#36716;&#20026;&amp;str&#31867;&#22411;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s2</span> = <span style="color: #E6DB74;">"haha"</span>;   <span style="color: #75715E;">// </span><span style="color: #75715E;">s2&#20063;&#26159;&amp;str&#31867;&#22411;, &#25152;&#20197;s2&#21644;&amp;s2[..]&#26159;&#19968;&#26679;&#30340;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s3</span> = <span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"&#21704;"</span>);
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, s3.len()); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#25171;&#21360;3&#65292; &#22240;&#20026;&#20854;&#23383;&#31526;&#20018;&#20351;&#29992;&#30340;utf-8&#23384;&#20648;&#65292;&#25152;&#20197;&#19968;&#20010;&#21704;&#23383;&#20351;&#29992;3&#20010;&#23383;&#33410;&#23384;&#20648;&#65292;&#25152;&#20197;&#25171;&#21360;3&#65292;&#27880;&#24847;String&#24213;&#23618;&#23454;&#38469;&#19978;&#26159;Vec&lt;u8&gt;&#65292;&#25152;&#20197;&#20854;&#38271;&#24230;&#20063;&#21363;&#20026;Vec&lt;u8&gt;&#30340;&#38271;&#24230;/&#23383;&#33410;&#38271;&#24230;&#65292;&#22240;&#27492;&#20026;&#20102;&#38450;&#27490;&#35823;&#20250;&#65292;&#26460;&#32477;&#20102;&#23545;&#23383;&#31526;&#20018;&#20351;&#29992;&#32034;&#24341;&#30340;&#25805;&#20316;&#65292;&#22914;s3[0]&#26159;&#19981;&#20250;&#32534;&#35793;&#36890;&#36807;&#30340;&#12290;&#32780;&#23545;&#23383;&#31526;&#20018;&#20351;&#29992;slice&#25805;&#20316;&#65292;&#22914;&amp;s3[0..4]&#36890;&#24120;&#26159;&#24456;&#21361;&#38505;&#30340;&#65292;&#22240;&#20026;&#19981;&#30693;&#36947;&#20250;&#25130;&#21462;&#20986;&#26469;&#20160;&#20040;&#20081;&#19971;&#20843;&#31967;&#30340;&#29609;&#24847;,&#20063;&#26377;&#21487;&#33021;&#23548;&#33268;panic&#30340;&#20986;&#29616;</span>
+
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#25805;&#20316;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s1</span> = <span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"haha"</span>);
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s2</span> = <span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"heihei"</span>);
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s3</span> = s1+&amp;s2;  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;+&#21495;&#23545;String&#25805;&#20316;&#26102;&#65292;&#31532;&#19968;&#20010;&#35201;&#26159;String&#31867;&#22411;&#65292;&#31532;&#20108;&#20010;&#26159;&amp;str&#31867;&#22411;,&#25110;&#32773;&amp;String&#20063;&#21487;&#20197;,&#22240;&#20026;&amp;String&#31867;&#22411;&#20250;&#34987;&#24378;&#36716;&#25104;&#20026;&amp;str&#31867;&#22411;(deref),&#20294;&#26159;&#36825;&#26679;&#25805;&#20316;&#21518;s1&#23558;&#20250;&#34987;move, &#29983;&#25104;&#30340;s3&#26159;String&#31867;&#22411;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s3</span> = s1 + &amp;s2 + &amp;s2; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21512;&#27861;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s3</span> = s3 + <span style="color: #E6DB74;">"haha"</span>; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;</span>
+<span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">s4</span> = <span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"haha"</span>); 
+s4.push_str(<span style="color: #E6DB74;">" oo"</span>); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#20351;&#29992;push_str&#26469;&#32473;&#23383;&#31526;&#20018;&#21518;&#36793;&#28155;&#21152;&#26032;&#30340;&#23383;&#31526;&#20018;</span>
+s4.push(<span style="color: #E6DB74;">'l'</span>); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#20351;&#29992;push &#26469;&#28155;&#21152;&#23383;&#31526;</span>
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#36941;&#21382;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">s.chars()&#20063;&#26159;iterator&#31867;&#22411;&#65292;&#25152;&#20197;&#21487;&#20197;&#26377;iterator&#30340;&#19968;&#31995;&#21015;&#25805;&#20316;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s</span> = <span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"&#21704;&#40657;"</span>);
+<span style="color: #F92672;">for</span> i <span style="color: #F92672;">in</span> s.chars(){
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;chars&#25165;&#33021;&#33719;&#21462;&#27491;&#30830;&#30340;&#23383;&#31526;, &#32780;&#20351;&#29992;s.bytes()&#20026;&#25152;&#26377;&#23383;&#33410;</span>
+}
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">count</span> = s.chars().count(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#23383;&#31526;&#20018;&#30340;&#38271;&#24230;&#65292;&#27880;&#24847;&#26159;&#19981;&#26159;&#23383;&#33410;&#38271;&#24230;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">two</span> = s.chars().nth(2); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#31532;2&#20010;&#23383;&#31526;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">back_two</span> = s.chars().back_nth(2); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#20498;&#25968;&#31532;&#20108;&#20010;&#23383;&#31526;</span>
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#23383;&#31526;&#20018;&#26367;&#25442;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">res</span> = <span style="color: #66D9EF;">str</span>::replace(<span style="color: #E6DB74;">"haha!"</span>,<span style="color: #E6DB74;">"!"</span>,<span style="color: #E6DB74;">"?"</span>);
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">res</span> = res.replace(<span style="color: #E6DB74;">"?"</span>,<span style="color: #E6DB74;">"!"</span>);
 </pre>
 </div></li>
 <li><p>
@@ -227,10 +324,11 @@ v.push(3); <span style="color: #75715E;">// </span><span style="color: #75715E;"
 </p>
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">arr</span> = [1,2,3,4,5];
-<span style="color: #F92672;">let</span> <span style="color: #FD971F;">slice_1</span> = &amp;arr[..]; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#20840;&#37096;&#20803;&#32032;</span>
-<span style="color: #F92672;">let</span> <span style="color: #FD971F;">slice_2</span> = &amp;arr[1..4]; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#19979;&#26631;[1,4]&#30340;&#20803;&#32032;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">slice_1</span> = &amp;arr[..]; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#20840;&#37096;&#20803;&#32032;, &#27880;&#24847;&#26159;&#24341;&#29992;,&#21407;&#26469;&#30340;&#20803;&#32032;&#22914;&#26524;&#20462;&#25913;&#65292;&#21017;&#24341;&#29992;&#30340;&#20803;&#32032;&#20063;&#20250;&#20462;&#25913;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">slice_2</span> = &amp;arr[1..4]; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#19979;&#26631;[1,4)&#30340;&#20803;&#32032;</span>
 <span style="color: #F92672;">let</span> <span style="color: #FD971F;">slice_3</span> = &amp;arr[1..]; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#19979;&#26631;1&#20043;&#21518;&#30340;&#25152;&#26377;&#20803;&#32032;</span>
 <span style="color: #F92672;">let</span> <span style="color: #FD971F;">slice_4</span> = &amp;arr[..3]; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#19979;&#26631;3&#20043;&#21069;&#30340;&#25152;&#26377;&#20803;&#32032;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">slice_5</span> = &amp;arr[1..=4]; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;[1,4]&#30340;&#20803;&#32032;</span>
 
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#26377;&#20851;slice&#30340;&#20989;&#25968;</span>
 <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">show</span>(<span style="color: #FD971F;">arr</span>: &amp;[<span style="color: #66D9EF;">u8</span>]){
@@ -240,6 +338,7 @@ v.push(3); <span style="color: #75715E;">// </span><span style="color: #75715E;"
 }
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#35843;&#29992;</span>
 show(&amp;arr[..]);
+show(&amp;arr); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;</span>
 show(slice_1);
 </pre>
 </div></li>
@@ -249,6 +348,8 @@ show(slice_1);
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">y</span> = (0, <span style="color: #E6DB74;">"1234"</span>);
 <span style="color: #F92672;">let</span> <span style="color: #FD971F;">x</span> :(<span style="color: #66D9EF;">i32</span>, &amp;<span style="color: #66D9EF;">str</span>) = (3, <span style="color: #E6DB74;">"123456"</span>)
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#33509;&#20803;&#32452;&#21482;&#21253;&#21547;&#19968;&#20010;&#20803;&#32032;&#65292;&#38656;&#35201;&#22312;&#20803;&#32032;&#26411;&#23614;&#28155;&#21152;&#36887;&#21495;&#65292;&#20197;&#21306;&#20998;&#25324;&#21495;&#34920;&#36798;&#24335;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">z</span> = (0,);
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#35775;&#38382;</span>
 <span style="color: #F92672;">let</span> (w, z) = y;
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#19979;&#26631;&#35775;&#38382;</span>
@@ -258,7 +359,7 @@ show(slice_1);
 </div></li>
 <li>指针：最底层的是裸指针*const T和*mut T，但解引用它们是不安全的，必须放到unsafe块里。</li>
 <li>函数：具有函数类型的变量实质上是一个函数指针。</li>
-<li>元类型：即()，其唯一的值也是()。</li>
+<li>元类型：即()，其唯一的值也是(), 也称单元类型。</li>
 <li><p>
 结构体
 </p>
@@ -291,6 +392,54 @@ show(slice_1);
 </div></li>
 </ul>
 </div>
+<div id="outline-container-orgd5e37bf" class="outline-3">
+<h3 id="orgd5e37bf">类型别名</h3>
+<div class="outline-text-3" id="text-orgd5e37bf">
+<ul class="org-ul">
+<li>可以使用type为一个类型起一个别名,且这两个类型一模一样，只不过名字不一样，不要和golang混淆</li>
+<li>泛型其实就是使用类型别名的方式实现的。</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">type</span> <span style="color: #66D9EF;">Age</span> = <span style="color: #66D9EF;">u32</span>;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5c5f6df" class="outline-3">
+<h3 id="org5c5f6df">类型转换</h3>
+<div class="outline-text-3" id="text-org5c5f6df">
+<ul class="org-ul">
+<li>类型转换的方式是通过as关键字</li>
+<li>如果转换是合理的，则编译通过，否则编译不通过</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">var1</span> : <span style="color: #66D9EF;">i8</span> = 41;
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">var2</span> : <span style="color: #66D9EF;">i16</span> = var1 <span style="color: #F92672;">as</span> <span style="color: #66D9EF;">i16</span>;
+
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">i</span> = <span style="color: #E6DB74;">"haha"</span>;
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">b</span> = i <span style="color: #F92672;">as</span> <span style="color: #66D9EF;">u32</span>; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#19981;&#21512;&#29702;&#65292;&#32534;&#35793;&#38169;&#35823;</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orged332d7" class="outline-2">
+<h2 id="orged332d7">输出格式化</h2>
+<div class="outline-text-2" id="text-orged332d7">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, 1);
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:o}</span><span style="color: #E6DB74;">"</span>, 9); <span style="color: #75715E;">// </span><span style="color: #75715E;">8&#36827;&#21046;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:x}</span><span style="color: #E6DB74;">"</span>, 255); <span style="color: #75715E;">// </span><span style="color: #75715E;">16&#36827;&#21046;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:X}</span><span style="color: #E6DB74;">"</span>, 255); <span style="color: #75715E;">//</span><span style="color: #75715E;">16&#36827;&#21046;&#22823;&#20889;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:p}</span><span style="color: #E6DB74;">"</span>,&amp;0); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#25351;&#38024;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:b}</span><span style="color: #E6DB74;">"</span>,15); <span style="color: #75715E;">// </span><span style="color: #75715E;">2&#36827;&#21046;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:e}</span><span style="color: #E6DB74;">"</span>,100000f32); <span style="color: #75715E;">//</span><span style="color: #75715E;">&#31185;&#23398;&#35745;&#25968;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,<span style="color: #E6DB74;">"test"</span>); <span style="color: #75715E;">//</span><span style="color: #75715E;">&#25171;&#21360;Debug trait</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:#?}</span><span style="color: #E6DB74;">"</span>, (<span style="color: #E6DB74;">"test1"</span>,<span style="color: #E6DB74;">"test2"</span>)); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#24102;&#25442;&#34892;&#21644;&#32553;&#36827;&#30340;Debug&#25171;&#21360;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{a}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{b}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{b}</span><span style="color: #E6DB74;">"</span>, a=<span style="color: #E6DB74;">"x"</span>, b=<span style="color: #E6DB74;">"y"</span>); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#24102;&#21629;&#21517;&#21442;&#25968;&#30340;&#25171;&#21360;</span>
+</pre>
+</div>
+</div>
 </div>
 <div id="outline-container-orgce289f6" class="outline-2">
 <h2 id="orgce289f6">控制流</h2>
@@ -310,13 +459,22 @@ show(slice_1);
 
 } <span style="color: #F92672;">else</span> <span style="color: #F92672;">if</span> expr2 {
 
-} <span style="color: #F92672;">else</span>
+} <span style="color: #F92672;">else</span> {
+
+}
 
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#24418;&#24335;3</span>
 <span style="color: #F92672;">if</span> expr1 {
 
 } <span style="color: #F92672;">else</span> {
 
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#22914;&#26524;&#20351;&#29992;if-else&#20316;&#20026;&#34920;&#36798;&#24335;&#65292;&#21017;&#20854;&#20998;&#25903;&#20013;&#36820;&#22238;&#30340;&#31867;&#22411;&#24517;&#39035;&#19968;&#33268;&#65292;&#33509;else&#20998;&#25903;&#30465;&#30053;&#20102;&#65292;&#21017;&#32534;&#35793;&#22120;&#40664;&#35748;&#35748;&#20026;else&#20998;&#25903;&#30340;&#31867;&#22411;&#20026;(), &#25152;&#20197;&#19979;&#38754;&#30340;&#20889;&#27861;&#26159;&#38169;&#35823;&#30340;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>(<span style="color: #FD971F;">flag</span>:<span style="color: #66D9EF;">bool</span>)-&gt;<span style="color: #66D9EF;">i32</span>{
+    <span style="color: #F92672;">if</span> flag {
+        42
+    }
 }
 
 <span style="color: #75715E;">// </span><span style="color: #75715E;">rust &#20013;if&#26159;&#19968;&#20010;&#34920;&#36798;&#24335;,so&#21487;&#20197;&#36825;&#20040;&#20889;</span>
@@ -343,7 +501,7 @@ show(slice_1);
 <span style="color: #F92672;">for</span> var <span style="color: #F92672;">in</span> iterator {
 
 }
-eg :
+<span style="color: #75715E;">// </span><span style="color: #75715E;">eg :</span>
 <span style="color: #F92672;">for</span> x <span style="color: #F92672;">in</span> 0..10 {
 
 }
@@ -365,10 +523,13 @@ eg :
 
 }
 
-<span style="color: #75715E;">// </span><span style="color: #75715E;">loop&#31867;&#20284; while true</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">loop&#31867;&#20284; while true,&#19968;&#33324;&#25512;&#33616;&#29992;loop,&#20854;&#26377;&#20248;&#21270;.</span>
 <span style="color: #F92672;">loop</span> {
 
 }
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">loop&#20013;&#30340;break&#21518;&#36319;&#19968;&#20010;&#34920;&#36798;&#24335;&#65292;&#21017;&#35813;&#34920;&#36798;&#24335;&#30340;&#20540;&#23601;&#20026;loop&#34920;&#36798;&#24335;&#30340;&#20540;,&#22914;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">v</span> = <span style="color: #F92672;">loop</span> { <span style="color: #F92672;">break</span> 10;}; <span style="color: #75715E;">//</span><span style="color: #75715E;">&#27492;&#26102;v&#30340;&#20540;&#20026;10</span>
 </pre>
 </div>
 </div>
@@ -377,7 +538,7 @@ eg :
 <h3 id="orgbeea5f2">match</h3>
 <div class="outline-text-3" id="text-orgbeea5f2">
 <div class="org-src-container">
-<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">match &#31867;&#27604;switch,&#38656;&#31526;&#21512;&#19968;&#19979;&#35201;&#27714;</span>
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">match &#31867;&#27604;switch,&#38656;&#31526;&#21512;&#20197;&#19979;&#35201;&#27714;</span>
 <span style="color: #75715E;">// </span><span style="color: #75715E;">1. &#35821;&#21477;&#20197;,&#32467;&#23614;</span>
 <span style="color: #75715E;">// </span><span style="color: #75715E;">2. &#33509;&#35201;&#33719;&#21462;&#21305;&#37197;&#20540;&#65292;&#20351;&#29992;@&#31526;&#21495;,&#36890;&#24120;&#29992;&#20110;&#27169;&#24335;&#21305;&#37197;&#20013;</span>
 <span style="color: #75715E;">// </span><span style="color: #75715E;">3. &#24517;&#39035;&#35201;&#26377;_&#31526;&#21512;&#26469;&#31351;&#20030;&#21097;&#20313;&#21305;&#37197;&#65292;&#22240;rust&#35201;&#27714;&#35206;&#30422;&#25152;&#26377;&#21487;&#33021;</span>
@@ -505,20 +666,64 @@ func(3);
     }
     inc
 }
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20989;&#25968;&#21487;&#20197;&#29992;const&#20851;&#38190;&#23383;&#20462;&#39280;&#65292;&#36825;&#26679;&#20989;&#25968;&#21487;&#20197;&#22312;&#32534;&#35793;&#38454;&#27573;&#25191;&#34892;&#65292;&#36820;&#22238;&#20540;&#20063;&#34987;&#35270;&#20026;&#32534;&#35793;&#22120;&#24120;&#37327;,&#22914;</span>
+<span style="color: #F92672;">#![feature(consts_fn)]</span>
+<span style="color: #F92672;">const</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">cube</span>(num :<span style="color: #66D9EF;">usize</span>) -&gt; <span style="color: #66D9EF;">usize</span> {
+    num*num*num
+}
 </pre>
 </div>
 </div>
 </div>
 
+<div id="outline-container-org70cf73a" class="outline-2">
+<h2 id="org70cf73a">测试</h2>
+<div class="outline-text-2" id="text-org70cf73a">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">&#21333;&#20803;&#27979;&#35797;&#65292;&#38656;&#35201;&#23558;tests&#27169;&#22359;&#25918;&#20837;&#30456;&#21516;&#30340;&#25991;&#20214;&#37324;&#65292;&#24182;&#29992;#[cfg(test)]&#26631;&#27880;, #[cfg(test)]&#27880;&#35299;&#21578;&#35785;Rust,&#21482;&#22312;&#36816;&#34892;cargo test&#30340;&#26102;&#20505;&#25165;&#25191;&#34892;, &#32780;&#22312;cargo build&#30340;&#26102;&#20505;&#19981;&#25191;&#34892;</span>
+<span style="color: #F92672;">#[cfg(test)]</span>
+<span style="color: #F92672;">mod</span> <span style="color: #AE81FF;">tests</span> {
+     <span style="color: #F92672;">#[test]</span> <span style="color: #75715E;">// </span><span style="color: #75715E;">&#38656;&#35201;&#20351;&#29992;#[test]&#27880;&#35299;&#26469;&#34920;&#26126;&#35813;&#20989;&#25968;&#26159;&#27979;&#35797;&#20989;&#25968;, &#20351;&#29992;cargo test&#26469;&#36816;&#34892;&#27979;&#35797;&#20989;&#25968;</span>
+     <span style="color: #F92672;">#[should_panic]</span> <span style="color: #75715E;">// </span><span style="color: #75715E;">&#27979;&#35797;panic,&#33509;&#26377;panic&#25104;&#21151;&#65292;&#33509;&#26080;panic&#22833;&#36133;</span>
+     <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">it_works</span>() {
+          <span style="color: #F92672;">assert_eq!</span>(2 + 2, 4);  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#27979;&#35797;&#30456;&#31561;</span>
+          <span style="color: #F92672;">assert_ne!</span>(2 + 1, 4);  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#27979;&#35797;&#19981;&#31561;</span>
+          <span style="color: #F92672;">assert!</span>(<span style="color: #F92672;">true</span>); <span style="color: #75715E;">// </span><span style="color: #75715E;">assert!&#21442;&#25968;&#20256;&#36882;&#20026;bool</span>
+          <span style="color: #F92672;">assert!</span>(<span style="color: #F92672;">false</span>,
+               <span style="color: #E6DB74;">"&#33258;&#23450;&#20041;&#36755;&#20986;&#20449;&#24687; {}"</span>, <span style="color: #E6DB74;">"&#21704;"</span>
+          )
+     }
+
+     <span style="color: #F92672;">#[test]</span>  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36890;&#36807;Result&#26469;&#21028;&#26029;&#27979;&#35797;&#32467;&#26524;</span>
+     <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">get_result</span>() -&gt; <span style="color: #66D9EF;">Result</span>&lt;(), <span style="color: #66D9EF;">String</span>&gt;{
+          <span style="color: #F92672;">if</span> <span style="color: #F92672;">true</span>{
+               <span style="color: #66D9EF;">Ok</span>(())
+          } <span style="color: #F92672;">else</span> {
+               <span style="color: #66D9EF;">Err</span>(<span style="color: #E6DB74;">"hei"</span>.to_owned())
+          }
+     }
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#38598;&#25104;&#27979;&#35797;&#38656;&#35201;&#22312;&#21644;src&#30340;&#21516;&#32423;&#30446;&#24405;&#19979;&#21019;&#24314;&#19968;&#20010;tests&#30446;&#24405;,&#20363;&#22914;&#21019;&#24314;&#19968;&#20010;main_test.rs&#25991;&#20214;&#65292;&#37324;&#38754;&#19981;&#38656;&#35201;#[cfg(test)]&#21450;mod tests&#20570;&#26631;&#27880;&#65292; &#21516;&#26679;&#35813;&#25991;&#20214;&#20063;&#21482;&#26377;&#22312;&#36816;&#34892;cargo test&#30340;&#26102;&#20505;&#25165;&#20250;&#25191;&#34892;</span>
+</pre>
+</div>
+</div>
+</div>
 <div id="outline-container-orgad713e8" class="outline-2">
 <h2 id="orgad713e8">trait</h2>
 <div class="outline-text-2" id="text-orgad713e8">
 <p>
-类似golang的interface
+类似golang的interface,但有很大不同
 </p>
 <div class="org-src-container">
 <pre class="src src-rust"><span style="color: #F92672;">trait</span> <span style="color: #66D9EF;">HasArea</span> {
-    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">area</span>(&amp;<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">f64</span>;
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">area</span>(&amp;<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">f64</span>; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#31532;&#19968;&#20010;&#21442;&#25968;&#20351;&#29992;&amp;self,&#21017;&#20854;&#31216;&#20026;&#26041;&#27861;&#65292;&#21487;&#20197;&#20351;&#29992;&#23567;&#25968;&#28857;&#35843;&#29992;&#65292;&#33509;&#27809;&#26377;&amp;self&#65292;&#21017;&#20026;&#38745;&#24577;&#20989;&#25968;&#65292;&#21487;&#20197;&#20351;&#29992;::&#26469;&#35843;&#29992;</span>
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">self, Self&#37117;&#26159;&#20851;&#38190;&#23383;&#65292;&#20854;&#20013;Self&#26159;&#31867;&#22411;&#65292;self&#26159;&#21464;&#37327;&#21517;, </span>
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">self &#20063;&#20998;&#20960;&#31181;&#31867;&#22411;&#65292;&#22914;self, &amp;self, &amp;mut self&#65292;&#20182;&#20204;&#37117;&#26159;self:Self&#65292; self:&amp;Self, self &amp;mut Self &#30340;&#31616;&#21270;&#29256;&#26412;</span>
+
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#40664;&#35748;&#26041;&#27861;&#65292;&#26080;&#39035;&#23454;&#29616;,&#20063;&#21487;&#37325;&#20889;</span>
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">default</span>(&amp;<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">f64</span>{3.14f64}
 }
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#23454;&#29616;</span>
 <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Cycle</span>{
@@ -583,12 +788,88 @@ func(3);
     <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">foobar</span>(&amp;<span style="color: #F92672;">self</span>) { <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"foobar"</span>); }
 }
 
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#20026;&#20869;&#32622;&#31867;&#22411;&#28155;&#21152;&#19968;&#20123;&#26041;&#27861;&#65292;&#22914;&#20026;i32&#28155;&#21152;&#26041;&#27861;</span>
+<span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">SomeTrait</span> <span style="color: #F92672;">for</span> <span style="color: #66D9EF;">i32</span> {
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">xxx</span>
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">trait&#19981;&#21487;&#34987;&#24403;&#20570;&#21442;&#25968;&#20256;&#36882;,&#22914;&#19979;&#21015;&#20195;&#30721;&#26159;&#38169;&#35823;&#30340;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>(<span style="color: #FD971F;">args</span>: <span style="color: #66D9EF;">HasAres</span>) -&gt; <span style="color: #66D9EF;">i32</span>{}
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#33509;&#24819;&#23454;&#29616;&#20197;&#19978;&#25928;&#26524;&#65292;&#38656;&#35201;&#20351;&#29992;&#27867;&#22411;&#26469;&#23454;&#29616;</span>
 <span style="color: #75715E;">// </span><span style="color: #75715E;">derive &#21644;haskell&#20013;&#19968;&#26679;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#19981;&#24517;&#25163;&#21160;&#30340;&#23454;&#29616;&#19968;&#20123;trait&#65292;&#36890;&#36807;derive&#26469;&#27966;&#29983;</span>
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33021;&#34987;derive&#30340;trait&#26377;:Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd</span>
 <span style="color: #F92672;">#[derive(Debug)]</span>
 <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Foo</span>;
 </pre>
 </div>
+</div>
+</div>
+<div id="outline-container-org6026974" class="outline-2">
+<h2 id="org6026974">泛型</h2>
+<div class="outline-text-2" id="text-org6026974">
+<ul class="org-ul">
+<li><p>
+泛型可以有默认值
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">S</span>&lt;T=i32&gt;{
+    <span style="color: #FD971F;">data</span>:<span style="color: #66D9EF;">T</span>
+}  
+</pre>
+</div></li>
+<li>如果指定泛型参数，就必须被使用，否则编译不通过</li>
+<li><p>
+泛型用于函数中
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>&lt;<span style="color: #66D9EF;">T</span>&gt;(<span style="color: #FD971F;">args</span>:<span style="color: #66D9EF;">T</span>) -&gt; <span style="color: #66D9EF;">bool</span>{}
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>&lt;<span style="color: #66D9EF;">T1</span>,<span style="color: #66D9EF;">T2</span>&gt; (args1 :<span style="color: #66D9EF;">T1</span>, <span style="color: #FD971F;">arg2</span>:<span style="color: #66D9EF;">T2</span>) -&gt; <span style="color: #66D9EF;">bool</span> {} <span style="color: #75715E;">// </span><span style="color: #75715E;">&#22810;&#20010;&#27867;&#22411;&#21442;&#25968;</span>
+</pre>
+</div></li>
+<li>可以通过泛型来实现函数重载功能，但是rust中没有同一个函数不同数量参数的函数重载</li>
+<li><p>
+impl中的泛型, 在impl块中出现的泛型参数，需要在impl关键字后边用尖括号声明
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">impl</span>&lt;<span style="color: #66D9EF;">T</span>,<span style="color: #66D9EF;">U</span>&gt; <span style="color: #66D9EF;">Into</span>&lt;<span style="color: #66D9EF;">U</span>&gt; <span style="color: #F92672;">for</span> <span style="color: #66D9EF;">T</span>
+    <span style="color: #F92672;">where</span> <span style="color: #FD971F;">U</span>: <span style="color: #66D9EF;">From</span>&lt;<span style="color: #66D9EF;">T</span>&gt;
+{
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">into</span>(<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">U</span> {
+        <span style="color: #66D9EF;">U</span>::from(<span style="color: #F92672;">self</span>)
+    }
+}
+</pre>
+</div></li>
+<li><p>
+泛型参数约束有两种方式，1. 在泛型参数声明时使用冒号 2. 使用where子句, 使用冒号的方式一定可以转成where，但使用where的却不一定能转成冒号
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">1.</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">max</span>&lt;<span style="color: #FD971F;">T</span>: <span style="color: #66D9EF;">Ord</span>&gt;(<span style="color: #FD971F;">a</span>: <span style="color: #66D9EF;">T</span>, <span style="color: #FD971F;">b</span>:<span style="color: #66D9EF;">T</span>)-&gt;<span style="color: #66D9EF;">T</span>{}
+<span style="color: #75715E;">// </span><span style="color: #75715E;">2.</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">max</span>&lt;<span style="color: #66D9EF;">T</span>&gt;(<span style="color: #FD971F;">a</span>:<span style="color: #66D9EF;">T</span>, <span style="color: #FD971F;">b</span>:<span style="color: #66D9EF;">T</span>)-&gt;<span style="color: #66D9EF;">T</span>
+   <span style="color: #F92672;">where</span> <span style="color: #FD971F;">T</span>: <span style="color: #66D9EF;">Ord</span>
+</pre>
+</div></li>
+<li><p>
+关联类型，也是泛型参数如Iterator中有一个关联类型为Item，在使用的时候可以通过名字进行关联
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">trait</span> <span style="color: #66D9EF;">Test</span>{
+    <span style="color: #F92672;">type</span> <span style="color: #66D9EF;">N</span>; <span style="color: #75715E;">// </span><span style="color: #75715E;">N&#21363;&#20026;&#19968;&#20010;&#20851;&#32852;&#31867;&#22411;</span>
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>(&amp;<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">Self</span>::<span style="color: #66D9EF;">N</span>;
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#22914;&#26524;&#35201;&#23454;&#29616;&#30340;&#35805;</span>
+<span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Test</span> <span style="color: #F92672;">for</span> <span style="color: #66D9EF;">i32</span>{
+    <span style="color: #F92672;">type</span> <span style="color: #66D9EF;">N</span> = <span style="color: #66D9EF;">i32</span>;
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>(&amp;<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">i32</span> {}
+}
+</pre>
+</div></li>
+<li>一般来说，在尖括号里存在的是输入类型参数，在trait内部存在的关联类型是输出类型参数</li>
+</ul>
 </div>
 </div>
 <div id="outline-container-orge28df4b" class="outline-2">
@@ -650,10 +931,547 @@ b &lt;=&gt; 内存(地址：B，内容：100)<br />
 <li>借用在离开作用域后释放。</li>
 <li>在可变借用释放前不可访问源变量。</li>
 </ul></li>
-<li>borrowing也分不可变借用(&amp;T)和可变借用(&amp;mut T)，不可变借用只读,而可变借用可读写，但其借用的对象也要有可变性.</li>
-<li>可变借用未释放时，原变量无法访问</li>
+<li><p>
+borrowing也分不可变借用(&amp;T)和可变借用(&amp;mut T)，不可变借用只读,而可变借用可读写，但其借用的对象也要有可变性.但要注意区分mut修饰变量和修饰借用时的区别
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">p</span> = &amp;<span style="color: #F92672;">mut</span> v; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#34920;&#31034;p&#26159;&#23545;v&#30340;&#21487;&#21464;&#20511;&#29992;,&#20294;&#26159;p&#26080;&#27861;&#37325;&#26032;&#32465;&#23450;</span>
+<span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">p</span> = v; <span style="color: #75715E;">//</span><span style="color: #75715E;">&#34920;&#31034;p&#26159;&#21487;&#20197;&#37325;&#26032;&#32465;&#23450;&#30340;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">mut&#20462;&#39280;&#21464;&#37327;&#26102;&#24378;&#35843;&#30340;&#26159;&#32465;&#23450;&#20851;&#31995;&#12290;</span>
+</pre>
+</div></li>
+<li><p>
+可变借用未释放时，原变量无法访问
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">x</span> = 1_i32;
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">p</span> = &amp;<span style="color: #F92672;">mut</span> x;
+x = 2;  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#32534;&#35793;&#25253;&#38169;&#65292;&#22240;x&#24050;&#34987;&#20511;&#29992;&#65292;&#26080;&#27861;&#35775;&#38382;&#21644;&#20462;&#25913;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, x);
+</pre>
+</div></li>
 <li><code>let y = &amp;mut x</code> 和 <code>let mut y = &amp;mut x</code> 的区别是，第二个y还可以被可变借用，而第一个则不可被可变借用。</li>
-<li><code>'a</code> 是lifetime的标识符,类比泛型中的T名字。,w</li>
+<li><code>'a</code> 是lifetime的标识符,类比泛型中的T名字。</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org4eb3e6d" class="outline-2">
+<h2 id="org4eb3e6d">生命周期</h2>
+<div class="outline-text-2" id="text-org4eb3e6d">
+<ol class="org-ol">
+<li><p>
+生命周期符号使用单引号开头，与泛型类型的参数是一样的，都是先声明后使用。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>&lt;'<span style="color: #FD971F;">a</span>&gt;(<span style="color: #FD971F;">arg</span>: &amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">T</span>) -&gt; &amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">i32</span>{
+
+}
+</pre>
+</div></li>
+<li>若生命周期a比生命周期b长，则记为 <code>'a:'b</code></li>
+<li>'static是一个特殊的生命周期，表示程序从开始到结束的整个阶段</li>
+<li><p>
+在实际调用的时候，生命周期会被特化为对应的参数，如
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>&lt;'<span style="color: #FD971F;">a</span>&gt;(<span style="color: #FD971F;">arg1</span>:&amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">i32</span>, arg2 : &amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">i32</span>) -&gt; &amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">i32</span>{}
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">x</span> = 1;
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">y</span> = 2;
+test(&amp;x, &amp;y); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#34429;&#28982;x&#21644;y&#30340;&#29983;&#21629;&#21608;&#26399;&#19981;&#30456;&#31561;&#65292;&#20294;&#26159;&#20854;&#21482;&#35201;&#28385;&#36275; x:'a, y:'a&#21363;&#21487;&#34892;</span>
+</pre>
+</div></li>
+<li><p>
+若自定义类型中的成员包含生命周期参数，那么该类型也必须有生命周期参数
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Test</span>&lt;'<span style="color: #FD971F;">a</span>&gt; {
+      member :&amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">str</span>
+}
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#23454;&#29616;&#30340;&#26102;&#20505;&#20063;&#35201;&#20808;&#22768;&#26126;&#29983;&#21629;&#21608;&#26399;,&#20854;&#20013;impl&#21518;&#36319;&#30340;&#27867;&#22411;&#26159;&#22768;&#26126;&#65292;&#32780;Test&#21518;&#36319;&#30340;&#27867;&#22411;&#26159;&#20351;&#29992;</span>
+<span style="color: #F92672;">impl</span> &lt;'<span style="color: #FD971F;">a</span>&gt; <span style="color: #66D9EF;">Test</span>&lt;'<span style="color: #FD971F;">a</span>&gt; {
+     <span style="color: #F92672;">fn</span> <span style="color: #66D9EF;">Test</span>&lt;'<span style="color: #FD971F;">a</span>&gt;()
+}
+</pre>
+</div></li>
+<li><p>
+生命周期是可以省略的，其对省略的生命周期会自动补全，补全规则为
+</p>
+<ol class="org-ol">
+<li>每个带生命周期参数的输入参数，对应不同的生命周期参数</li>
+<li>如果只有一个参数带生命周期参数，那么返回值的生命周期也被指定为该参数</li>
+<li>如果有多个参数，但其中有&amp;self, &amp;mut self,那么返回值的生命周期被指定为该参数</li>
+<li>若以上都不满足，则不能补全</li>
+</ol>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">get_str</span>(<span style="color: #FD971F;">s</span>: &amp;<span style="color: #66D9EF;">String</span>) -&gt; &amp;<span style="color: #66D9EF;">str</span> <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#33258;&#21160;&#34917;&#20840;&#65292;&#31526;&#21512;&#26465;&#20214;2, &#25152;&#20197;&#20854;&#34917;&#20840;&#20026;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">get_str</span>&lt;'<span style="color: #FD971F;">a</span>&gt;(<span style="color: #FD971F;">s</span>:&amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">String</span>) -&gt; &amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">str</span>
+</pre>
+</div></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgf67ea03" class="outline-2">
+<h2 id="orgf67ea03">析构</h2>
+<div class="outline-text-2" id="text-orgf67ea03">
+<ul class="org-ul">
+<li>两种方式执行析构.1. 手动调用std::mem::drop()方法 2. 实现std::mem::Drop trait.</li>
+<li>其中std::mem::drop()方法是一个空的函数体,其执行时实际是调用move语义。且参数只能是T类型，而不是&amp;T类型。</li>
+<li>实现std::mem::Drop的trait后，生命周期结束后会自动执行对应的方法。不允许手动调用。且该trait的drop方法的参数类型是&amp;mut Self</li>
+<li>使用下划线绑定一个变量，这个下划线对应的变量会当场执行析构</li>
+<li>实现Drop的同时不能实现Copy</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orge86aa14" class="outline-2">
+<h2 id="orge86aa14">智能指针</h2>
+<div class="outline-text-2" id="text-orge86aa14">
+<p>
+智能指针多了两个trait, Deref用来解引用，使得智能指针可以直接对指向的内容进行操作，Drop用来析构
+</p>
+</div>
+<div id="outline-container-org409fc78" class="outline-3">
+<h3 id="org409fc78">内部可变性</h3>
+<div class="outline-text-3" id="text-org409fc78">
+<p>
+rust在不使用mut来修饰变量时候，其内部是不能发生改变的，比如 <code>let v = vec![1,2,4]</code> 此时对v使用v.push方法是会报错的，而内部可变性是说，在不使用mut来修饰变量时，也可改变内部状态，如Cell 
+</p>
+</div>
+</div>
+<div id="outline-container-org35715da" class="outline-3">
+<h3 id="org35715da">Box</h3>
+<div class="outline-text-3" id="text-org35715da">
+<p>
+Box将数据存储在堆上，而非栈上, 一般用于以下情形
+</p>
+<ol class="org-ol">
+<li>递归数据结构，如链表，二叉树,Box有已知的大小</li>
+<li>与dyn配合使用,dyn粗粒度理解为多态，即无法明确其具体类型时，如Box&lt;dyn Animal&gt;</li>
+</ol>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">1.&#36882;&#24402;&#25968;&#25454;</span>
+<span style="color: #F92672;">pub</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">List</span>{
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#39318;&#20808;&#26126;&#30830;&#20026;&#20160;&#20040;&#29992;Box&#65292;&#22240;&#20026;&#19981;&#29992;Box,&#21017;&#25351;&#23450;&#20026;List&#31867;&#22411;&#65292;List&#31867;&#22411;&#26159;&#36882;&#24402;&#31867;&#22411;&#65292;&#25152;&#20197;&#26080;&#27861;&#26126;&#30830;&#20854;&#22823;&#23567;&#65292;&#32780;&#20351;&#29992;&#25351;&#38024;&#21487;&#20197;&#26126;&#30830;&#22823;&#23567;</span>
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20854;&#27425;&#26126;&#30830;&#20026;&#20160;&#20040;&#20351;&#29992;Option,&#22240;&#20026;next&#21487;&#33021;&#20026;&#31354;&#65292;&#32780;rust&#27809;&#26377;&#31354;&#30340;&#27010;&#24565;&#65292;&#35201;&#34920;&#31034;&#31354;&#30340;&#27010;&#24565;&#65292;&#38656;&#35201;&#20351;&#29992;Option&#31867;&#22411;.</span>
+     <span style="color: #FD971F;">next</span>:<span style="color: #66D9EF;">Box</span>&lt;<span style="color: #66D9EF;">Option</span>&lt;<span style="color: #66D9EF;">List</span>&gt;&gt;,
+     <span style="color: #FD971F;">value</span>:<span style="color: #66D9EF;">i32</span>,  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20197;i32&#20030;&#20363;</span>
+}
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21019;&#24314;&#30340;&#26041;&#24335;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">l</span> = <span style="color: #66D9EF;">List</span>{
+     <span style="color: #FD971F;">next</span>: <span style="color: #66D9EF;">Box</span>::new(<span style="color: #66D9EF;">None</span>),
+     <span style="color: #FD971F;">value</span>: 18,
+};
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgae64e4a" class="outline-3">
+<h3 id="orgae64e4a">Cell</h3>
+<div class="outline-text-3" id="text-orgae64e4a">
+<ul class="org-ul">
+<li>Cell类似一个壳,把数据包裹在里面，所有指针只能指向Cell，不能指向数据,修改数据只能通过Cell来完成,用户无法创建一个直接指向数据的指针</li>
+<li>以下代码是可以编译通过的</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">cell</span>::<span style="color: #66D9EF;">Cell</span>;
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">data</span> = <span style="color: #66D9EF;">Cell</span>::new(1); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#27809;&#26377;&#20351;&#29992;mut&#20462;&#39280;</span>
+    data.set(2); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#25913;&#21464;&#20869;&#37096;&#29366;&#24577;</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">_p</span> = &amp;data; 
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,data); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#22312;&#23384;&#22312;p&#24341;&#29992;&#30340;&#26102;&#20505;&#20063;&#21487;&#35775;&#38382;</span>
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf960698" class="outline-3">
+<h3 id="orgf960698">RefCell</h3>
+<div class="outline-text-3" id="text-orgf960698">
+<ul class="org-ul">
+<li>RefCell是另外一个提供内部可变性的类型,Cell无法提供一个直接指向内部数据的指针，而RefCell可以,RefCell用于单线程场景</li>
+<li>如代码</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">cell</span>::<span style="color: #66D9EF;">RefCell</span>;
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">data</span> = <span style="color: #66D9EF;">RefCell</span>::new(<span style="color: #F92672;">vec!</span>[1,2,3]);
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">p1</span> = &amp;data;
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">p2</span> = &amp;data;
+    p1.borrow_mut().push(4); <span style="color: #75715E;">// </span><span style="color: #75715E;">borrow_mut&#21487;&#20197;&#33719;&#21462;&#19968;&#20010;&#25351;&#21521;&#20869;&#37096;&#25968;&#25454;&#30340;&#21487;&#21464;&#25351;&#38024;&#65292;&#21521;vec&#36825;&#26679;&#30340;&#25968;&#25454;&#65292;&#21482;&#26377;&#33719;&#21462;&#21040;&#20102;&#25351;&#38024;&#25165;&#33021;&#20570;&#20462;&#25913;</span>
+    p2.borrow_mut().push(5);
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,data);
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org06ecf38" class="outline-3">
+<h3 id="org06ecf38">解引用</h3>
+<div class="outline-text-3" id="text-org06ecf38">
+<ul class="org-ul">
+<li>实现std::ops::Deref或std::ops::DerefMut</li>
+<li>解引用是编译器的一种自动机制,在某些场景会隐式的启动</li>
+<li>通过解引用可以方便的直接对其内部的数据进行操作，而不用先获取内部数据的指针再进行操作</li>
+<li>deref方法返回的是&amp;T而不是T。</li>
+<li>针对*y，会自动转换为*(y.deref())</li>
+<li><p>
+如String类型实现了向目标类型str的解引用的转换
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">s</span> = <span style="color: #E6DB74;">"hello"</span>;
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,s.len());
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,(&amp;s).len());
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,(&amp;&amp;s).len());  <span style="color: #75715E;">//</span><span style="color: #75715E;">&#22343;&#33021;&#25171;&#21360;&#20986;&#32467;&#26524;</span>
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">len&#30340;&#20989;&#25968;&#26159;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">len</span>(&amp;<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">usize</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#37027;&#20040;&#20026;&#20160;&#20040;&#20351;&#29992; (&amp;&amp;&amp;&amp;s).len()&#20063;&#33021;&#35843;&#29992;&#21602;&#65292;&#21407;&#22240;&#26159;&#22312;(&amp;&amp;&amp;&amp;s)&#20013;&#25214;&#19981;&#21040;len()&#26041;&#27861;&#65292;&#21017;&#23581;&#35797;&#20182;&#30340;deref,&#21464;&#25104;(&amp;&amp;&amp;s)&#65292;&#20877;&#23547;&#25214;len&#26041;&#27861;&#65292;&#20381;&#27425;&#31867;&#25512;&#65292;&#30452;&#21040;&#25214;&#21040;&#20026;&#27490;&#12290;</span>
+</pre>
+</div></li>
+<li><p>
+如Rc实现了Deref
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">rc</span>::<span style="color: #66D9EF;">Rc</span>;
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">s</span> = <span style="color: #66D9EF;">Rc</span>::new(<span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"haha"</span>));
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,s.bytes());  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#27492;&#22788;&#36827;&#34892;&#20102;&#35299;&#24341;&#29992;,&#33719;&#21462;&#21040;&#20102;String&#31867;&#22411;&#65292;&#32780;String&#31867;&#22411;&#27809;&#26377;bytes&#26041;&#27861;&#65292;&#25152;&#20197;&#20854;&#20063;&#36827;&#34892;&#35299;&#24341;&#29992;&#65292;&#33719;&#21462;&#21040;&#20102;&amp;str&#31867;&#22411;&#65292;&#25509;&#30528;&#23601;&#21487;&#20197;&#35843;&#29992;bytes&#26041;&#27861;</span>
+}
+</pre>
+</div></li>
+<li>Vec&lt;T&gt;也实现了Deref,目标类型是[T]，所以可以通过deref来获取&amp;[T]的切片</li>
+<li>若s实现了Deref，则 <code>&amp;*s</code> 等效与s.deref()</li>
+<li><p>
+若某个结构存在方法A(),而其deref也存在方法A()，那么要调用deref的方法A()，只能手动调用
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">&#20197;&#19979;&#20195;&#30721;&#26159;&#32534;&#35793;&#19981;&#36890;&#36807;&#30340;,&#21407;&#22240;&#26159;&amp;s&#26159;String&#31867;&#22411;&#65292;&#32780;&#20998;&#25903;&#20013;&#30340;"hehe"&#26159;&amp;'static str&#31867;&#22411;,&#27492;&#26102;&#32534;&#35793;&#22120;&#24182;&#27809;&#26377;&#23545;s&#36827;&#34892;&#33258;&#21160;deref</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">s</span> = <span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"hehe"</span>);
+<span style="color: #F92672;">match</span> &amp;s {
+    <span style="color: #E6DB74;">"hehe"</span> =&gt; <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,<span style="color: #E6DB74;">"hehe"</span>),
+    _ =&gt; <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,<span style="color: #E6DB74;">"heihei"</span>),
+}
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#27492;&#26102;&#38656;&#35201;&#25105;&#20204;&#33258;&#24049;deref,deref&#30340;&#26041;&#24335;&#26377;&#22914;&#19979;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">1. s.deref()</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">2. &amp;*s</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">3. s.as_ref()</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">4. s.borrow()</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">5. &amp;s[..]</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#25152;&#20197;&#23454;&#29616;&#23383;&#31526;&#20018;&#21305;&#37197;&#21487;&#20197;&#36825;&#20040;&#20889;</span>
+<span style="color: #F92672;">match</span> s.deref(){
+    <span style="color: #E6DB74;">"hehe"</span> =&gt; <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,<span style="color: #E6DB74;">"hehe"</span>),
+    _ =&gt; <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,<span style="color: #E6DB74;">"heihei"</span>),
+}
+</pre>
+</div></li>
+<li>解引用强制多态， 是说当一个变量传递给一个函数时，若该函数接收的类型不是传入的类型，会强制的通过deref来解引用为需要的类型，如函数fn test( s:&amp;str) 需要的是&amp;str类型，但是传入&amp;String也可以，因为&amp;String会被强制解引用为&amp;str类型, 也可以传入&amp;Box::new("haha".to<sub>string</sub>())类型</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgca4d406" class="outline-3">
+<h3 id="orgca4d406">引用计数</h3>
+<div class="outline-text-3" id="text-orgca4d406">
+<ul class="org-ul">
+<li>std::rc::Rc和std::rc::Arc类型都提供了引用计数功能，一块数据当所有引用都消亡时，该数据的内存才会释放</li>
+<li>Rc类型的引用计数是普通整数操作，只能在单线程中，而Arc的引用计数是原子操作，可以在多线程中</li>
+<li><p>
+其创建引用的方式使用clone，如
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">s</span> = <span style="color: #66D9EF;">Rc</span>::new(<span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"hehe"</span>));
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">r1</span> = s.clone();
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">r2</span> = s.clone();
+
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">r3</span> = <span style="color: #66D9EF;">Rc</span>::clone(&amp;s); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20294;&#26159;&#19968;&#33324;&#24314;&#35758;&#20351;&#29992;&#36825;&#31181;&#26041;&#24335;&#65292;&#19982;*.clone()&#26041;&#27861;&#21306;&#21035;&#20986;&#26469;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:p}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{:p}</span><span style="color: #E6DB74;">"</span>,&amp;*r1, &amp;*r2);  <span style="color: #75715E;">// </span><span style="color: #75715E;">&amp;*s &#30456;&#24403;&#20110;s.deref() ,&#25171;&#21360;&#20986;&#26469;&#30340;&#22320;&#22336;&#26159;&#19968;&#26679;&#30340;,&#35828;&#26126;r1&#21644;r2&#25351;&#21521;&#30340;&#25968;&#25454;&#26159;&#21516;&#19968;&#20010;</span>
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org60a8689" class="outline-2">
+<h2 id="org60a8689">unsafe</h2>
+<div class="outline-text-2" id="text-org60a8689">
+<ul class="org-ul">
+<li>unsafe可用于修饰函数fn, 代码块，trait,impl等</li>
+<li>unsafe具有传递性，具有unsafe性质的函数，其调用者也必须有unsafe修饰</li>
+<li>Rust中提供了两种裸指针，*mut T和*const T，可以通过*mut T修改所指向的数据，而*const T不能，但在unsafe中，这两个指针可以互换
+<ul class="org-ul">
+<li>裸指针可以为空，且不保证裸指针一定指向一个合法的地址</li>
+<li>裸指针不会执行任何自动化清理工作</li>
+<li>裸指针复制操作执行的是简单的内存浅复制</li>
+<li><p>
+创建裸指针是安全的，只有在对裸指针解引用才是不安全的，如
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">y</span> : <span style="color: #66D9EF;">u32</span> = 1;
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">raw_mut</span> = &amp;<span style="color: #F92672;">mut</span> y <span style="color: #F92672;">as</span> *<span style="color: #F92672;">mut</span> <span style="color: #66D9EF;">u32</span> <span style="color: #F92672;">as</span> *<span style="color: #F92672;">mut</span> <span style="color: #66D9EF;">i32</span> <span style="color: #F92672;">as</span> *<span style="color: #F92672;">mut</span> <span style="color: #66D9EF;">i64</span>; <span style="color: #75715E;">//</span><span style="color: #75715E;">&#23433;&#20840;&#30340;, &#21487;&#20197;&#36890;&#36807;as&#26469;&#36827;&#34892;&#31867;&#22411;&#36716;&#25442;&#65292;&#36716;&#25442;&#21518;&#23601;&#21487;&#20197;&#24403;&#20570;&#21478;&#19968;&#31181;&#31867;&#22411;&#26469;&#36827;&#34892;&#25805;&#20316;, &#20294;&#26159;&#38656;&#35201;&#27880;&#24847;&#30340;&#26159;&#65292;&#22914;&#26524;&#23558;u32&#24378;&#36716;&#20026;i64,&#22312;&#23545;&#20854;&#36827;&#34892;&#36171;&#20540;&#30340;&#26102;&#20505;&#65292;&#23601;&#20250;&#24433;&#21709;&#21040;&#26412;&#26469;&#19981;&#23646;&#20110;u32&#30340;&#20869;&#23384;&#22320;&#22336;</span>
+<span style="color: #FD971F; font-weight: bold; font-style: italic; text-decoration: underline;">unsafe</span> {*raw_mut = 2;} <span style="color: #75715E;">// </span><span style="color: #75715E;">&#19981;&#23433;&#20840;&#30340;&#65292;&#24517;&#39035;&#22312;unsafe&#22359;&#20013;</span>
+<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,y);
+</pre>
+</div></li>
+</ul></li>
+<li>标准库中有个std::intrinsics模块，该模块的函数是在编译器内部实现，在使用的时候需要使用unsafe来修饰，这些函数不是准备直接提供给用户使用的
+<ul class="org-ul">
+<li>transmute函数可以执行强制类型转换，把一个T类型参数转换为U类型返回值,但其内部的二进制值不变,且必须满足两者的size是一样的。其实我们也可以通过as来进行实现，但是不能实现size一样的约束条件</li>
+<li><p>
+transmute<sub>copy函数是对引用进行的copy操作</sub>，其参数是引用类型，而transmute参数是T类型,且有move语义,如查看Vec的内存表示
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">v</span> = <span style="color: #F92672;">vec!</span>[1,2,3];
+<span style="color: #FD971F; font-weight: bold; font-style: italic; text-decoration: underline;">unsafe</span> {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">t</span> : (<span style="color: #66D9EF;">usize</span>,<span style="color: #66D9EF;">usize</span>, <span style="color: #66D9EF;">usize</span>) = <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">mem</span>::transmute_copy(&amp;v);
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, t.0, t.1, t.2);
+}
+</pre>
+</div></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org60c4b79" class="outline-2">
+<h2 id="org60c4b79">闭包</h2>
+<div class="outline-text-2" id="text-org60c4b79">
+<ul class="org-ul">
+<li>匿名函数，具有捕获外部变量的能力,也被称为lambda表达式</li>
+<li>其特点是访问外部变量，而函数不可访问外部变量</li>
+<li><p>
+匿名函数可以省略类型，编译器会根据上下文环境自动推倒，但是同一个匿名函数不能有两种语义。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">add</span> = |<span style="color: #FD971F;">x</span>:<span style="color: #66D9EF;">i32</span>, <span style="color: #FD971F;">y</span>:<span style="color: #66D9EF;">i32</span>|-&gt;<span style="color: #66D9EF;">i32</span> {<span style="color: #F92672;">return</span> x + y};
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">add</span> = |x,y|x+y;
+</pre>
+</div></li>
+<li>使用move关键字来修饰闭包，可以将闭包中使用的外部变量自动move，并可以将对应的闭包传递到函数外部,通常用于将变量传递到函数外部</li>
+<li>Fn/FnMut/FnOnce, FnOnce对应的self是self,FnMut是&amp;mut self, Fn是&amp;self，对于一个闭包，他会尽量impl Fn，依次尝试impl FnMut, FnOnce,这些都是编译器自动分析出来的。</li>
+<li><p>
+举个例子
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">v</span> = <span style="color: #F92672;">vec!</span>[1,3,3];
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">d</span> = ||drop(v);<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20854;&#20013;std::mem::drop(d:T)&#20013;&#21442;&#25968;&#26159;T&#31867;&#22411;&#65292;&#25152;&#20197;v&#26159;&#20250;&#34987;move&#21040;&#38381;&#21253;&#20013;,&#37027;&#20040;&#20182;&#23545;&#24212;&#30340;trait&#26159;FnOnce,&#22240;&#20026;Fn&#21644;FnMut&#37117;&#34892;&#19981;&#36890;(&#37117;&#38656;&#35201;&amp;self&#24341;&#29992;&#65292;&#20294;&#26159;&#38381;&#21253;&#20013;&#24182;&#27809;&#26377;v&#30340;&#24341;&#29992;),&#25152;&#20197;&#29983;&#25104;&#30340;&#38381;&#21253;&#21482;&#33021;&#35843;&#29992;&#19968;&#27425;&#12290;</span>
+d();
+d(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#35843;&#29992;&#22833;&#36133;</span>
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21516;&#29702;&#65292;&#29983;&#25104;Fn&#30340;&#26041;&#24335;&#20063;&#21644;&#38381;&#21253;&#20351;&#29992;&#30340;&#22806;&#37096;&#21464;&#37327;&#30340;&#26041;&#24335;&#26377;&#20851;&#65292;&#22914;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">v</span> = <span style="color: #F92672;">vec!</span>[1,3,3];
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">d</span> = || <span style="color: #F92672;">for</span> i <span style="color: #F92672;">in</span> &amp;v{<span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,i)};
+d();
+d(); <span style="color: #75715E;">// </span><span style="color: #75715E;">d&#38381;&#21253;&#20351;&#29992;&#30340;&#22806;&#37096;&#29615;&#22659;v&#26159;&#24341;&#29992;&#31867;&#22411;&#65292;&#25152;&#20197;&#20854;&#23545;&#24212;&#30340;trait&#26159;Fn&#65292;&#23545;&#24212;&#30340;self&#26159;&amp;self,&#19981;&#23384;&#22312;move&#35821;&#20041;&#65292;&#25152;&#20197;&#20854;&#21487;&#20197;&#35843;&#29992;&#22810;&#27425;</span>
+</pre>
+</div></li>
+<li>每个闭包，编译器都会为其生成一个匿名结构体类型</li>
+<li><p>
+静态分派/动态分派
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">trait&#21487;&#20197;&#36820;&#22238;&#65292;&#20294;&#26159;&#19981;&#33021;&#30452;&#25509;&#36820;&#22238;&#65292;&#22914;&#26377;trait Animal,&#37027;&#20040;&#20989;&#25968;&#19981;&#33021;&#36825;&#20040;&#20889; fn test()-&gt;Animal</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#22240;&#20026;&#32534;&#35793;&#22120;&#19981;&#30693;&#36947;Animal&#21344;&#29992;&#22810;&#23569;&#31354;&#38388;,&#21363;&#19981;&#30693;&#36947;trait&#21344;&#29992;&#22810;&#23569;&#31354;&#38388;&#65292;&#20294;&#26159;&#26377;&#20197;&#19979;&#20004;&#31181;&#20889;&#27861;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">1. &#38745;&#24577;&#20998;&#27966;&#65292;&#34920;&#31034;&#36820;&#22238;&#30340;trait&#20855;&#20307;&#26159;&#21738;&#20010;&#65292;&#22312;&#32534;&#35793;&#26102;&#26399;&#23601;&#30830;&#23450;&#20102;&#19979;&#26469;&#65292; &#20854;&#20351;&#29992;&#27867;&#22411;&#21450;impl trait&#26469;&#23436;&#25104;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>(<span style="color: #FD971F;">arg</span>:<span style="color: #66D9EF;">Animal</span>) <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20837;&#21442;&#21487;&#20197;&#30452;&#25509;&#20351;&#29992;Animal&#26469;&#34920;&#31034;&#65292;&#36825;&#31181;&#26159;&#38745;&#24577;&#20998;&#27966;&#183;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>() -&gt; <span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Animal</span> <span style="color: #75715E;">// </span><span style="color: #75715E;">&#34920;&#31034;&#36820;&#22238;&#30340;&#31867;&#22411;&#23454;&#29616;&#20102;Animal&#30340;trait</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">2. &#21160;&#24577;&#20998;&#27966;&#65292;&#34920;&#31034;&#20855;&#20307;&#35843;&#29992;&#30340;trait&#26159;&#22312;&#25191;&#34892;&#38454;&#27573;&#25165;&#33021;&#30830;&#35748;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>(<span style="color: #FD971F;">arg</span>:<span style="color: #66D9EF;">Box</span>&lt;<span style="color: #F92672;">dyn</span> <span style="color: #66D9EF;">Animal</span>&gt;) <span style="color: #75715E;">// </span><span style="color: #75715E;">&#34429;&#28982;trait&#19981;&#30693;&#36947;&#31354;&#38388;&#65292;&#20294;&#26159;Box&#21487;&#20197;&#30693;&#36947;,Box&#20013;&#20256;&#20837;&#19968;&#20010;trait object,&#36825;&#31181;&#23601;&#23646;&#20110;&#21160;&#24577;&#20998;&#27966;&#65292;&#22312;&#36816;&#34892;&#26399;&#30830;&#23450;&#35843;&#29992;&#30340;&#21738;&#20010;&#20989;&#25968;,dyn&#26159;&#19968;&#20010;&#20851;&#38190;&#23383;&#65292;&#30446;&#21069;&#26410;&#31283;&#23450;&#65292;&#34920;&#31034;trait&#20013;&#30340;&#20855;&#20307;&#31867;&#22411;&#26159;&#21160;&#24577;&#30340;</span>
+</pre>
+</div></li>
+<li>trait object,例如trait Animal ,那么dyn Animal 就是一个动态大小类型(DST),而&amp;dyn Animal, &amp;mut dyn Animal, Box&lt;dyn Animal&gt;,Rc&lt;dyn Animal&gt; 都是trait object</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd6d404b" class="outline-2">
+<h2 id="orgd6d404b">协程</h2>
+<div class="outline-text-2" id="text-orgd6d404b">
+</div>
+<div id="outline-container-org3781e0c" class="outline-3">
+<h3 id="org3781e0c">生成器</h3>
+<div class="outline-text-3" id="text-org3781e0c">
+<ul class="org-ul">
+<li>生成器是协程的基础,生成器和闭包的语法很像，当闭包中有yield关键字的时候，它就不是一个闭包，而是一个生成器。</li>
+<li>但有yield关键字时，编译器自动为该闭包生成一个方法resume(),要运行该闭包(生成器)时，使用resume()方法</li>
+<li>yield与return相似，会返回一个值，但是下次调用resume()方法时，会从yield的地方继续运行</li>
+<li>yield 返回的值需要使用GenerateState::Yielded(v)来接收，而return的返回值使用GenarateState::Complete()接收,当返回了Complete时候，就不能在调用resume方法</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7f55588" class="outline-3">
+<h3 id="org7f55588">协程</h3>
+<div class="outline-text-3" id="text-org7f55588">
+<ul class="org-ul">
+<li><p>
+async/await, async关键字可以修饰函数闭包和代码块:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">async</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">f1</span>(arg : <span style="color: #66D9EF;">u8</span>) -&gt; <span style="color: #66D9EF;">u8</span> {} 
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#31561;&#21516;&#20110;,</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">f1</span>(arg : <span style="color: #66D9EF;">u8</span>) -&gt; <span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Future</span>&lt;<span style="color: #66D9EF;">Output</span> = <span style="color: #66D9EF;">u8</span>&gt;
+<span style="color: #75715E;">// </span><span style="color: #75715E;">await&#21482;&#33021;&#22312;async&#20013;&#20986;&#29616;&#65292;&#20854;&#34920;&#31034;&#30340;&#21547;&#20041;&#26159;&#65292;&#33509;&#24322;&#27493;&#30340;&#31243;&#24207;&#27809;&#26377;&#25191;&#34892;&#23436;&#27605;&#65292;&#37027;&#20040;&#20854;&#20250;&#36827;&#34892;yield&#65292;&#26242;&#26102;&#36864;&#20986;&#35813;Future,&#27599;&#24403;&#35843;&#24230;&#22120;&#24674;&#22797;&#20854;&#25191;&#34892;&#65292;&#37117;&#20250;&#36890;&#36807;poll&#26469;&#26597;&#30475;&#24322;&#27493;&#31243;&#24207;&#36816;&#34892;&#29366;&#24577;&#65292;&#30452;&#21040;&#36816;&#34892;&#23436;&#27605;,</span>
+<span style="color: #F92672;">async</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">fetch</span>(client <span style="color: #AE81FF;">hyper</span>::<span style="color: #66D9EF;">Client</span>) -&gt; <span style="color: #AE81FF;">io</span>::<span style="color: #66D9EF;">Result</span>&lt;<span style="color: #66D9EF;">String</span>&gt; {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">res</span> = <span style="color: #F92672;">await!</span>(client.get(<span style="color: #E6DB74;">"http://www.baidu.com"</span>))<span style="color: #F92672; font-weight: bold;">?</span>;
+    <span style="color: #F92672;">if</span> !res.status().is_success(){
+        <span style="color: #F92672;">return</span> <span style="color: #66D9EF;">Err</span>(..);
+    }
+    <span style="color: #66D9EF;">Ok</span>(<span style="color: #E6DB74;">"something"</span>)
+}
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#30475;&#21040;&#20351;&#29992;async/await&#20889;&#20195;&#30721;&#36923;&#36753;&#65292;&#19982;&#38750;&#24322;&#27493;&#30340;&#31243;&#24207;&#30340;&#20195;&#30721;&#36923;&#36753;&#26159;&#31867;&#20284;&#30340;</span>
+</pre>
+</div></li>
+<li>Future:基于生成器实现，他内部有一个方法是poll,该poll方法用于查看当前协程的运行状态, Future具有能在某个状态中断执行的特性，在某个时刻恢复执行的特性，其都是使用yield来实现的.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org4040ba8" class="outline-2">
+<h2 id="org4040ba8">线程</h2>
+<div class="outline-text-2" id="text-org4040ba8">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::thread;
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21019;&#24314;&#32447;&#31243;</span>
+<span style="color: #AE81FF;">thread</span>::spawn(<span style="color: #F92672;">move</span> || {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#32447;&#31243;&#20869;&#37096;&#36923;&#36753;</span>
+});
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">t</span> = <span style="color: #AE81FF;">thread</span>::spawn(<span style="color: #F92672;">move</span> || {});
+t.join() <span style="color: #75715E;">// </span><span style="color: #75715E;">join()&#26041;&#27861;&#21487;&#20197;&#31561;&#24453;&#32447;&#31243;&#25191;&#34892;&#23436;&#27605;</span>
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">Builder&#21487;&#20197;&#20026;&#32447;&#31243;&#25351;&#23450;&#26356;&#22810;&#21442;&#25968;&#20449;&#24687;</span>
+<span style="color: #AE81FF;">thread</span>::<span style="color: #66D9EF;">Builder</span>::new().name(<span style="color: #E6DB74;">"thread name"</span>.to_string()).spawn(<span style="color: #F92672;">move</span> || {});
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">trait Send</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#32447;&#31243;&#20013;&#30340;&#25968;&#25454;&#38656;&#35201;&#28385;&#36275;trait Send</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#22914;&#26524;&#19968;&#20010;&#31867;&#22411;&#21487;&#20197;&#23433;&#20840;&#30340;&#20174;&#19968;&#20010;&#32447;&#31243;move&#21040;&#21478;&#19968;&#20010;&#32447;&#31243;&#65292;&#37027;&#23427;&#23601;&#26159;move&#31867;&#22411;&#12290;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#19981;&#21253;&#21547;&#24341;&#29992;&#30340;&#31867;&#22411;&#37117;&#26159;Send&#65292;&#22240;&#20026;&#22312;move&#30340;&#26102;&#20505;&#65292;&#23427;&#21644;&#21407;&#26469;&#30340;&#32447;&#31243;&#23601;&#27809;&#26377;&#20160;&#20040;&#20851;&#31995;&#20102;&#12290;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20856;&#22411;&#30340;Rc&#23601;&#19981;&#26159;Send&#31867;&#22411;&#65292;&#22240;&#20026;&#20854;&#22312;&#34987;move&#30340;&#26102;&#20505;&#65292;&#19981;&#20250;&#36827;&#34892;&#24341;&#29992;+1&#65292;&#32780;&#30456;&#23545;&#30340;Arc&#21017;&#26159;Send&#31867;&#22411;&#12290;</span>
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">trait Sync</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#34920;&#31034;&#33509;T&#23454;&#29616;&#20102;Sync,&#21017;&#22312;&#19981;&#21516;&#30340;&#32447;&#31243;&#20351;&#29992;&amp;T&#35775;&#38382;&#21516;&#19968;&#20010;&#21464;&#37327;&#26102;&#26159;&#23433;&#20840;&#30340;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#22914;i32&#31561;&#22522;&#30784;&#25968;&#25454;&#31867;&#22411;&#65292;&#37117;&#26159;Sync&#31867;&#22411;&#65292;&#22240;&#20026;&amp;i32&#26159;&#21482;&#35835;&#30340;&#65292;&#22810;&#20010;&#32447;&#31243;&#35775;&#38382;&#27809;&#26377;&#38382;&#39064;&#12290;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20855;&#26377;&#20869;&#37096;&#21487;&#21464;&#24615;&#19988;&#27809;&#26377;&#32771;&#34385;&#32447;&#31243;&#21516;&#27493;&#30340;&#37117;&#26159;&#38750;Sync&#31867;&#22411;&#30340;&#65292;&#22914;Cell&lt;T&gt;,RefCell&lt;T&gt;</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-org90e271b" class="outline-3">
+<h3 id="org90e271b">管道</h3>
+<div class="outline-text-3" id="text-org90e271b">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::thread;
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">sync</span>::<span style="color: #AE81FF;">mpsc</span>::channel;
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">tx &#26159;&#36755;&#20837;&#65292;&#21457;&#36865;&#32773;&#65292;rx&#26159;&#25509;&#25910;&#32773;</span>
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21457;&#36865;&#32773;&#21487;&#20197;&#26377;&#22810;&#20010;&#65292;&#25509;&#25910;&#32773;&#21482;&#33021;&#26377;&#19968;&#20010;,mpsc&#24847;&#20026;multiple provider single consumer</span>
+    <span style="color: #F92672;">let</span> (tx, rx) = channel(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;channel&#21019;&#24314;&#30340;&#31649;&#36947;&#26159;&#24322;&#27493;&#31649;&#36947;&#65292;&#20854;&#21487;&#20197;&#26080;&#38480;&#21046;&#30340;&#22622;&#25968;&#25454;</span>
+    <span style="color: #F92672;">let</span> (tx2,rx2) = sync_channel(0); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;sync_channel&#21019;&#24314;&#30340;&#31649;&#36947;&#26159;&#21516;&#27493;&#31649;&#36947;&#65292;&#21442;&#25968;&#25351;&#23450;&#31649;&#36947;&#38431;&#21015;&#30340;&#38271;&#24230;&#65292;&#33509;&#26080;&#27861;&#22622;&#25968;&#25454;&#21017;&#38459;&#22622;&#65292; &#21644;golang&#30340;channel&#30340;&#25928;&#26524;&#19968;&#26679;</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">tx1</span> = tx.clone();  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;clone&#26041;&#27861;&#26469;&#22686;&#21152;&#19968;&#20010;&#21457;&#36865;&#32773;</span>
+    <span style="color: #AE81FF;">thread</span>::spawn(<span style="color: #F92672;">move</span> ||{
+        <span style="color: #F92672;">for</span> i <span style="color: #F92672;">in</span> 1..10{
+            tx.send(i); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;tx.send&#21457;&#36865;&#20540;&#65292;&#19988;&#35813;&#31649;&#36947;&#27809;&#26377;&#22823;&#23567;&#38480;&#21046;&#65292;&#21487;&#20197;&#19968;&#30452;&#36187;&#25968;&#25454;&#65292;&#21040;&#20869;&#23384;&#22622;&#28385;&#37117;&#26159;&#21487;&#20197;&#30340;</span>
+        }
+    });
+
+
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;rx.recv() &#25509;&#25910;&#31649;&#36947;&#20540;&#65292;&#33509;&#26080;&#20540;&#21017;&#38459;&#22622;</span>
+    <span style="color: #F92672;">while</span> <span style="color: #F92672;">let</span> <span style="color: #66D9EF;">Ok</span>(r) = rx.recv(){
+        <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,r);
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org93dde1f" class="outline-2">
+<h2 id="org93dde1f">STD</h2>
+<div class="outline-text-2" id="text-org93dde1f">
+</div>
+<div id="outline-container-org8311471" class="outline-3">
+<h3 id="org8311471">Vec</h3>
+<div class="outline-text-3" id="text-org8311471">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">testVec</span>(){
+     <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">v</span> = <span style="color: #66D9EF;">Vec</span>::new();
+     v.push(1);  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#28155;&#21152;&#25968;&#25454;</span>
+     v.push(2);
+     v.push(3);
+     v.pop(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21024;&#38500;&#25968;&#25454;</span>
+     v.first(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#31532;&#19968;&#20010;&#25968;&#25454;&#65292;Option&lt;&amp;T&gt;&#31867;&#22411;</span>
+     v.last(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#26368;&#21518;&#19968;&#20010;&#25968;&#25454;&#65292;Option&lt;&amp;T&gt;&#31867;&#22411;</span>
+     v.remove(0);<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21024;&#38500;&#19979;&#26631;&#30340;&#20803;&#32032;</span>
+     v.get(2);<span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#25968;&#25454;,&#33719;&#21462;&#30340;&#25968;&#25454;&#23454;&#38469;&#19978;&#20063;&#26159;&#24341;&#29992;</span>
+     <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">vi</span> = &amp;<span style="color: #F92672;">mut</span> v[1]; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;borrow&#24341;&#29992;&#33719;&#21462;&#25968;&#25454;, &#27880;&#24847;&#21069;&#19968;&#20010;mut&#26159;&#20462;&#39280;&#21464;&#37327;vi&#30340;&#65292;&#24847;&#20026;vi&#26159;&#21542;&#33021;&#37325;&#26032;&#32465;&#23450;&#65292;&#25110;&#34987;&#32465;&#23450;&#20026;mut&#31867;&#22411;</span>
+     *vi = 3;
+     <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,v);
+
+     <span style="color: #F92672;">let</span> v3= &amp;<span style="color: #F92672;">mut</span> v[..1]; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36825;&#31181;&#36820;&#22238;&#30340;&#19981;&#26159;Vec&lt;&gt;&#31867;&#22411;&#65292;&#32780;&#26159;&amp;mut [i32]&#31867;&#22411;,&#25152;&#20197;&#19981;&#33021;&#22815;push&#25968;&#25454;&#65292;&#21482;&#33021;&#20462;&#25913;&#25968;&#25454;</span>
+     v3[0] = 5; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#27880;&#24847; &#19981;&#38656;&#35201;*v3[0] = 5, &#22240;&#20026;&#21152;&#19979;&#26631;&#26412;&#36523;&#23601;&#26159;&#19968;&#20010;&#25351;&#38024;&#65292;&#32771;&#34385;c++&#35821;&#35328;&#20013;&#30340;&#24773;&#24418;</span>
+     <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>, v);
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36941;&#21382;&#20803;&#32032;&#65292;&#27880;&#24847;&#20351;&#29992;borrow,&#21542;&#36941;&#21382;&#23436;&#27605;&#21518;&#65292;&#25968;&#25454;&#34987;move</span>
+     <span style="color: #F92672;">for</span> i <span style="color: #F92672;">in</span> &amp;v{
+          <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:}</span><span style="color: #E6DB74;">"</span>,i);
+     }
+
+     <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>, v);
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33509;&#24819;&#22312;&#36941;&#21382;&#30340;&#26102;&#20505;&#21516;&#26102;&#20462;&#25913;,&#38656;&#35201;&#20351;&#29992;mut</span>
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33509;&#36941;&#21382;&#30340;&#20803;&#32032;&#26159;&amp;v, &#21017;i&#20026;&amp;T</span>
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33509;&#36941;&#21382;&#30340;&#20803;&#32032;&#26159;v, &#21017;i &#20026;T</span>
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33509;&#36941;&#21382;&#30340;&#20803;&#32032;&#26159;&amp;mut v, &#21017;i &#20026;&amp;mut T</span>
+     <span style="color: #F92672;">for</span> i <span style="color: #F92672;">in</span> &amp;<span style="color: #F92672;">mut</span> v {
+          *i = 0;
+     }
+
+     <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>, v);
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orga94c95d" class="outline-3">
+<h3 id="orga94c95d">HashMap</h3>
+<div class="outline-text-3" id="text-orga94c95d">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test_hashmap</span>(){
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;zip&#26469;&#21019;&#24314;</span>
+     <span style="color: #F92672;">let</span> <span style="color: #FD971F;">vec1</span> = <span style="color: #F92672;">vec!</span>[<span style="color: #E6DB74;">"haha"</span>];
+     <span style="color: #F92672;">let</span> <span style="color: #FD971F;">vec2</span> = <span style="color: #F92672;">vec!</span>[<span style="color: #E6DB74;">"hwihwi"</span>];
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20294;&#26159;&#38656;&#35201;&#25351;&#21517;HashMap&#30340;&#31867;&#22411;,&#20351;&#29992;&#19979;&#21010;&#32447;&#21363;&#21487;&#65292;rust&#20250;&#36890;&#36807;vec&#25512;&#26029;&#20986;&#31867;&#22411;</span>
+     <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">map</span> :<span style="color: #66D9EF;">HashMap</span>&lt;_,_&gt;= vec1.iter().zip(vec2.iter()).collect();
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#26032;&#24314;</span>
+     <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">map</span>:<span style="color: #66D9EF;">HashMap</span>&lt;&amp;<span style="color: #66D9EF;">str</span>,&amp;<span style="color: #66D9EF;">str</span>&gt; = <span style="color: #66D9EF;">HashMap</span>::new();
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#25554;&#20837;&#25968;&#25454;</span>
+     map.insert(<span style="color: #E6DB74;">"haha"</span>,<span style="color: #E6DB74;">"hwihwi"</span>);
+
+     <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,map);
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;get&#26469;&#33719;&#21462;&#20540;, &#27880;&#24847;get&#20013;&#20256;&#20837;&#30340;&#21442;&#25968;&#26159;&#24341;&#29992;&#31867;&#22411;&#65292;&#25152;&#20197;&#38656;&#35201;&#21152;&#19978;&amp;&#31526;&#21495;</span>
+     <span style="color: #F92672;">let</span> <span style="color: #FD971F;">v</span> = map.get(<span style="color: #E6DB74;">"haha"</span>);
+     <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,v);
+
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36941;&#21382;, &#27880;&#24847;&#27492;&#26102;&#30340;key,value&#20063;&#26159;&#24341;&#29992;&#31867;&#22411;</span>
+     <span style="color: #F92672;">for</span> (key, value) <span style="color: #F92672;">in</span> &amp;map {
+
+     }
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#20351;&#29992;entry&#26469;&#33719;&#21462;&#38190;&#20540;&#23545;&#65292;&#22914;&#26524;&#21457;&#29616;&#26080;&#35813;&#38190;&#20540;&#23545;&#65292;&#21487;&#20197;&#20351;&#29992;or_insert&#26469;&#20026;&#20854;&#28155;&#21152;&#40664;&#35748;&#20540;,or_insert&#36820;&#22238;V&#30340;&#21487;&#21464;&#24341;&#29992;</span>
+     <span style="color: #F92672;">let</span> <span style="color: #FD971F;">v</span> =  map.entry(<span style="color: #E6DB74;">"haha"</span>).or_insert(<span style="color: #E6DB74;">"huhu"</span>);
+     *v = <span style="color: #E6DB74;">"lala"</span>; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#20351;&#29992;or_insert&#36820;&#22238;&#30340;&#21487;&#21464;&#24341;&#29992;&#26469;&#20462;&#25913;map&#20869;&#37096;&#30340;&#20540;</span>
+     <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>, map);
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20462;&#25913;&#23545;&#24212;&#30340;&#20540;</span>
+     <span style="color: #F92672;">let</span> <span style="color: #FD971F;">e</span> = map.insert(<span style="color: #E6DB74;">"haha"</span>,<span style="color: #E6DB74;">"hqhq"</span>);
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org48f7c22" class="outline-2">
+<h2 id="org48f7c22">错误</h2>
+<div class="outline-text-2" id="text-org48f7c22">
+<ol class="org-ol">
+<li>问号运算符，如果结果是Err，则提前返回，否则继续执行</li>
+<li>问号运算符返回的是Result&lt;&gt;类型，所以?无法在main函数中运行</li>
 </ol>
 </div>
 </div>
@@ -684,10 +1502,183 @@ cargo的默认规则:
 </div>
 </div>
 </div>
+<div id="outline-container-org2e4b8ee" class="outline-2">
+<h2 id="org2e4b8ee">IO</h2>
+<div class="outline-text-2" id="text-org2e4b8ee">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">&#35835;&#21462;&#21629;&#20196;&#34892;&#21442;&#25968;  use std::env;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">args</span>:<span style="color: #66D9EF;">Vec</span>&lt;<span style="color: #66D9EF;">String</span>&gt; = <span style="color: #AE81FF;">env</span>::args().collect();
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#35835;&#21462;&#26080;&#25928;&#30340;Unicode&#23383;&#31526; </span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">args</span>:<span style="color: #66D9EF;">Vec</span>&lt;<span style="color: #66D9EF;">String</span>&gt; = <span style="color: #AE81FF;">env</span>::args_os().collect();
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#35835;&#21462;&#25991;&#20214;&#65292;&#36820;&#22238;String&#20869;&#23481; use std::fs;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">contents</span> = fs.read_to_string(filename);
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org7296173" class="outline-2">
+<h2 id="org7296173">宏</h2>
+<div class="outline-text-2" id="text-org7296173">
+<ul class="org-ul">
+<li>实现宏有两种方式，1使用标准库macro<sub>rules</sub>!实现,2通过提供编译器扩展实现。</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">1. macro_rules</span>
+<span style="color: #F92672;">macro_rules!</span> hashmap{
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#31532;&#19968;&#20010;&#25324;&#21495;&#34920;&#31034;&#36755;&#20837;&#21442;&#25968;&#26041;&#24335;</span>
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">+&#34920;&#31034;&#19968;&#20010;&#25110;&#32773;&#22810;&#20010;&#65292;*&#34920;&#31034;0&#20010;&#25110;&#22810;&#20010;</span>
+    ($(<span style="color: #FD971F;">$key</span>: expr =&gt; <span style="color: #FD971F;">$val</span>: expr),*) =&gt; {
+        {
+            <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">map</span> = <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">collections</span>::<span style="color: #66D9EF;">HashMap</span>::new();
+            $(map.insert($key, $val);)*  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20063;&#21487;&#36890;&#36807;*&#31526;&#21495;&#25193;&#23637;</span>
+            map
+        }
+    }
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#35843;&#29992;</span>
+<span style="color: #F92672;">hashmap!</span>[<span style="color: #E6DB74;">'A'</span>=&gt;1,<span style="color: #E6DB74;">'B'</span>=&gt;2];
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#23454;&#29616;println&#20989;&#25968;</span>
+<span style="color: #F92672;">macro_rules!</span> myPrintln{
+    (<span style="color: #FD971F;">$format</span>:expr, <span style="color: #FD971F;">$input</span>:expr)=&gt;{
+        <span style="color: #F92672;">println!</span>($format, $input);
+    }
+}
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#35843;&#29992;</span>
+<span style="color: #F92672;">myPrintln!</span>(<span style="color: #E6DB74;">"{:?}"</span>,someVal);
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#23450;&#20041;&#20989;&#25968;</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orged73101" class="outline-2">
+<h2 id="orged73101">demo</h2>
+<div class="outline-text-2" id="text-orged73101">
+</div>
+<div id="outline-container-org0c9c5e4" class="outline-3">
+<h3 id="org0c9c5e4">编写minigrep</h3>
+<div class="outline-text-3" id="text-org0c9c5e4">
+<p>
+代码目录
+</p>
+<p class="verse">
+.<br />
+├── Cargo.lock<br />
+├── Cargo.toml<br />
+├── minigrep.iml<br />
+├── poem.txt<br />
+├── src<br />
+│   ├── lib.rs<br />
+│   └── main.rs<br />
+</p>
+<p>
+lib.rs
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::{env,fs, process, <span style="color: #AE81FF;">error</span>::<span style="color: #66D9EF;">Error</span>};
+
+<span style="color: #F92672;">pub</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Config</span> {
+    query : <span style="color: #66D9EF;">String</span>,
+    <span style="color: #FD971F;">fileName</span>: <span style="color: #66D9EF;">String</span>,
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">Box &#21644;dyn Error &#37197;&#21512;&#20351;&#29992;&#30340;&#21407;&#22240;&#26159;&#65292;dyn Error&#26159;&#21160;&#24577;&#30340;&#65292;&#19981;&#26126;&#30830;&#22823;&#23567;&#30340;&#65292;&#32780;Box&#20250;&#23558;&#36825;&#31181;&#21160;&#24577;&#30340;&#25968;&#25454;&#25918;&#22312;&#22534;&#19978;&#65292;&#31526;&#21512;Box&#30340;&#20351;&#29992;&#24605;&#36335;</span>
+<span style="color: #F92672;">pub</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">run</span>(config :<span style="color: #66D9EF;">Config</span>) -&gt; <span style="color: #66D9EF;">Result</span>&lt;(), <span style="color: #66D9EF;">Box</span>&lt;<span style="color: #F92672;">dyn</span> <span style="color: #66D9EF;">Error</span>&gt;&gt;{
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">contents</span> = <span style="color: #AE81FF;">fs</span>::read_to_string(config.fileName)<span style="color: #F92672; font-weight: bold;">?</span>;
+
+    <span style="color: #F92672;">for</span> line <span style="color: #F92672;">in</span> search(&amp;config.query,&amp;contents) {
+        <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, line);
+    }
+    <span style="color: #66D9EF;">Ok</span>(())
+}
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">search</span>&lt;'<span style="color: #FD971F;">a</span>&gt;(<span style="color: #FD971F;">query</span>: &amp;<span style="color: #66D9EF;">str</span>, <span style="color: #FD971F;">contents</span>: &amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">str</span>) -&gt; <span style="color: #66D9EF;">Vec</span>&lt;&amp;'<span style="color: #FD971F;">a</span> <span style="color: #66D9EF;">str</span>&gt; {
+    <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">result</span> = <span style="color: #F92672;">vec!</span>[];
+    <span style="color: #F92672;">for</span> line <span style="color: #F92672;">in</span> contents.lines(){
+        <span style="color: #F92672;">if</span> line.contains(query) {
+            result.push(line);
+        }
+    }
+    result
+
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;iter&#30340;&#20889;&#27861;</span>
+    <span style="color: #E6DB74;">/// contents.lines()</span>
+    <span style="color: #E6DB74;">///    .filter(|line|line.contains(query))</span>
+    <span style="color: #E6DB74;">///    .collect()</span>
+}
+
+<span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Config</span> {
+    <span style="color: #F92672;">pub</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">new</span>(<span style="color: #FD971F;">args</span>:&amp;[<span style="color: #66D9EF;">String</span>]) -&gt; <span style="color: #66D9EF;">Result</span>&lt;<span style="color: #66D9EF;">Config</span>, &amp;'<span style="color: #F92672;">static</span> <span style="color: #66D9EF;">str</span>&gt;{
+        <span style="color: #F92672;">if</span> args.len() &lt; 3 {
+            <span style="color: #F92672;">return</span> <span style="color: #66D9EF;">Err</span>(<span style="color: #E6DB74;">"not enough params"</span>);
+        }
+        <span style="color: #F92672;">let</span> <span style="color: #FD971F;">query</span> = args[1].clone();
+        <span style="color: #F92672;">let</span> <span style="color: #FD971F;">fileName</span> = args[2].clone(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#19981;&#20351;&#29992;clone,&#21017;&#20026;&#24341;&#29992;</span>
+
+        <span style="color: #66D9EF;">Ok</span>(<span style="color: #66D9EF;">Config</span>{
+            query,
+            fileName,
+        })
+    }
+}
+
+
+<span style="color: #F92672;">#[cfg(test)]</span>
+<span style="color: #F92672;">mod</span> <span style="color: #AE81FF;">tests</span> {
+    <span style="color: #F92672;">use</span> <span style="color: #F92672;">super</span>::*;
+
+    <span style="color: #F92672;">#[test]</span>
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">one_result</span>(){
+        <span style="color: #F92672;">let</span> <span style="color: #FD971F;">query</span> = <span style="color: #E6DB74;">"duct"</span>;
+        <span style="color: #F92672;">let</span> <span style="color: #FD971F;">contents</span> = <span style="color: #E6DB74;">"\</span>
+<span style="color: #E6DB74;">Rust:</span>
+<span style="color: #E6DB74;">safe, fast, productive.</span>
+<span style="color: #E6DB74;">Pick three."</span>;
+        <span style="color: #F92672;">assert_eq!</span>(
+            <span style="color: #F92672;">vec!</span>[<span style="color: #E6DB74;">"safe, fast, productive."</span>],
+            search(query, contents)
+        );
+    }
+}
+</pre>
+</div>
+
+<p>
+main.rs
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::env;
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::process;
+
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">minigrep</span>;
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">minigrep</span>::<span style="color: #66D9EF;">Config</span>;
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">args</span> : <span style="color: #66D9EF;">Vec</span>&lt;<span style="color: #66D9EF;">String</span>&gt; = <span style="color: #AE81FF;">env</span>::args().collect();
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">config</span> = <span style="color: #66D9EF;">Config</span>::new(&amp;args).unwrap_or_else(|err|{
+        <span style="color: #F92672;">eprintln!</span>(<span style="color: #E6DB74;">"config new runs err : </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, err);
+        <span style="color: #AE81FF;">process</span>::exit(1);
+    });
+
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;if let&#21644;unwrap_or_else&#30340;&#21306;&#21035;&#26159;&#65292;unwrap&#38656;&#35201;&#21462;&#21040;Result&#20013;&#30340;&#20540;, if let&#19981;&#38656;&#35201;unwrap(&#21363;&#21462;&#20540;)</span>
+    <span style="color: #F92672;">if</span> <span style="color: #F92672;">let</span> <span style="color: #66D9EF;">Err</span>(err) = <span style="color: #AE81FF;">minigrep</span>::run(config) {
+        <span style="color: #F92672;">eprintln!</span>(<span style="color: #E6DB74;">"run error : </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, err);
+        <span style="color: #AE81FF;">process</span>::exit(1);
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-04-24 Wed 10:38</p>
+<p class="date">Created: 2019-05-26 Sun 16:05</p>
 <p class="validation"></p>
 </div>
 </body>

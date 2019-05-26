@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-05-26 Sun 16:05 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>core dump相关</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">core dump相关</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org5f349ed">什么是core dump</a></li>
+<li><a href="#orgc5f7cd5">core相关配置</a>
+<ul>
+<li><a href="#org735ab7d">core文件大小</a></li>
+<li><a href="#orgfc1ce0d">core文件生成位置及命名</a></li>
+</ul>
+</li>
+<li><a href="#org2b0b977">调试</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5f349ed" class="outline-2">
+<h2 id="org5f349ed">什么是core dump</h2>
+<div class="outline-text-2" id="text-org5f349ed">
+<p>
+在使用半导体作为内存的材料前，人类是利用线圈当作内存的材料（发明者为王安），线圈就叫作 core ，用线圈做的内存就叫作 core memory。如今 ，半导体工业澎勃发展，已经没有人用 core memory 了，不过，在许多情况下， 人们还是把记忆体叫作 core 。 
+即core为内存,dump意为将内存倾倒下来.其作用就是在程序出现各种异常或bug导致程序退出或终止,会产生一个core的文件,这个过程就是core dump.该文件内容记录了程序在退出时内存的信息.
+</p>
+</div>
+</div>
+<div id="outline-container-orgc5f7cd5" class="outline-2">
+<h2 id="orgc5f7cd5">core相关配置</h2>
+<div class="outline-text-2" id="text-orgc5f7cd5">
+</div>
+<div id="outline-container-org735ab7d" class="outline-3">
+<h3 id="org735ab7d">core文件大小</h3>
+<div class="outline-text-3" id="text-org735ab7d">
+<p>
+<code>ulimit -c</code> ulimit命令可以查看linux系统的一些初始化的参数,其中 <code>ulimit -c</code> 是查看core size, 即core文件的可创建大小,如果是0,则表示无法core dump.
+</p>
+</div>
+</div>
+<div id="outline-container-orgfc1ce0d" class="outline-3">
+<h3 id="orgfc1ce0d">core文件生成位置及命名</h3>
+<div class="outline-text-3" id="text-orgfc1ce0d">
+<p>
+<code>/proc/sys/kernal/core_uses_pid</code> 用来控制core文件的文件名中是否添加pid作为扩展,如果为1则添加,为0不添加
+<code>/proc/sys/kernal/core_pattern</code> 可用来控制core文件生成的位置和名字,如文件内容为 <code>/home/coresave %e %p %u %g %s %t</code> 则表示将core文件统一生成到/home/coresave文件中,其中参数表示如下:
+</p>
+<ul class="org-ul">
+<li>%p - insert pid into filename 添加pid</li>
+<li>%u - insert current uid into filename 添加当前uid</li>
+<li>%g - insert current gid into filename 添加当前gid</li>
+<li>%s - insert signal that caused the coredump into the filename 添加导致产生core的信号</li>
+<li>%t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间</li>
+<li>%h - insert hostname where the coredump happened into filename 添加主机名</li>
+<li>%e - insert coredumping executable name into filename 添加命令名</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org2b0b977" class="outline-2">
+<h2 id="org2b0b977">调试</h2>
+<div class="outline-text-2" id="text-org2b0b977">
+<p>
+使用gdb进行调试 <code>gdb [exe file] [core file]</code> 
+其中[exe file]是程序执行目录,[core file] 是core文件目录.
+在进入gdb后,where或者bt命令可以进行backtrace
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-05-26 Sun 16:05</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-05-26 Sun 16:05 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>tmux使用</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">tmux使用</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgd2c3b00">tmux简介</a></li>
+<li><a href="#org74d42b9">参考</a></li>
+<li><a href="#org096a10c">命令</a></li>
+<li><a href="#orgc041b86">快捷键</a>
+<ul>
+<li><a href="#org9f23cae">会话篇</a></li>
+<li><a href="#org382faac">窗口</a></li>
+<li><a href="#org71118c5">窗格</a></li>
+<li><a href="#org772596a">其他</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd2c3b00" class="outline-2">
+<h2 id="orgd2c3b00">tmux简介</h2>
+<div class="outline-text-2" id="text-orgd2c3b00">
+<p>
+原以为tmux就是一个简单的分屏工具,在第一次安装后发现这个玩意好丑,而且分屏也不好用,于是放弃了.后来找了一些文章,才发现,其主要作用原来是保持会话,当你在服务器上进行开发时候,会给你带来很大的便利性.如ssh到服务器上后,编译一个项目,之后关闭电脑回家,发现ssh断掉了,若编译未完成,则前功尽弃,需要重新登录机器,重新编译.而tmux能保证,当你关掉电脑后,你的会话仍然有效.
+即tmux一般用于服务器,用来保存会话的内容
+</p>
+</div>
+</div>
+<div id="outline-container-org74d42b9" class="outline-2">
+<h2 id="org74d42b9">参考</h2>
+<div class="outline-text-2" id="text-org74d42b9">
+<ul class="org-ul">
+<li>Linux 从业利器: <a href="http://cenalulu.github.io/linux/tmux/">http://cenalulu.github.io/linux/tmux/</a></li>
+<li>Tmux美化: <a href="https://github.com/gpakosz/.tmux">https://github.com/gpakosz/.tmux</a> , 其中的powerline的箭头需要到~/.tmux.conf.local中修改,修改完毕后中,在tmux中使用 <code>C-b :</code> 命令,并键入 <code>source-file ~/.tmux.conf</code> 来更新</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org096a10c" class="outline-2">
+<h2 id="org096a10c">命令</h2>
+<div class="outline-text-2" id="text-org096a10c">
+<ul class="org-ul">
+<li><code>tmux</code> 运行,若发现乱码,可使用 <code>tmux -u</code> 来运行,即用utf-8</li>
+<li><code>tmux ls</code> 显示所有会话,或者在tmux中,使用 <code>C-b s</code></li>
+<li><code>tmux new</code> 新建会话,不指定名字,不推荐 <code>tmux new -s session-name</code> 新建会话,指定名字,推荐</li>
+<li><code>tmux a</code> 接入(attach)第一个可用的会话, <code>tmux a -t session-name</code> 接入指定会话</li>
+<li><code>tmux detach</code> 从会话中断开,或 <code>C-b d</code></li>
+<li><code>tmux kill-session -t session-name</code> 关闭会话,shutdown, <code>tmux killall</code> 关闭所有</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgc041b86" class="outline-2">
+<h2 id="orgc041b86">快捷键</h2>
+<div class="outline-text-2" id="text-orgc041b86">
+<p>
+prefix为 <code>C-a</code> 或 <code>C-s</code>,每个快捷键都需要前缀,后边省略
+<code>prefix ?</code> 可以显示当前的快捷键绑定
+</p>
+</div>
+<div id="outline-container-org9f23cae" class="outline-3">
+<h3 id="org9f23cae">会话篇</h3>
+<div class="outline-text-3" id="text-org9f23cae">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">name</th>
+<th scope="col" class="org-left">des</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">s</td>
+<td class="org-left">列出所有会话</td>
+</tr>
+
+<tr>
+<td class="org-left">$</td>
+<td class="org-left">重命名当前会话</td>
+</tr>
+
+<tr>
+<td class="org-left">d</td>
+<td class="org-left">断开当前会话</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org382faac" class="outline-3">
+<h3 id="org382faac">窗口</h3>
+<div class="outline-text-3" id="text-org382faac">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">name</th>
+<th scope="col" class="org-left">des</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">c</td>
+<td class="org-left">创建一个新窗口</td>
+</tr>
+
+<tr>
+<td class="org-left">,</td>
+<td class="org-left">重命名当前窗口</td>
+</tr>
+
+<tr>
+<td class="org-left">w</td>
+<td class="org-left">列出所有窗口</td>
+</tr>
+
+<tr>
+<td class="org-left">%</td>
+<td class="org-left">水平分割窗口</td>
+</tr>
+
+<tr>
+<td class="org-left">"</td>
+<td class="org-left">竖直分割窗口</td>
+</tr>
+
+<tr>
+<td class="org-left">n</td>
+<td class="org-left">选择下一个窗口</td>
+</tr>
+
+<tr>
+<td class="org-left">p</td>
+<td class="org-left">选择上一个窗口</td>
+</tr>
+
+<tr>
+<td class="org-left">0~9</td>
+<td class="org-left">选择数字对应窗口</td>
+</tr>
+
+<tr>
+<td class="org-left">&amp;</td>
+<td class="org-left">关闭当前窗口</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org71118c5" class="outline-3">
+<h3 id="org71118c5">窗格</h3>
+<div class="outline-text-3" id="text-org71118c5">
+<p>
+注意区分窗格和窗口的区别,窗口是一个占满郑屏的窗格,窗格即panel
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">name</th>
+<th scope="col" class="org-left">des</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">%</td>
+<td class="org-left">创建一个水平窗格</td>
+</tr>
+
+<tr>
+<td class="org-left">"</td>
+<td class="org-left">竖直创建一个窗格</td>
+</tr>
+
+<tr>
+<td class="org-left">hjkl</td>
+<td class="org-left">窗格移动</td>
+</tr>
+
+<tr>
+<td class="org-left">q</td>
+<td class="org-left">显示窗格编号</td>
+</tr>
+
+<tr>
+<td class="org-left">o</td>
+<td class="org-left">在窗格之间切换</td>
+</tr>
+
+<tr>
+<td class="org-left">{}</td>
+<td class="org-left">与上/下一个窗格交换位置</td>
+</tr>
+
+<tr>
+<td class="org-left">!</td>
+<td class="org-left">在新窗口显示当前窗格</td>
+</tr>
+
+<tr>
+<td class="org-left">x</td>
+<td class="org-left">关闭当前窗格</td>
+</tr>
+
+<tr>
+<td class="org-left">t</td>
+<td class="org-left">在当前窗格显示时间</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org772596a" class="outline-3">
+<h3 id="org772596a">其他</h3>
+<div class="outline-text-3" id="text-org772596a">
+<ul class="org-ul">
+<li>翻页: 如果使用了tmux, 没有开启鼠标滚轮,那么鼠标滚轮将不会有滚屏的效果,如果需要滚屏效果,需要使用命令 <code>set -g mnouse on</code>, 但是使用这个效果的缺点是,复制将不可用.但是可以使用一种更优雅的方式翻页,命令 <code>prefix [</code> 开启一个vi-mode,此时可以像操作vim一样来操作屏幕内容,翻页使用 <code>C-d</code> 即可,这样方便许多</li>
+<li>&lt;C-a&gt;: shell 命令 &lt;C-a&gt;是将光标移动到行首,使用tmux的美化库(上边的链接)则使用&lt;C-a&gt;&lt;C-a&gt;进行移动</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-05-26 Sun 16:05</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

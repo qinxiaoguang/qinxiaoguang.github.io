@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-24 Wed 10:38 -->
+<!-- 2019-05-26 Sun 16:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Linux手册</title>
@@ -35,6 +35,19 @@
 <li><a href="#orgad3f8bf">字符串</a></li>
 <li><a href="#orgb0bf51d">循环</a></li>
 <li><a href="#orgd600db0">常用if</a></li>
+<li><a href="#orge5e177a">sleep</a></li>
+<li><a href="#orgdc32fbc">sed</a>
+<ul>
+<li><a href="#org4af2c9c">[option]</a></li>
+<li><a href="#org75b2cd7">[action]</a></li>
+<li><a href="#org909c333">eg</a>
+<ul>
+<li><a href="#org8540409">使用变量</a></li>
+<li><a href="#org1c1c945">修改文件</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#org6ca6642">后记</a></li>
 </ul>
 </div>
@@ -137,6 +150,92 @@ cat &lt;&lt;EOF
 </ul>
 </div>
 </div>
+<div id="outline-container-orge5e177a" class="outline-2">
+<h2 id="orge5e177a">sleep</h2>
+<div class="outline-text-2" id="text-orge5e177a">
+<ul class="org-ul">
+<li><code>sleep 0.01</code>  睡眠1毫秒</li>
+<li><code>sleep 1</code> 睡眠1s</li>
+<li><code>sleep 1s</code> 睡眠1秒</li>
+<li><code>sleep 1m</code> 睡眠1分</li>
+<li><code>sleep 1h</code> 睡眠1小时</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgdc32fbc" class="outline-2">
+<h2 id="orgdc32fbc">sed</h2>
+<div class="outline-text-2" id="text-orgdc32fbc">
+<p>
+对数据进行选取,替换,删除,新增的命令
+使用方式 <code>sed [option] '[action]' filename</code>
+</p>
+</div>
+<div id="outline-container-org4af2c9c" class="outline-3">
+<h3 id="org4af2c9c">[option]</h3>
+<div class="outline-text-3" id="text-org4af2c9c">
+<p>
+参数解析
+</p>
+<ul class="org-ul">
+<li><code>-n</code> :一般sed会把所有数据输出到屏幕，而使用-n后，只会把经过sed命令处理的行输出到屏幕</li>
+<li><code>-e</code> : 允许输入多条动作</li>
+<li><code>-i</code> : 一般sed不会修改文件，只会将结果显示在屏幕，但是加上-i会修改文件。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org75b2cd7" class="outline-3">
+<h3 id="org75b2cd7">[action]</h3>
+<div class="outline-text-3" id="text-org75b2cd7">
+<p>
+动作解析
+</p>
+<ul class="org-ul">
+<li>a:追加，在某一行的后边添加一行或多行</li>
+<li>c:行替换，用c后面的字符串替换原数据行</li>
+<li>i:插入，在某一行的前边插入一行或多行。</li>
+<li>d:删除，删除指定行</li>
+<li>p:输出指定行</li>
+<li>s:字符替换，用一个字符串替换另外一个字符串，与vim中的替换类似 <code>行范围s/新字符串/旧字符串/g</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org909c333" class="outline-3">
+<h3 id="org909c333">eg</h3>
+<div class="outline-text-3" id="text-org909c333">
+<ul class="org-ul">
+<li><code>sed -n '2p' student.txt</code> :查看当前文件的第二行,注意一定加上-n，如果没有-n将输出所有行。</li>
+<li><code>sed '2,4d' student.txt</code> : 删除第二行到第四行的数据</li>
+<li><code>sed '2a something' student.txt</code> :在第二行的后边加入一行内容</li>
+<li><code>sed '2i something' student.txt</code> :在第二行的前边加入一行内容</li>
+<li><code>sed '4c something' student.txt</code> :将第4行替换为something</li>
+<li><code>sed '4s/70/100/g' student.txt</code> 将第四行的70替换为100，如果不加行数，则会替换全文内容。</li>
+<li><code>sed -e 's/furong//g;s/fengjie//g' student.txt</code> -e指定多条命令，命令之间使用`;`隔开。</li>
+</ul>
+</div>
+<div id="outline-container-org8540409" class="outline-4">
+<h4 id="org8540409">使用变量</h4>
+<div class="outline-text-4" id="text-org8540409">
+<p>
+需要通过符号 <code>$</code>  来使用,如
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #FD971F;">i</span>=1
+sed -n <span style="color: #E6DB74;">"${i}p"</span> xx
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1c1c945" class="outline-4">
+<h4 id="org1c1c945">修改文件</h4>
+<div class="outline-text-4" id="text-org1c1c945">
+<p>
+通过-i 参数,如 <code>sed -i "s/first/second/g" filename.txt</code>
+修改整行:通过正则表达式,如匹配有 port 的行,并整行替换: <code>sed -i 's/^port.*/port:8080/g' tmp.txt</code>
+</p>
+</div>
+</div>
+</div>
+</div>
 <div id="outline-container-org6ca6642" class="outline-2">
 <h2 id="org6ca6642">后记</h2>
 <div class="outline-text-2" id="text-org6ca6642">
@@ -148,7 +247,7 @@ cat &lt;&lt;EOF
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-04-24 Wed 10:38</p>
+<p class="date">Created: 2019-05-26 Sun 16:05</p>
 <p class="validation"></p>
 </div>
 </body>

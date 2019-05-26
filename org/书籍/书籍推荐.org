@@ -29,6 +29,8 @@
 - 社会性动物
 - 亲密关系
 - 非暴力沟通
+- 软技能：代码之外的生存指南
+- 人性的弱点
 * 英语
 - Word Power made easy
 - Merriam-Webster Vocabulary Builder
@@ -48,3 +50,5 @@
 - VIM使用技巧
 - 深入浅出rust
 - rust编程之道
+- linux 内核完全剖析
+- 30天自制操作系统

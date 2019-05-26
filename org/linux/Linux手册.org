@@ -57,6 +57,39 @@ IFS='
 - =sleep 1s= 睡眠1秒
 - =sleep 1m= 睡眠1分
 - =sleep 1h= 睡眠1小时
+* sed
+对数据进行选取,替换,删除,新增的命令
+使用方式 =sed [option] '[action]' filename=
+** [option]
+ 参数解析
+- =-n= :一般sed会把所有数据输出到屏幕，而使用-n后，只会把经过sed命令处理的行输出到屏幕
+- =-e= : 允许输入多条动作
+- =-i= : 一般sed不会修改文件，只会将结果显示在屏幕，但是加上-i会修改文件。
+** [action]
+ 动作解析
+- a:追加，在某一行的后边添加一行或多行
+- c:行替换，用c后面的字符串替换原数据行
+- i:插入，在某一行的前边插入一行或多行。
+- d:删除，删除指定行
+- p:输出指定行
+- s:字符替换，用一个字符串替换另外一个字符串，与vim中的替换类似 =行范围s/新字符串/旧字符串/g=
+** eg
+- =sed -n '2p' student.txt= :查看当前文件的第二行,注意一定加上-n，如果没有-n将输出所有行。
+- =sed '2,4d' student.txt= : 删除第二行到第四行的数据
+- =sed '2a something' student.txt= :在第二行的后边加入一行内容
+- =sed '2i something' student.txt= :在第二行的前边加入一行内容
+- =sed '4c something' student.txt= :将第4行替换为something
+- =sed '4s/70/100/g' student.txt= 将第四行的70替换为100，如果不加行数，则会替换全文内容。
+- =sed -e 's/furong//g;s/fengjie//g' student.txt= -e指定多条命令，命令之间使用`;`隔开。
+*** 使用变量
+需要通过符号 =$=  来使用,如
+ #+BEGIN_SRC shell
+i=1
+sed -n "${i}p" xx
+ #+END_SRC
+*** 修改文件
+通过-i 参数,如 =sed -i "s/first/second/g" filename.txt=
+修改整行:通过正则表达式,如匹配有 port 的行,并整行替换: =sed -i 's/^port.*/port:8080/g' tmp.txt=
 * 后记
 本来想把linux的笔记从简书搬运过来，但是太多内容了，还是算了吧，以后再说吧
 

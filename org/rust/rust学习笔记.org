@@ -77,7 +77,7 @@ let (a, mut b):(bool, bool) = (true, false); // 多个变量赋值
 let (mut a, mut b) = (1,2) // 声明多个可变变量
 
 let v = vec![1,2,3];
-let mut v = v; // 可以通过创建同名变量的方式改变其可变性
+let mut v = v; // 可以通过创建同名变量的方式改变其可变性,别犹豫,绝对正确.
 
 // 静态变量/全局变量
 // 必须初始化,且必须是可确定的常量
@@ -121,6 +121,36 @@ let c="hello".to_string();
 c.chars().nth(2); // 访问第2个 
 
 // 字符串切片，很危险，不建议使用
+let s = String::from("haha");
+let s1 = &s[1..2]; // s1是&str类型，&str就是切片类型, 使用&s[..]可以把String类型转为&str类型
+let s2 = "haha";   // s2也是&str类型, 所以s2和&s2[..]是一样的
+let s3 = String::from("哈");
+println!("{}", s3.len()); // 打印3， 因为其字符串使用的utf-8存储，所以一个哈字使用3个字节存储，所以打印3，注意String底层实际上是Vec<u8>，所以其长度也即为Vec<u8>的长度/字节长度，因此为了防止误会，杜绝了对字符串使用索引的操作，如s3[0]是不会编译通过的。而对字符串使用slice操作，如&s3[0..4]通常是很危险的，因为不知道会截取出来什么乱七八糟的玩意,也有可能导致panic的出现
+
+
+// 操作
+let s1 = String::from("haha");
+let s2 = String::from("heihei");
+let s3 = s1+&s2;  // 使用+号对String操作时，第一个要是String类型，第二个是&str类型,或者&String也可以,因为&String类型会被强转成为&str类型(deref),但是这样操作后s1将会被move, 生成的s3是String类型
+let s3 = s1 + &s2 + &s2; // 合法
+let s3 = s3 + "haha"; // 可以
+let mut s4 = String::from("haha"); 
+s4.push_str(" oo"); // 可以使用push_str来给字符串后边添加新的字符串
+s4.push('l'); // 可以使用push 来添加字符
+
+// 遍历
+// s.chars()也是iterator类型，所以可以有iterator的一系列操作
+let s = String::from("哈黑");
+for i in s.chars(){
+     // 使用chars才能获取正确的字符, 而使用s.bytes()为所有字节
+}
+let count = s.chars().count(); // 获取字符串的长度，注意是不是字节长度
+let two = s.chars().nth(2); // 获取第2个字符
+let back_two = s.chars().back_nth(2); // 获取倒数第二个字符
+
+// 字符串替换
+let res = str::replace("haha!","!","?");
+let res = res.replace("?","!");
   #+END_SRC
 - 数组：具有固定大小，并且元素都是同种类型，可表示为[T; N]。
   #+BEGIN_SRC rust
@@ -141,7 +171,7 @@ c.chars().nth(2); // 访问第2个
 - 切片：引用一个数组的部分数据并且不需要拷贝，可表示为&[T]。&符号不要考虑成引用，会给自己增加负担，相反，应考虑为切片的必要的一部分。
   #+BEGIN_SRC rust
 let arr = [1,2,3,4,5];
-let slice_1 = &arr[..]; // 获取全部元素
+let slice_1 = &arr[..]; // 获取全部元素, 注意是引用,原来的元素如果修改，则引用的元素也会修改
 let slice_2 = &arr[1..4]; // 获取下标[1,4)的元素
 let slice_3 = &arr[1..]; // 获取下标1之后的所有元素
 let slice_4 = &arr[..3]; // 获取下标3之前的所有元素
@@ -155,6 +185,7 @@ fn show(arr: &[u8]){
 }
 // 调用
 show(&arr[..]);
+show(&arr); // 可以
 show(slice_1);
 #+END_SRC
 - 元组：具有固定大小的有序列表，每个元素都有自己的类型，通过解构或者索引来获得每个元素的值。
@@ -241,7 +272,9 @@ if expr1 {
 
 } else if expr2 {
 
-} else
+} else {
+
+}
 
 // 形式3
 if expr1 {
@@ -270,7 +303,7 @@ if let Some(y) = x{
 }
 let z = if let Some(y) = x {y} else {0}; // 若x中有值，则赋给z
 #+END_SRC
-**  for
+** for
 #+BEGIN_SRC rust
 // expression 是一个迭代器,如0..10,or [0,1,2].iter()
 for var in iterator {
@@ -293,7 +326,7 @@ while expr{
 
 }
 
-// loop类似 while true
+// loop类似 while true,一般推荐用loop,其有优化.
 loop {
 
 }
@@ -303,7 +336,7 @@ let v = loop { break 10;}; //此时v的值为10
 #+END_SRC
 ** match
 #+BEGIN_SRC rust
-    // match 类比switch,需符合一下要求
+    // match 类比switch,需符合以下要求
     // 1. 语句以,结尾
     // 2. 若要获取匹配值，使用@符号,通常用于模式匹配中
     // 3. 必须要有_符合来穷举剩余匹配，因rust要求覆盖所有可能
@@ -433,6 +466,34 @@ const fn cube(num :usize) -> usize {
 }
 #+END_SRC
 
+* 测试
+#+BEGIN_SRC rust
+// 单元测试，需要将tests模块放入相同的文件里，并用#[cfg(test)]标注, #[cfg(test)]注解告诉Rust,只在运行cargo test的时候才执行, 而在cargo build的时候不执行
+#[cfg(test)]
+mod tests {
+     #[test] // 需要使用#[test]注解来表明该函数是测试函数, 使用cargo test来运行测试函数
+     #[should_panic] // 测试panic,若有panic成功，若无panic失败
+     fn it_works() {
+          assert_eq!(2 + 2, 4);  // 测试相等
+          assert_ne!(2 + 1, 4);  // 测试不等
+          assert!(true); // assert!参数传递为bool
+          assert!(false,
+               "自定义输出信息 {}", "哈"
+          )
+     }
+
+     #[test]  // 通过Result来判断测试结果
+     fn get_result() -> Result<(), String>{
+          if true{
+               Ok(())
+          } else {
+               Err("hei".to_owned())
+          }
+     }
+}
+
+// 集成测试需要在和src的同级目录下创建一个tests目录,例如创建一个main_test.rs文件，里面不需要#[cfg(test)]及mod tests做标注， 同样该文件也只有在运行cargo test的时候才会执行
+#+END_SRC
 * trait
 类似golang的interface,但有很大不同
 #+BEGIN_SRC rust
@@ -670,8 +731,28 @@ impl Test for i32{
 - 实现std::mem::Drop的trait后，生命周期结束后会自动执行对应的方法。不允许手动调用。且该trait的drop方法的参数类型是&mut Self
 - 使用下划线绑定一个变量，这个下划线对应的变量会当场执行析构
 - 实现Drop的同时不能实现Copy
-* 内部可变性
+* 智能指针
+智能指针多了两个trait, Deref用来解引用，使得智能指针可以直接对指向的内容进行操作，Drop用来析构
+** 内部可变性
 rust在不使用mut来修饰变量时候，其内部是不能发生改变的，比如 ~let v = vec![1,2,4]~ 此时对v使用v.push方法是会报错的，而内部可变性是说，在不使用mut来修饰变量时，也可改变内部状态，如Cell 
+** Box
+Box将数据存储在堆上，而非栈上, 一般用于以下情形
+1. 递归数据结构，如链表，二叉树,Box有已知的大小
+2. 与dyn配合使用,dyn粗粒度理解为多态，即无法明确其具体类型时，如Box<dyn Animal>
+#+BEGIN_SRC rust
+// 1.递归数据
+pub struct List{
+     // 首先明确为什么用Box，因为不用Box,则指定为List类型，List类型是递归类型，所以无法明确其大小，而使用指针可以明确大小
+     // 其次明确为什么使用Option,因为next可能为空，而rust没有空的概念，要表示空的概念，需要使用Option类型.
+     next:Box<Option<List>>,
+     value:i32,  // 以i32举例
+}
+// 创建的方式
+let l = List{
+     next: Box::new(None),
+     value: 18,
+};
+#+END_SRC
 ** Cell
 - Cell类似一个壳,把数据包裹在里面，所有指针只能指向Cell，不能指向数据,修改数据只能通过Cell来完成,用户无法创建一个直接指向数据的指针
 -  以下代码是可以编译通过的
@@ -686,7 +767,7 @@ fn main() {
 }
 #+END_SRC
 ** RefCell
-- RefCell是另外一个提供内部可变性的类型,Cell无法提供一个直接指向内部数据的指针，而RefCell可以
+- RefCell是另外一个提供内部可变性的类型,Cell无法提供一个直接指向内部数据的指针，而RefCell可以,RefCell用于单线程场景
 - 如代码
 #+BEGIN_SRC rust
 use std::cell::RefCell;
@@ -705,6 +786,7 @@ fn main() {
 - 解引用是编译器的一种自动机制,在某些场景会隐式的启动
 - 通过解引用可以方便的直接对其内部的数据进行操作，而不用先获取内部数据的指针再进行操作
 - deref方法返回的是&T而不是T。
+- 针对*y，会自动转换为*(y.deref())
 - 如String类型实现了向目标类型str的解引用的转换
   #+BEGIN_SRC rust
   fn main() {
@@ -749,6 +831,7 @@ match s.deref(){
     _ => println!("{:?}","heihei"),
 }
   #+END_SRC
+- 解引用强制多态， 是说当一个变量传递给一个函数时，若该函数接收的类型不是传入的类型，会强制的通过deref来解引用为需要的类型，如函数fn test( s:&str) 需要的是&str类型，但是传入&String也可以，因为&String会被强制解引用为&str类型, 也可以传入&Box::new("haha".to_string())类型
 ** 引用计数
 - std::rc::Rc和std::rc::Arc类型都提供了引用计数功能，一块数据当所有引用都消亡时，该数据的内存才会释放
 - Rc类型的引用计数是普通整数操作，只能在单线程中，而Arc的引用计数是原子操作，可以在多线程中
@@ -757,7 +840,8 @@ match s.deref(){
     let s = Rc::new(String::from("hehe"));
     let r1 = s.clone();
     let r2 = s.clone();
-
+    
+    let r3 = Rc::clone(&s); // 但是一般建议使用这种方式，与*.clone()方法区别出来
     println!("{:p} {:p}",&*r1, &*r2);  // &*s 相当于s.deref() ,打印出来的地址是一样的,说明r1和r2指向的数据是同一个
   #+END_SRC
 * unsafe
@@ -890,10 +974,77 @@ fn main() {
     }
 }
 #+END_SRC
+* STD
+** Vec
+#+BEGIN_SRC rust
+fn testVec(){
+     let mut v = Vec::new();
+     v.push(1);  // 添加数据
+     v.push(2);
+     v.push(3);
+     v.pop(); // 删除数据
+     v.first(); // 获取第一个数据，Option<&T>类型
+     v.last(); // 获取最后一个数据，Option<&T>类型
+     v.remove(0);// 删除下标的元素
+     v.get(2);// 获取数据,获取的数据实际上也是引用
+     let mut vi = &mut v[1]; // 使用borrow引用获取数据, 注意前一个mut是修饰变量vi的，意为vi是否能重新绑定，或被绑定为mut类型
+     *vi = 3;
+     println!("{:?}",v);
+
+     let v3= &mut v[..1]; // 这种返回的不是Vec<>类型，而是&mut [i32]类型,所以不能够push数据，只能修改数据
+     v3[0] = 5; // 注意 不需要*v3[0] = 5, 因为加下标本身就是一个指针，考虑c++语言中的情形
+     println!("{:?}", v);
+     // 遍历元素，注意使用borrow,否遍历完毕后，数据被move
+     for i in &v{
+          println!("{:}",i);
+     }
+
+     println!("{:?}", v);
+     // 若想在遍历的时候同时修改,需要使用mut
+     // 若遍历的元素是&v, 则i为&T
+     // 若遍历的元素是v, 则i 为T
+     // 若遍历的元素是&mut v, 则i 为&mut T
+     for i in &mut v {
+          *i = 0;
+     }
+
+     println!("{:?}", v);
+}
+#+END_SRC
+** HashMap
+#+BEGIN_SRC rust
+fn test_hashmap(){
+     // 使用zip来创建
+     let vec1 = vec!["haha"];
+     let vec2 = vec!["hwihwi"];
+     // 但是需要指名HashMap的类型,使用下划线即可，rust会通过vec推断出类型
+     let mut map :HashMap<_,_>= vec1.iter().zip(vec2.iter()).collect();
+     // 新建
+     let mut map:HashMap<&str,&str> = HashMap::new();
+     // 插入数据
+     map.insert("haha","hwihwi");
+
+     println!("{:?}",map);
+     // 使用get来获取值, 注意get中传入的参数是引用类型，所以需要加上&符号
+     let v = map.get("haha");
+     println!("{:?}",v);
+
+     // 遍历, 注意此时的key,value也是引用类型
+     for (key, value) in &map {
+
+     }
+     // 可以使用entry来获取键值对，如果发现无该键值对，可以使用or_insert来为其添加默认值,or_insert返回V的可变引用
+     let v =  map.entry("haha").or_insert("huhu");
+     *v = "lala"; // 可以使用or_insert返回的可变引用来修改map内部的值
+     println!("{:?}", map);
+     // 修改对应的值
+     let e = map.insert("haha","hqhq");
+}
+#+END_SRC
 * 错误
 1. 问号运算符，如果结果是Err，则提前返回，否则继续执行
 2. 问号运算符返回的是Result<>类型，所以?无法在main函数中运行
-*  cargo
+* cargo
 cargo为项目管理工具，类比java的maven,c++的cmake等。
 cargo的默认规则:
 - cargo.toml和cargo.lock文件总是位于项目根目录下。
@@ -946,4 +1097,108 @@ macro_rules! myPrintln{
 myPrintln!("{:?}",someVal);
 
 // 定义函数
+#+END_SRC
+* demo
+** 编写minigrep
+代码目录
+#+BEGIN_VERSE
+.
+├── Cargo.lock
+├── Cargo.toml
+├── minigrep.iml
+├── poem.txt
+├── src
+│   ├── lib.rs
+│   └── main.rs
+#+END_VERSE
+lib.rs
+#+BEGIN_SRC rust
+use std::{env,fs, process, error::Error};
+
+pub struct Config {
+    query : String,
+    fileName: String,
+}
+
+// Box 和dyn Error 配合使用的原因是，dyn Error是动态的，不明确大小的，而Box会将这种动态的数据放在堆上，符合Box的使用思路
+pub fn run(config :Config) -> Result<(), Box<dyn Error>>{
+    let contents = fs::read_to_string(config.fileName)?;
+
+    for line in search(&config.query,&contents) {
+        println!("{}", line);
+    }
+    Ok(())
+}
+
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut result = vec![];
+    for line in contents.lines(){
+        if line.contains(query) {
+            result.push(line);
+        }
+    }
+    result
+
+    // 使用iter的写法
+    /// contents.lines()
+    ///    .filter(|line|line.contains(query))
+    ///    .collect()
+}
+
+impl Config {
+    pub fn new(args:&[String]) -> Result<Config, &'static str>{
+        if args.len() < 3 {
+            return Err("not enough params");
+        }
+        let query = args[1].clone();
+        let fileName = args[2].clone(); // 不使用clone,则为引用
+
+        Ok(Config{
+            query,
+            fileName,
+        })
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn one_result(){
+        let query = "duct";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.";
+        assert_eq!(
+            vec!["safe, fast, productive."],
+            search(query, contents)
+        );
+    }
+}
+#+END_SRC
+
+main.rs
+#+BEGIN_SRC rust
+use std::env;
+use std::process;
+
+use minigrep;
+use minigrep::Config;
+
+fn main() {
+    let args : Vec<String> = env::args().collect();
+    let config = Config::new(&args).unwrap_or_else(|err|{
+        eprintln!("config new runs err : {}", err);
+        process::exit(1);
+    });
+
+    // 使用if let和unwrap_or_else的区别是，unwrap需要取到Result中的值, if let不需要unwrap(即取值)
+    if let Err(err) = minigrep::run(config) {
+        eprintln!("run error : {}", err);
+        process::exit(1);
+    }
+}
 #+END_SRC
