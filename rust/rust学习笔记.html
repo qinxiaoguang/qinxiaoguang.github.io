@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-05-26 Sun 16:05 -->
+<!-- 2019-06-04 Tue 00:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>rust学习笔记</title>
@@ -31,6 +31,7 @@
 <ul>
 <li><a href="#org24f8dc1">书籍</a></li>
 <li><a href="#orgdcf49f1">install</a></li>
+<li><a href="#org1c74c26">update</a></li>
 <li><a href="#org28b213b">emacs配置</a></li>
 <li><a href="#org6b052e2">Hello world</a></li>
 <li><a href="#org9811429">Hello Rust</a></li>
@@ -69,10 +70,10 @@
 </li>
 <li><a href="#org60a8689">unsafe</a></li>
 <li><a href="#org60c4b79">闭包</a></li>
-<li><a href="#orgd6d404b">协程</a>
+<li><a href="#org9735b2b">协程</a>
 <ul>
 <li><a href="#org3781e0c">生成器</a></li>
-<li><a href="#org7f55588">协程</a></li>
+<li><a href="#orgd6d404b">协程</a></li>
 </ul>
 </li>
 <li><a href="#org4040ba8">线程</a>
@@ -123,6 +124,16 @@
 </ol>
 </div>
 </div>
+<div id="outline-container-org1c74c26" class="outline-2">
+<h2 id="org1c74c26">update</h2>
+<div class="outline-text-2" id="text-org1c74c26">
+<p>
+<code>rustup update</code> : stable版本更新
+<code>rustup install nightly</code> nightly版本更新
+</p>
+</div>
+</div>
+
 <div id="outline-container-org28b213b" class="outline-2">
 <h2 id="org28b213b">emacs配置</h2>
 <div class="outline-text-2" id="text-org28b213b">
@@ -508,6 +519,7 @@ show(slice_1);
 
 <span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#32034;&#24341;&#65292;&#20351;&#29992;enumerate()&#20989;&#25968;</span>
 <span style="color: #F92672;">for</span> (i,j) <span style="color: #F92672;">in</span> (0..10).enumerate() {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#27880;&#24847;j&#26159;&#24341;&#29992;</span>
     <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"i is </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">, j is </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, i, j);
 }
 </pre>
@@ -1285,9 +1297,9 @@ d(); <span style="color: #75715E;">// </span><span style="color: #75715E;">d&#38
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd6d404b" class="outline-2">
-<h2 id="orgd6d404b">协程</h2>
-<div class="outline-text-2" id="text-orgd6d404b">
+<div id="outline-container-org9735b2b" class="outline-2">
+<h2 id="org9735b2b">协程</h2>
+<div class="outline-text-2" id="text-org9735b2b">
 </div>
 <div id="outline-container-org3781e0c" class="outline-3">
 <h3 id="org3781e0c">生成器</h3>
@@ -1300,9 +1312,9 @@ d(); <span style="color: #75715E;">// </span><span style="color: #75715E;">d&#38
 </ul>
 </div>
 </div>
-<div id="outline-container-org7f55588" class="outline-3">
-<h3 id="org7f55588">协程</h3>
-<div class="outline-text-3" id="text-org7f55588">
+<div id="outline-container-orgd6d404b" class="outline-3">
+<h3 id="orgd6d404b">协程</h3>
+<div class="outline-text-3" id="text-orgd6d404b">
 <ul class="org-ul">
 <li><p>
 async/await, async关键字可以修饰函数闭包和代码块:
@@ -1442,7 +1454,9 @@ t.join() <span style="color: #75715E;">// </span><span style="color: #75715E;">j
      <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">map</span> :<span style="color: #66D9EF;">HashMap</span>&lt;_,_&gt;= vec1.iter().zip(vec2.iter()).collect();
      <span style="color: #75715E;">// </span><span style="color: #75715E;">&#26032;&#24314;</span>
      <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">map</span>:<span style="color: #66D9EF;">HashMap</span>&lt;&amp;<span style="color: #66D9EF;">str</span>,&amp;<span style="color: #66D9EF;">str</span>&gt; = <span style="color: #66D9EF;">HashMap</span>::new();
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">let mut map = HashMap::with_capacity(5);</span>
      <span style="color: #75715E;">// </span><span style="color: #75715E;">&#25554;&#20837;&#25968;&#25454;</span>
+     <span style="color: #75715E;">// </span><span style="color: #75715E;">&#27880;&#24847;&#25554;&#20837;&#25968;&#25454;&#26159;k,v&#65292;&#20294;&#26159;&#33719;&#21462;&#25968;&#25454;&#26102;&#20351;&#29992;&#30340;&#26159;&amp;k</span>
      map.insert(<span style="color: #E6DB74;">"haha"</span>,<span style="color: #E6DB74;">"hwihwi"</span>);
 
      <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{:?}</span><span style="color: #E6DB74;">"</span>,map);
@@ -1678,7 +1692,7 @@ main.rs
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-05-26 Sun 16:05</p>
+<p class="date">Created: 2019-06-04 Tue 00:01</p>
 <p class="validation"></p>
 </div>
 </body>

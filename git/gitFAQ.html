@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-06-04 Tue 00:03 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>git常见问题</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">git常见问题</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org11d75d3">忽略文件权限</a></li>
+<li><a href="#orga1ca227">git commit 提交后想要修改提交说明</a></li>
+<li><a href="#org6d45142">已提交的文件包含了不该提交的文件</a></li>
+<li><a href="#org68a5af7">在未进行提交的时候切换分支</a></li>
+<li><a href="#org7fc4041">出现non-fast-forward</a></li>
+<li><a href="#org4fa2d4c">git 中HEAD的含义</a></li>
+<li><a href="#org6161ee9">git diff的不同效果</a></li>
+<li><a href="#orgcac4372">git reset的用法</a>
+<ul>
+<li><a href="#orgc79265d">重置分支引用包括工作区和暂存区</a></li>
+<li><a href="#org6382104">重置分支的引用，不包括工作区和暂存区</a></li>
+<li><a href="#orgb752a16">重置分支引用和暂存区但是不修改工作区</a></li>
+<li><a href="#orgfe8c583">重置暂存区或清空暂存区</a></li>
+<li><a href="#org500cd83">清空工作区</a></li>
+<li><a href="#org053cc9c">add文件后撤销</a></li>
+</ul>
+</li>
+<li><a href="#orgda7329d">git checkout 命令</a>
+<ul>
+<li><a href="#org41dbccf">切换分支</a></li>
+<li><a href="#orga04f326">包含路径的git checkout命令</a></li>
+<li><a href="#orgc60597e">git cherry-pick</a></li>
+</ul>
+</li>
+<li><a href="#org03ab848">取消git add命令汇总</a></li>
+<li><a href="#orgb967c80">取消git add 某file命令汇总</a></li>
+<li><a href="#orgdccb6f3">取消git commit 到 git add 命令汇总</a></li>
+<li><a href="#org4adb114">取消git commit到工作区命令汇总</a></li>
+<li><a href="#org2993f7d">别名</a></li>
+<li><a href="#orgf658b26">删除当前分支</a></li>
+<li><a href="#orgadd9990">从指定远程分支pull代码到当前分支</a></li>
+<li><a href="#org7958526">当pull或merge出现冲突时</a></li>
+<li><a href="#orgbbcab86">git revert</a></li>
+<li><a href="#orgbf9c175">git clone不仅克隆远程分支，也可克隆本地</a></li>
+<li><a href="#orgfe5bd70">git pull/push</a></li>
+<li><a href="#org495c0c1">git remote</a></li>
+<li><a href="#orgd710992">git reflog</a></li>
+<li><a href="#orga66b6b5">拉代码的时候让本地和远程对应</a></li>
+<li><a href="#org2bb59a0">如果没有设置跟踪分支</a></li>
+<li><a href="#org0ddc855">git tag</a></li>
+<li><a href="#orgda2dbfc">git status -s</a></li>
+<li><a href="#orgaae5950">origin</a></li>
+<li><a href="#org1ccd612">git branch</a></li>
+<li><a href="#org5e10ad3">删除远程分支</a></li>
+<li><a href="#orgcb714f9">冲突的相关问题</a></li>
+<li><a href="#orge46ce3f">git push</a></li>
+<li><a href="#orgdb45966">替换某个分支的文件到另一个分支</a></li>
+<li><a href="#orga7765a3">git使用A账户commit,git push时报错，非本人操作</a></li>
+<li><a href="#orge8ef334">.gitignore失效问题</a></li>
+<li><a href="#org35cc8a9">refs/for</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org11d75d3" class="outline-2">
+<h2 id="org11d75d3">忽略文件权限</h2>
+<div class="outline-text-2" id="text-org11d75d3">
+<p>
+有时候修改了文件的权限，都会与线上产生冲突，可以通过以下命令让git忽略权限
+<code>git config core.filemode false</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga1ca227" class="outline-2">
+<h2 id="orga1ca227">git commit 提交后想要修改提交说明</h2>
+<div class="outline-text-2" id="text-orga1ca227">
+<p>
+<code>git commit --amend</code> 进入提交说明界面，修改原来的提交说明。或者说是覆盖之前的提交。如果提交评审后，发现有问题，再提交一遍评审就会出现两个记录，但是我想只有一条记录，方法就是使用git commit &#x2013;amend,注意只是用于评审过程中。
+</p>
+</div>
+</div>
+<div id="outline-container-org6d45142" class="outline-2">
+<h2 id="org6d45142">已提交的文件包含了不该提交的文件</h2>
+<div class="outline-text-2" id="text-org6d45142">
+<p>
+<code>git rm --cached xxx.xx</code> -&gt; <code>git commit --amend</code>
+</p>
+</div>
+</div>
+<div id="outline-container-org68a5af7" class="outline-2">
+<h2 id="org68a5af7">在未进行提交的时候切换分支</h2>
+<div class="outline-text-2" id="text-org68a5af7">
+<p>
+<code>git stash</code> -&gt; <code>git checkout &lt;branch&gt;</code>
+切换回来后执行 <code>git stash pop</code>
+<code>git stash</code> 是将工作区和暂存区的内容保存起来。
+</p>
+</div>
+</div>
+<div id="outline-container-org7fc4041" class="outline-2">
+<h2 id="org7fc4041">出现non-fast-forward</h2>
+<div class="outline-text-2" id="text-org7fc4041">
+<p>
+如果确定代码没问题时，可以使用 <code>git push -f</code> 来强制覆盖
+</p>
+</div>
+</div>
+<div id="outline-container-org4fa2d4c" class="outline-2">
+<h2 id="org4fa2d4c">git 中HEAD的含义</h2>
+<div class="outline-text-2" id="text-org4fa2d4c">
+<p>
+HEAD是当前版本库的头指针，在 <code>.git/HEAD</code> 文件中有记录，如 <code>ref: refs/heads/master</code> ，表示的就是HEAD指向一个引用，该引用是 <code>refs/heads/master</code> 其保存在 <code>.git</code> 文件中，即 <code>.git/refs/heads/master</code> 。而master文件中则记录着一个提交的sha id，如 <code>e29f9aff771447d475d33a455340452e57659030</code> ，其内容是 <code>commit-id</code> ，可以使用 <code>git cat-file commit &lt;commit-id&gt;</code> 查看该commit的信息。注意HEAD是当前分支的头指针，其指向的就是当前分支，如果当前分支是qxg，那么就会在 <code>.git/refs/heads</code> 目录下生成 <code>qxg</code> 文件。
+但使用 <code>git commit</code> 提交后，会生成一个新的sha1 id。同时HEAD指向的分支，如refs/heads/master将会指向最近的提交。
+所以这里说明几个概念，当说工作区，暂存区，HEAD的时候，就可理解为三个不同的区域， <code>git add</code> 就是将内容从工作去添加到暂存区中， <code>git commit</code> 就是将暂存区内容添加到HEAD新指向的区域。
+</p>
+
+<p>
+有一点需要弄明白，当前在工作区所修改的内容，并不属于HEAD，HEAD是指当前已提交的版本。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6161ee9" class="outline-2">
+<h2 id="org6161ee9">git diff的不同效果</h2>
+<div class="outline-text-2" id="text-org6161ee9">
+<p>
+<code>git diff</code> :该命令是工作区和暂存区的比较，即当前文件和 <code>git add</code> 后的文件的比较
+<code>git diff --cached</code> :暂存区和HEAD的比较，即 <code>git add</code> 后的文件和 <code>git commit</code> 后的文件的比较。
+<code>git diff HEAD</code> :工作区和HEAD的比较，即当前工作区的内容和已提交的内容的比较。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcac4372" class="outline-2">
+<h2 id="orgcac4372">git reset的用法</h2>
+<div class="outline-text-2" id="text-orgcac4372">
+<p>
+假设当前分支位于 <code>refs/heads/master</code> 上，那么使用 <code>git reset</code> 可以将该分支的指向修改，或是修改 <code>refs/heads/master</code> 中的内容。
+书中所说的 <code>refs/heads/master</code> 类似一个游标，但是当 <code>commit</code> 后，该游标只能往下走，如何往上走呢，方法就是使用 <code>git reset</code> 方法。但是 <code>git reset</code> 是比较危险的。
+</p>
+</div>
+
+<div id="outline-container-orgc79265d" class="outline-3">
+<h3 id="orgc79265d">重置分支引用包括工作区和暂存区</h3>
+<div class="outline-text-3" id="text-orgc79265d">
+<p>
+以下方法的 <code>HEAD^</code> 都可替换为 <code>&lt;commit-id&gt;</code>
+</p>
+
+<p>
+<code>git reset --hard HEAD^</code> ，包含 <code>--hard</code> 的 <code>git reset</code> 命令比较危险，原因是，该命令不仅仅会重置当前分支的指向，同时会将原有的暂存区的内容和工作区的内容清空，变为和当前重置后的分支一致。
+假设在当前分支执行了 <code>git add somefile.txt</code> ,而在调用 <code>git reset --hard HEAD^</code> 后，暂存区中的 <code>somefile.txt</code> 就没有了。
+</p>
+
+<p>
+<code>HEAD</code> 表示最近的一次提交， <code>HEAD^</code> 表示最近提交的父提交，使用 <code>git reset --hard HEAD^</code> 命令时，当前的内容会恢复到 <code>HEAD^</code> 刚提交的状态，或说当前的版本将变成 <code>HEAD^</code> 指定的版本。
+其实再说明白一点，使用 <code>--hard</code> 的时候，工作区和commit-id对应的内容一摸一样。而之前工作区的内容就不见了，同时暂存区意味着被清空。
+</p>
+
+<p>
+所以谨慎使用 <code>--hard</code> 
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6382104" class="outline-3">
+<h3 id="org6382104">重置分支的引用，不包括工作区和暂存区</h3>
+<div class="outline-text-3" id="text-org6382104">
+<p>
+<code>git reset --soft HEAD^</code> ，该方法只是重置当前分支的引用，不会修改工作区和暂存区的内容。
+当对最新的提交不满意的时候，或想修改提交的说明或部分文件时候，可以使用该命令，执行后，可继续进行操作之后再提交。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb752a16" class="outline-3">
+<h3 id="orgb752a16">重置分支引用和暂存区但是不修改工作区</h3>
+<div class="outline-text-3" id="text-orgb752a16">
+<p>
+<code>git reset --mixed HEAD^</code> ，默认是 <code>--mixed</code> 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfe8c583" class="outline-3">
+<h3 id="orgfe8c583">重置暂存区或清空暂存区</h3>
+<div class="outline-text-3" id="text-orgfe8c583">
+<p>
+<code>git reset</code> 或 <code>git reset HEAD</code> ，因为默认是 <code>--mixed</code> ，该命令会重置分支引用，但是因为重置的分支引用还是 <code>HEAD</code> ,所以可以看作没有重置，但是会重置暂存区。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org500cd83" class="outline-3">
+<h3 id="org500cd83">清空工作区</h3>
+<div class="outline-text-3" id="text-org500cd83">
+<p>
+<code>git checkout .</code> 
+</p>
+</div>
+</div>
+<div id="outline-container-org053cc9c" class="outline-3">
+<h3 id="org053cc9c">add文件后撤销</h3>
+<div class="outline-text-3" id="text-org053cc9c">
+<p>
+<code>git reset HEAD -- &lt;file&gt;</code> 或 <code>git reset HEAD &lt;file&gt;</code> 其中 <code>--</code> 是担心提交的id和文件产生冲突。
+如果指定 <code>&lt;file&gt;</code> 或说是 <code>&lt;path&gt;</code> 时， <code>reset</code> 则不是重置HEAD指向的master的引用。
+</p>
+
+<p>
+或 <code>HEAD</code> 也可以省略，即 <code>git reset -- &lt;file&gt;</code> ，起到同样的作用，参看上一条。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgda7329d" class="outline-2">
+<h2 id="orgda7329d">git checkout 命令</h2>
+<div class="outline-text-2" id="text-orgda7329d">
+</div>
+<div id="outline-container-org41dbccf" class="outline-3">
+<h3 id="org41dbccf">切换分支</h3>
+<div class="outline-text-3" id="text-org41dbccf">
+<p>
+使用 <code>git checkout &lt;branch-name&gt;</code> 可以进行切换分支，而使用 <code>git chceckout &lt;commit-id&gt;</code> 则使HEAD直接指向 <code>&lt;commit-id&gt;</code> ，即其不指向某一分支，但是在这个地方提交后的内容虽然会生成一个新的commit-id,当切换一个有名字的分支，HEAD原先直接指向的commmit-id代表的内容将可能消失，因为没有任何一个分支对该内容进行追踪。但是如果没有消失，可以使用 <code>git merge</code> 命令将其内容合并到当前分支。
+</p>
+
+<p>
+<code>git checkout -b &lt;branch&gt; &lt;remote-name&gt;/&lt;branch&gt;</code> 会创建分支并设置跟踪分支
+而 <code>git checkout --track &lt;remote-name&gt;/&lt;branch&gt;</code> 会自动跟踪目标分支并创建一个分支与之对应。
+</p>
+
+<p>
+如 <code>git checkout -b qxg origin/qxg</code> 和 <code>git checkout --track origin/qxg</code> 等价。
+</p>
+</div>
+</div>
+<div id="outline-container-orga04f326" class="outline-3">
+<h3 id="orga04f326">包含路径的git checkout命令</h3>
+<div class="outline-text-3" id="text-orga04f326">
+<p>
+<code>git checkout -- &lt;file&gt;</code> 将暂存区中的文件取出覆盖工作区。如果刚刚使用 <code>git add</code> 提交某一文件，想要撤销可使用该命令，但是该命令是以覆盖的方式。
+</p>
+
+<p>
+那么 <code>git checkout .</code> 或 <code>git checkout -- .</code> 则会将暂存区的所有文件取出并覆盖给工作区，意味着清空工作区内容
+</p>
+
+<p>
+<code>git checkout &lt;commit-id&gt; -- &lt;file&gt;</code> 使用某提交后的文件来替换当前工作区和暂存区的文件。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc60597e" class="outline-3">
+<h3 id="orgc60597e">git cherry-pick</h3>
+<div class="outline-text-3" id="text-orgc60597e">
+<p>
+该命令用于将某个commmit直接用作当前HEAD，比如当前分支位于master,存在另一个分支Test,现在想把Test中的内容整合到master，但是不是merge，因为还要在Test上进行操作，那么就可以使用cherry-pick
+</p>
+<div class="org-src-container">
+<pre class="src src-git">git checkout master
+git cherry-pick &lt;Test&gt;
+</pre>
+</div>
+<p>
+该命令直接会完成一次提交，该提交和Test中的提交一摸一样包括内容和提交的说明。但是注意 <code>git cherry-pick</code> 只能把对应的最新版本提交到当前版本，和git merge有很大出入。 
+<code>git merge</code> 成功后两个分支会变为一个。
+<code>git rebase</code> 会将当前分支的所有commit都重定向到目标分支上，并整个分支都会消失，看似是一直在主分支上进行操作一样。
+</p>
+
+<p>
+将test分支合并到master： <code>git checkout master</code> -&gt; <code>git merge test</code>
+变基方式将test分支合并到master: <code>git checkout test</code> -&gt; <code>git rebase master</code> ,如果遇到问题，解决后使用 <code>git add</code> 之后不用提交，直接 <code>git rebase --continue</code>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org03ab848" class="outline-2">
+<h2 id="org03ab848">取消git add命令汇总</h2>
+<div class="outline-text-2" id="text-org03ab848">
+<ul class="org-ul">
+<li><code>git reset</code></li>
+<li><code>git reset --mixed</code></li>
+<li><code>git reset HEAD</code></li>
+<li><code>git reset --mixed HEAD</code></li>
+<li><code>git checkout -- .</code> (保证git add后没有进行其他操作)</li>
+<li><code>git checkout .</code> (同上)</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb967c80" class="outline-2">
+<h2 id="orgb967c80">取消git add 某file命令汇总</h2>
+<div class="outline-text-2" id="text-orgb967c80">
+<ul class="org-ul">
+<li><code>git checkout -- &lt;file&gt;</code></li>
+<li><code>git checkout &lt;file&gt;</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgdccb6f3" class="outline-2">
+<h2 id="orgdccb6f3">取消git commit 到 git add 命令汇总</h2>
+<div class="outline-text-2" id="text-orgdccb6f3">
+<ul class="org-ul">
+<li><code>git reset --soft HEAD^</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org4adb114" class="outline-2">
+<h2 id="org4adb114">取消git commit到工作区命令汇总</h2>
+<div class="outline-text-2" id="text-org4adb114">
+<ul class="org-ul">
+<li><code>git reset --mixed HEAD^</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org2993f7d" class="outline-2">
+<h2 id="org2993f7d">别名</h2>
+<div class="outline-text-2" id="text-org2993f7d">
+<ul class="org-ul">
+<li><code>git config --system alias.lg "log --graph --pretty=oneline"</code>,之后 <code>git lg</code> 就可以看到分支的运行状态。</li>
+<li><code>git config --system alias.st status</code> 则 <code>git st == git status</code></li>
+<li>善用别名</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgf658b26" class="outline-2">
+<h2 id="orgf658b26">删除当前分支</h2>
+<div class="outline-text-2" id="text-orgf658b26">
+<p>
+<code>git branch -D &lt;分支名&gt;</code>,可能需要 <code>git stash</code> 命令
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgadd9990" class="outline-2">
+<h2 id="orgadd9990">从指定远程分支pull代码到当前分支</h2>
+<div class="outline-text-2" id="text-orgadd9990">
+<p>
+<code>git pull origin &lt;branch-name&gt;</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7958526" class="outline-2">
+<h2 id="org7958526">当pull或merge出现冲突时</h2>
+<div class="outline-text-2" id="text-org7958526">
+<p>
+使用 <code>git mergetool</code> 来解决冲突
+或者自己修改冲突后，使用 <code>git add</code> 并提交即可。
+如果不想修改冲突，可以使用 <code>git reset</code> 来取消暂存区的内容。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbbcab86" class="outline-2">
+<h2 id="orgbbcab86">git revert</h2>
+<div class="outline-text-2" id="text-orgbbcab86">
+<p>
+<code>git revert HEAD</code> 所做的操作是撤销当前的提交，但是其并不是真正撤销，而是将对应的类似撤销的操作当作一个提交，提交后内容和上一次的提交内容一样。所以如果当前提交为 <code>A -&gt; B</code> ，那么执行 <code>git revert HEAD</code> 后，当前的提交就变为 <code>A -&gt; B -&gt; A'</code>  其中 <code>A'</code> 和 <code>A</code> 内容一样，不过 <code>commit-id</code> 不一样。
+</p>
+</div>
+</div>
+<div id="outline-container-orgbf9c175" class="outline-2">
+<h2 id="orgbf9c175">git clone不仅克隆远程分支，也可克隆本地</h2>
+<div class="outline-text-2" id="text-orgbf9c175">
+<p>
+如: <code>git clone /home/qxg/demo /home/qxg/demo-backup</code> 
+</p>
+</div>
+</div>
+<div id="outline-container-orgfe5bd70" class="outline-2">
+<h2 id="orgfe5bd70">git pull/push</h2>
+<div class="outline-text-2" id="text-orgfe5bd70">
+<p>
+ <code>git pull/push [&lt;remote-repos&gt; [&lt;refspec&gt;]]</code> 
+[]标记的可省略， <code>&lt;remote-repose&gt;</code> 是远程版本库， <code>refspec</code> 是引用表达式。
+</p>
+</div>
+</div>
+<div id="outline-container-org495c0c1" class="outline-2">
+<h2 id="org495c0c1">git remote</h2>
+<div class="outline-text-2" id="text-org495c0c1">
+<p>
+<code>git remote -v</code> 可以查看上游版本库，正常操作就是设置的对应的远程版本库。其实注册的上游版本库在 <code>.git/config</code> 中都可以查看到。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd710992" class="outline-2">
+<h2 id="orgd710992">git reflog</h2>
+<div class="outline-text-2" id="text-orgd710992">
+<p>
+当使用 <code>git reset</code> 来重置到之前的版本时，之间的版本将在 <code>git log</code> 中消失，如果想回退就需要使用 <code>git reflog</code> ，该命令打印出来的 <code>log</code> 会包含任何版本的信息，包括 <code>git reset</code> 的操作。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga66b6b5" class="outline-2">
+<h2 id="orga66b6b5">拉代码的时候让本地和远程对应</h2>
+<div class="outline-text-2" id="text-orga66b6b5">
+<p>
+<code>git checkout -b &lt;new-branch&gt; &lt;remote-branch&gt;</code>
+eg: <code>git checkout -b qxg origin/master_xxx</code>
+</p>
+
+<p>
+当执行 <code>git chekcout -b qxg</code> 来创建分支的时候，是不会指定远程跟踪分支的，也不会指定本地跟踪分支的。如果要创建远程跟踪分支，就是上边的命令。
+<code>git checkout -b qxg &lt;local-branch&gt;</code> 执行该命令也不会将本地分支设置为跟踪分支，除非加上 <code>--track</code> ，即 <code>git checkout -b --track qxg &lt;local-branch&gt;</code> 。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2bb59a0" class="outline-2">
+<h2 id="org2bb59a0">如果没有设置跟踪分支</h2>
+<div class="outline-text-2" id="text-org2bb59a0">
+<p>
+如果没有设置对应的远程跟踪分支，或是没有设置上游分支，可以使用命令 <code>git branch -u &lt;remote-name&gt;/&lt;branch&gt;</code> 来设置，如 <code>git branch -u origin/qxg</code> 或 <code>git branch --set-upstream-to origin/qxg</code> 。
+</p>
+</div>
+</div>
+<div id="outline-container-org0ddc855" class="outline-2">
+<h2 id="org0ddc855">git tag</h2>
+<div class="outline-text-2" id="text-org0ddc855">
+<p>
+给对应的commit-id创建一个标签，在其他需要commit-id的参数的时候，就可以用tag来代替。 <code>git tag &lt;tag-name&gt; &lt;commit-id&gt;</code> 如 <code>git tag super-power HEAD^</code> 表示给上一个版本的提交起个名字super-power
+</p>
+</div>
+</div>
+<div id="outline-container-orgda2dbfc" class="outline-2">
+<h2 id="orgda2dbfc">git status -s</h2>
+<div class="outline-text-2" id="text-orgda2dbfc">
+<p>
+<code>git status -s</code> 或 <code>git status --short</code> 显示的status简略
+</p>
+<p class="verse">
+$ git status -s<br />
+&#xa0;M README<br />
+MM Rakefile<br />
+A lib/git.rb<br />
+M lib/simplegit.rb<br />
+?? LICENSE.txt<br />
+</p>
+<p>
+除了 <code>??</code> 表示未暂存，其他的标记只要在第一列都表示已加到暂存区了，第二列的M表示文件被修改，没加入暂存区，第一列的M表示文件被修改并加入暂存区，而第一列的A表示文件新添加的并加入了暂存区。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaae5950" class="outline-2">
+<h2 id="orgaae5950">origin</h2>
+<div class="outline-text-2" id="text-orgaae5950">
+<p>
+origin是远程仓库的名字，当使用git pull 或git push的时候，需要指定远程仓库，比如<a href="http://xxxxx.git这种，而origin默认就指定了这些仓库，所以">http://xxxxx.git这种，而origin默认就指定了这些仓库，所以</a> <code>git push origin qxg</code> 就是将当前的代码提交到远程仓库的qxg分支中，如果本地没有指定origin对应的仓库，则会执行失败。
+同样的origin名字也可以更改，master也可以更改，master是分支。
+</p>
+
+<p>
+当执行 <code>git push origin qxg</code> 时候，实际上是执行 <code>git push origin refs/heads/qxg:refs/heads/qxg</code>  <code>:</code> 前表示本地分支，该代码就表示将本地的qxg分支推送到远程的qxg分支。
+同样也可以使用 <code>git push origin qxg:qxg</code> ，而使用 <code>git push origin qxg:other</code> 将本地qxg分支推送到远程的other分支上。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1ccd612" class="outline-2">
+<h2 id="org1ccd612">git branch</h2>
+<div class="outline-text-2" id="text-org1ccd612">
+<ul class="org-ul">
+<li><code>git branch -a</code> 查看所有分支</li>
+<li><code>git branch -r</code> 查看远程分支</li>
+<li><code>git branch</code> 查看本地分支</li>
+<li><code>git branch -vv</code> 查看本地分支和远程分支的对应。</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5e10ad3" class="outline-2">
+<h2 id="org5e10ad3">删除远程分支</h2>
+<div class="outline-text-2" id="text-org5e10ad3">
+<ul class="org-ul">
+<li><code>git push &lt;remote-name&gt; --delete &lt;branch&gt;</code></li>
+<li><code>git push origin --delete qxg</code> 可以删除origin对应的qxg分支。</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgcb714f9" class="outline-2">
+<h2 id="orgcb714f9">冲突的相关问题</h2>
+<div class="outline-text-2" id="text-orgcb714f9">
+<p>
+master分支pull完代码后合并到qxg分支出现冲突，解决完冲突后git add ,commit后，其实master和qxg就合并了，生成了一个新的节点并且该节点的父节点可以理解有两个，然后切换到master,git merge qxg其实就是将master指针直接指向那个交叉的节点。但是远程的master还在老位置，所以这个时候再pull代码不会有新代码了，这个时候master就可以提交了。仔细考虑考虑这个问题。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge46ce3f" class="outline-2">
+<h2 id="orge46ce3f">git push</h2>
+<div class="outline-text-2" id="text-orge46ce3f">
+<ul class="org-ul">
+<li>默认的 <code>git push</code> 会把所有的分支都push。</li>
+<li>如果想要执行特定的push,需要执行 <code>git push origin qxg</code> ,则会把qxg分支推送的远程的qxg分支上。</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgdb45966" class="outline-2">
+<h2 id="orgdb45966">替换某个分支的文件到另一个分支</h2>
+<div class="outline-text-2" id="text-orgdb45966">
+<p>
+其实这个问题的解法有很多，一个是 <code>git cherry-pick</code> ，但是该方法的使用有局限，限制在某次提交上。
+另一个是 <code>git checkout &lt;commit-id&gt; -- file</code> ,个人比较喜欢的是第二个。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga7765a3" class="outline-2">
+<h2 id="orga7765a3">git使用A账户commit,git push时报错，非本人操作</h2>
+<div class="outline-text-2" id="text-orga7765a3">
+<p>
+此时应该使用 <code>git reset --soft HEAD^</code> ,该操作将状态还原到 <code>git add</code> 后，即重新进行提交，但是前提是已切换过账户。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge8ef334" class="outline-2">
+<h2 id="orge8ef334">.gitignore失效问题</h2>
+<div class="outline-text-2" id="text-orge8ef334">
+<p>
+如果git add将某些文件track了，那么此时再编写gitignore，只要这些文件被track就不会被忽略，此时需要做的操作是 <code>git rm -r --cached .</code> ,接着编写.gitignore再add,commit即可。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org35cc8a9" class="outline-2">
+<h2 id="org35cc8a9">refs/for</h2>
+<div class="outline-text-2" id="text-org35cc8a9">
+<p>
+refs/for不是git的规则，而是gerrit的规则，使用refs/for的需要进行评审，或叫做code review才能进行合并。
+refs/heads 则不需要code review,如上所述， <code>git push origin master</code> 实际就是 <code>git push origin refs/heads/master:refs/heads/master</code> 的缩写
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-06-04 Tue 00:03</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

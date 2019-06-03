@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-05-26 Sun 16:05 -->
+<!-- 2019-06-04 Tue 00:03 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Linux手册</title>
@@ -46,6 +46,12 @@
 <li><a href="#org1c1c945">修改文件</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#orgacdf6ec">ln</a>
+<ul>
+<li><a href="#orgbdb361b">针对文件建立链接</a></li>
+<li><a href="#org1c61eb9">针对目录建立链接</a></li>
 </ul>
 </li>
 <li><a href="#org6ca6642">后记</a></li>
@@ -236,6 +242,33 @@ sed -n <span style="color: #E6DB74;">"${i}p"</span> xx
 </div>
 </div>
 </div>
+<div id="outline-container-orgacdf6ec" class="outline-2">
+<h2 id="orgacdf6ec">ln</h2>
+<div class="outline-text-2" id="text-orgacdf6ec">
+<p>
+建立软/硬链接
+命令： <code>ln -s [源文件] [目标文件]</code>
+</p>
+</div>
+<div id="outline-container-orgbdb361b" class="outline-3">
+<h3 id="orgbdb361b">针对文件建立链接</h3>
+<div class="outline-text-3" id="text-orgbdb361b">
+<p>
+链接分为硬链接和软链接。假设有一个文件/home/qxg/good,那么通过`ln /home/qxg/good /tmp/bad`创建该文件的硬链接，处于/tmp/下名为bad。那么在修改good文件的时候，bad文件也会跟着修改，但是删除good的时候，bad依然存在，可以理解为硬链接就是java中的引用，其只是指向了文件的实际位置。
+而软链接就类似windows中的快捷方式，一般推荐使用软链接的形式。
+但是注意一点，在创建链接的时候，源文件的路径一定要写绝对路径。
+</p>
+</div>
+</div>
+<div id="outline-container-org1c61eb9" class="outline-3">
+<h3 id="org1c61eb9">针对目录建立链接</h3>
+<div class="outline-text-3" id="text-org1c61eb9">
+<p>
+目录只能使用软链接来进行创建，创建方式和软链接一样： <code>ln -s /home/dir/one /home/dir/two</code> 
+</p>
+</div>
+</div>
+</div>
 <div id="outline-container-org6ca6642" class="outline-2">
 <h2 id="org6ca6642">后记</h2>
 <div class="outline-text-2" id="text-org6ca6642">
@@ -247,7 +280,7 @@ sed -n <span style="color: #E6DB74;">"${i}p"</span> xx
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-05-26 Sun 16:05</p>
+<p class="date">Created: 2019-06-04 Tue 00:03</p>
 <p class="validation"></p>
 </div>
 </body>

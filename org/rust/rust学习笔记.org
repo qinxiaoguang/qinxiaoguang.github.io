@@ -8,6 +8,10 @@ https://rustcc.gitbooks.io/rustprimer/content/
 4. =git clone https://github.com/rust-lang/rust.git ~/.rust=
 5. ~export RUST_SRC_PATH="/path/to/rust/src"~
 6. emacs环境: ~(setenv "RUST_SRC_PATH" "/path/to/rust/src")~
+* update
+=rustup update= : stable版本更新
+=rustup install nightly= nightly版本更新
+
 * emacs配置
 #+BEGIN_SRC elisp
 (use-package rust-mode :ensure t :defer t
@@ -316,6 +320,7 @@ for x in 0..10 {
 
 // 获取索引，使用enumerate()函数
 for (i,j) in (0..10).enumerate() {
+    // 注意j是引用
     println!("i is {}, j is {}", i, j);
 }
 #+END_SRC
@@ -1021,7 +1026,9 @@ fn test_hashmap(){
      let mut map :HashMap<_,_>= vec1.iter().zip(vec2.iter()).collect();
      // 新建
      let mut map:HashMap<&str,&str> = HashMap::new();
+     // let mut map = HashMap::with_capacity(5);
      // 插入数据
+     // 注意插入数据是k,v，但是获取数据时使用的是&k
      map.insert("haha","hwihwi");
 
      println!("{:?}",map);

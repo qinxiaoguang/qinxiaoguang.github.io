@@ -6,15 +6,15 @@
 - Linux 从业利器: http://cenalulu.github.io/linux/tmux/
 - Tmux美化: https://github.com/gpakosz/.tmux , 其中的powerline的箭头需要到~/.tmux.conf.local中修改,修改完毕后中,在tmux中使用 =C-b := 命令,并键入 =source-file ~/.tmux.conf= 来更新
 * 命令
-- =tmux= 运行,若发现乱码,可使用 =tmux -u= 来运行,即用utf-8
-- =tmux ls= 显示所有会话,或者在tmux中,使用 =C-b s=
-- =tmux new= 新建会话,不指定名字,不推荐 =tmux new -s session-name= 新建会话,指定名字,推荐
-- =tmux a= 接入(attach)第一个可用的会话, =tmux a -t session-name= 接入指定会话
-- =tmux detach= 从会话中断开,或 =C-b d=
-- =tmux kill-session -t session-name= 关闭会话,shutdown, =tmux killall= 关闭所有
+- =tmux= :运行,若发现乱码,可使用 =tmux -u= 来运行,即用utf-8
+- =tmux ls= :显示所有会话,或者在tmux中,使用 =C-b s=
+- =tmux new= :新建会话,不指定名字,不推荐 =tmux new -s session-name= 新建会话,指定名字,推荐
+- =tmux a= :接入(attach)第一个可用的会话, =tmux a -t session-name= 接入指定会话
+- =tmux detach= :从会话中断开,或 =C-b d=
+- =tmux kill-session -t session-name= :关闭会话,shutdown, =tmux killall= 关闭所有
 * 快捷键
 prefix为 =C-a= 或 =C-s=,每个快捷键都需要前缀,后边省略
-=prefix ?= 可以显示当前的快捷键绑定
+=prefix ?= :可以显示当前的快捷键绑定
 ** 会话篇
 | name | des            |
 |------+----------------|
