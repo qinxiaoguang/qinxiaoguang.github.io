@@ -1,4 +1,7 @@
 $(function(){
-    var height = $(document.body).height();
-    document.getElementById("content").style.height = ""+height + "px"
+    var screenHeight = $(document.body).height();
+    var contentHeight = $("#content").height();
+    if (contentHeight < screenHeight) {
+        document.getElementById("content").style.height = ""+height + "px"
+    }
 })
