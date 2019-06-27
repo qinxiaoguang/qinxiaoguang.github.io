@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-06-27 Thu 12:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>go读写数据</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">go读写数据</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgb4fd9d4">用户输入</a>
+<ul>
+<li><a href="#org8a77d39">fmt.Scanxx</a>
+<ul>
+<li><a href="#orgd1b538f">fmt.Scanln</a></li>
+<li><a href="#org1da1c29">fmt.Scanf()</a></li>
+<li><a href="#org77eaa1e">fmt.Scan()</a></li>
+</ul>
+</li>
+<li><a href="#org74b36b5">fmt.Sscanxxx</a></li>
+<li><a href="#orgf549819">bufio</a>
+<ul>
+<li><a href="#org4f043ef">bufio.NewScanner</a></li>
+<li><a href="#org56495cb">bufio.NewReader</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org541da0a">文件读写</a>
+<ul>
+<li><a href="#orgb8e6273">os.Open和bufio</a></li>
+<li><a href="#orgafb356a">ioutil</a></li>
+<li><a href="#orgc78a9de">缓冲读取</a></li>
+<li><a href="#org258886e">fmt.Fscanxxx</a></li>
+<li><a href="#org450e854">文件写入</a></li>
+<li><a href="#org56a04ec">文件覆盖</a></li>
+</ul>
+</li>
+<li><a href="#org147ab96">文件拷贝</a></li>
+<li><a href="#org1c3af83">命令行读取</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb4fd9d4" class="outline-2">
+<h2 id="orgb4fd9d4">用户输入</h2>
+<div class="outline-text-2" id="text-orgb4fd9d4">
+</div>
+<div id="outline-container-org8a77d39" class="outline-3">
+<h3 id="org8a77d39">fmt.Scanxx</h3>
+<div class="outline-text-3" id="text-org8a77d39">
+</div>
+<div id="outline-container-orgd1b538f" class="outline-4">
+<h4 id="orgd1b538f">fmt.Scanln</h4>
+<div class="outline-text-4" id="text-orgd1b538f">
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">var</span> s1,s2 string
+fmt.<span style="color: #A6E22E;">Scanln</span>(&amp;s1,&amp;s2)
+</pre>
+</div>
+<p>
+以上是读取一行，以空格分隔，直到遇到非空字符。所以如果代码是这样的：
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">var</span> s1,s2 string
+fmt.<span style="color: #A6E22E;">Scanln</span>(&amp;s1)
+fmt.<span style="color: #A6E22E;">Scanln</span>(&amp;s2)
+fmt.<span style="color: #A6E22E;">Printnln</span>(s1,s2)
+</pre>
+</div>
+<p>
+而输入了 <code>abcd efg</code> 那么输出将会是 <code>abcd fg</code> ,因为第二个单词的第一个字符被当作换行处理。但是如果输入 <code>abcd\n</code> ，那么第二个字符串将会读取不到，因为是按行来读取的，遇到换行直接就读完了。
+</p>
+</div>
+</div>
+<div id="outline-container-org1da1c29" class="outline-4">
+<h4 id="org1da1c29">fmt.Scanf()</h4>
+<div class="outline-text-4" id="text-org1da1c29">
+<p>
+<code>fmt.Scanf</code> 和C语言中的scanf用法一样: <code>fmt.Scanf("%s%s",&amp;s1,&amp;s2)</code> 
+</p>
+</div>
+</div>
+<div id="outline-container-org77eaa1e" class="outline-4">
+<h4 id="org77eaa1e">fmt.Scan()</h4>
+<div class="outline-text-4" id="text-org77eaa1e">
+<p>
+<code>fmt.Scan()</code> 不处理换行符，直到传入的参数都读取完毕。如 <code>fmt.Scan(&amp;s1,&amp;2)</code> ,读取的两个字符串之间可以有换行符。
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org74b36b5" class="outline-3">
+<h3 id="org74b36b5">fmt.Sscanxxx</h3>
+<div class="outline-text-3" id="text-org74b36b5">
+<p>
+遇到S开头的scan函数，其处理的都是字符串，不会处理用户输入。
+如:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">input := <span style="color: #E6DB74;">"abcd efg"</span>
+fmt.<span style="color: #A6E22E;">Sscan</span>(input,&amp;s1,&amp;s2)
+fmt.<span style="color: #A6E22E;">Sscanln</span>(input,&amp;s1,&amp;s2)
+fmt.<span style="color: #A6E22E;">Sscanf</span>(input,<span style="color: #E6DB74;">"%s%s"</span>,&amp;s1,&amp;s2)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf549819" class="outline-3">
+<h3 id="orgf549819">bufio</h3>
+<div class="outline-text-3" id="text-orgf549819">
+<p>
+利用bufio也可以读取数据：
+</p>
+</div>
+<div id="outline-container-org4f043ef" class="outline-4">
+<h4 id="org4f043ef">bufio.NewScanner</h4>
+<div class="outline-text-4" id="text-org4f043ef">
+<div class="org-src-container">
+<pre class="src src-go">inputScanner := bufio.<span style="color: #A6E22E;">NewScanner</span>(os.Stdin)
+inputScanner.<span style="color: #A6E22E;">Scan</span>()
+fmt.<span style="color: #A6E22E;">Println</span>(inputScanner.<span style="color: #A6E22E;">Text</span>())
+</pre>
+</div>
+<p>
+其中inputScanner.Scan()会将读取的一行数据保存在内部的缓冲区中，使用inputScanner.Text()可以将其读取出来，注意Scan不会将换行符读进去，并且类似 <code>\n</code> 这种字符，他又不会去转义。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org56495cb" class="outline-4">
+<h4 id="org56495cb">bufio.NewReader</h4>
+<div class="outline-text-4" id="text-org56495cb">
+<div class="org-src-container">
+<pre class="src src-go">inputReader := bufio.<span style="color: #A6E22E;">NewReader</span>(os.Stdin)
+input,err := inputReader.<span style="color: #A6E22E;">ReadString</span>(<span style="color: #E6DB74;">','</span>)
+</pre>
+</div>
+<p>
+但是注意，这个函数和inputScanner不一样，这个是直接返回读取的数据以及error，其中参数表示，读取到对应的字符就停止，并且返回的数据包含该字符。所以如果输入是 <code>abcd,</code> ，则input的值就是 <code>abcd,</code>
+不止ReadString可以读取， <code>ReadBytes</code> 也可以读取，不过 <code>ReadBytes</code> 返回的是byte类型的切片。byte类型的切片又和string可以互转，所以基本上是一样的。
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org541da0a" class="outline-2">
+<h2 id="org541da0a">文件读写</h2>
+<div class="outline-text-2" id="text-org541da0a">
+</div>
+<div id="outline-container-orgb8e6273" class="outline-3">
+<h3 id="orgb8e6273">os.Open和bufio</h3>
+<div class="outline-text-3" id="text-orgb8e6273">
+<p>
+<code>os.Open("input.txt")</code> 用于打开一个文件，文件类型一般是 <code>os.*File</code> 类型，而 <code>os.Stdin</code> 也是 <code>os.*File</code> 类型，所以对于 <code>bufio.NewScanner()</code> 或 <code>bufio.NewReader</code> 也可以传入一个文件。所以文件读取最简单的思路就是通过 <code>os.Open</code> 和 <code>bufio</code> 包实现:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">file,err := os.<span style="color: #A6E22E;">Open</span>(<span style="color: #E6DB74;">"test.go"</span>)
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span>{
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#35835;&#21462;&#25991;&#20214;&#22833;&#36133;"</span>)
+}
+inputScan := bufio.<span style="color: #A6E22E;">NewScanner</span>(file)
+<span style="color: #F92672;">for</span> inputScan.<span style="color: #A6E22E;">Scan</span>() {
+    fmt.<span style="color: #A6E22E;">Println</span>(inputScan.<span style="color: #A6E22E;">Text</span>())
+}
+</pre>
+</div>
+<p>
+当然也可以通过 <code>bufio.NewReader(file)</code> 来实现，但是注意，这种方法实现的需要判断 <code>err</code> ，如果读取到文件结尾，将会返回io.EOF，所以读取整个文件的方式是：
+</p>
+<div class="org-src-container">
+<pre class="src src-go">file,err := os.<span style="color: #A6E22E;">Open</span>(<span style="color: #E6DB74;">"test.go"</span>)
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span>{
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#35835;&#21462;&#25991;&#20214;&#22833;&#36133;"</span>)
+}
+inputReader := bufio.<span style="color: #A6E22E;">NewReader</span>(file)
+<span style="color: #F92672;">for</span> {
+    line,err := inputReader.<span style="color: #A6E22E;">ReadString</span>(<span style="color: #E6DB74;">'\n'</span>)
+    fmt.<span style="color: #A6E22E;">Printf</span>(<span style="color: #E6DB74;">"%s"</span>,line)
+    <span style="color: #F92672;">if</span> err == io.<span style="color: #66D9EF;">EOF</span>{
+        <span style="color: #F92672;">return</span>
+    }
+}
+</pre>
+</div>
+<p>
+注意返回io.EOF的时候，line变量里也会有值。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgafb356a" class="outline-3">
+<h3 id="orgafb356a">ioutil</h3>
+<div class="outline-text-3" id="text-orgafb356a">
+<p>
+利用ioutil.ReadXxx的函数可以读取文件内容或用户输入,如:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">file,err := os.<span style="color: #A6E22E;">Open</span>(<span style="color: #E6DB74;">"test.go"</span>)
+<span style="color: #F92672;">defer</span> file.<span style="color: #A6E22E;">Close</span>()
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span>{
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#35835;&#21462;&#38169;&#35823;"</span>)
+}
+bytes,err := ioutil.<span style="color: #A6E22E;">ReadAll</span>(file)
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span>{
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#35835;&#21462;&#21448;&#38169;&#35823;"</span>)
+}
+fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #A6E22E;">string</span>(bytes))
+</pre>
+</div>
+<p>
+ioutil.ReadAll传入的是io.Reader，所以对于os.Open，其刚好返回io.Reader，所以是可以的。
+同样也可以使用 <code>ioutil.ReadFile</code> 方法，该方法其实就是对上述方法的封装:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">bytes,err := ioutil.<span style="color: #A6E22E;">ReadFile</span>(<span style="color: #E6DB74;">"test.go"</span>)
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span>{
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#35835;&#21462;&#38169;&#35823;"</span>)
+}
+fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #A6E22E;">string</span>(bytes))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc78a9de" class="outline-3">
+<h3 id="orgc78a9de">缓冲读取</h3>
+<div class="outline-text-3" id="text-orgc78a9de">
+<div class="org-src-container">
+<pre class="src src-go">f,err := os.<span style="color: #A6E22E;">Open</span>(<span style="color: #E6DB74;">"test.go"</span>)
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span>{
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#38169;&#35823;"</span>)
+}
+fefer f.<span style="color: #A6E22E;">Close</span>()
+inputReader := bufio.<span style="color: #A6E22E;">NewReader</span>(f)
+buf := <span style="color: #F92672;">make</span>([]<span style="color: #66D9EF;">byte</span>,1024)
+n,err := inputReader.<span style="color: #A6E22E;">Read</span>(buf)
+<span style="color: #F92672;">for</span> n!=0 &amp;&amp; err ==<span style="color: #AE81FF;">nil</span>{
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #A6E22E;">string</span>(buf))
+    n,err = inputReader.<span style="color: #A6E22E;">Read</span>(buf)
+}
+</pre>
+</div>
+<p>
+其中inpuReader.Read方法传入的就是缓冲的参数，该函数返回的是n表示读入的字节个数。注意，一定要融会贯通，这样读取的方式不仅仅对文件使用，同样对屏幕输入适用。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org258886e" class="outline-3">
+<h3 id="org258886e">fmt.Fscanxxx</h3>
+<div class="outline-text-3" id="text-org258886e">
+<p>
+同样fmt里包含F开头的一些读取函数，与 <code>fmt.Sscanln</code> <code>fmt.Sscan</code> <code>fmt.Sscanf</code> 是类似的，不过第一个参数从传入字符串，变成了传入文件。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org450e854" class="outline-3">
+<h3 id="org450e854">文件写入</h3>
+<div class="outline-text-3" id="text-org450e854">
+<p>
+最简单的是通过fmt.Fprintf将一个字符串写入: <code>fmt.Fprintf(file,"some data\n")</code> 或 <code>fmt.Fprintln(file,"some data")</code> 
+</p>
+<div class="org-src-container">
+<pre class="src src-go">f,_ := os.<span style="color: #A6E22E;">Open</span>(<span style="color: #E6DB74;">"test.go"</span>)
+_,err := fmt.<span style="color: #A6E22E;">Fprintln</span>(f,<span style="color: #E6DB74;">"someData"</span>)
+fmt.<span style="color: #A6E22E;">Println</span>(err)
+</pre>
+</div>
+<p>
+这种方式要注意权限，如果没有权限就会写入不成功
+另一种方法是通过 <code>os.OpenFile</code> 来打开文件，并且赋予打开的方式，如:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">outputFile,err := os.<span style="color: #A6E22E;">OpenFile</span>(<span style="color: #E6DB74;">"test.go"</span>,os.O_WRONLY|os.O_CREATE,0666)
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span>{
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#38169;&#35823;"</span>)
+}
+<span style="color: #F92672;">defer</span> outputFile.<span style="color: #A6E22E;">Close</span>()
+outputFile.<span style="color: #A6E22E;">WriteString</span>(<span style="color: #E6DB74;">"&#21704;&#21704;&#21704;&#65292;&#25105;&#32456;&#20110;&#20889;&#36827;&#26469;&#20102;"</span>)
+</pre>
+</div>
+<p>
+需要注意的是，第二个参数是打开的模式，可以有只读模式，以及追加模式等，一般用的模式有：
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">const</span> (
+    O_RDONLY int = syscall.O_RDONLY <span style="color: #75715E;">// </span><span style="color: #75715E;">open the file read-only.</span>
+    O_WRONLY int = syscall.O_WRONLY <span style="color: #75715E;">// </span><span style="color: #75715E;">open the file write-only.</span>
+    O_RDWR   int = syscall.O_RDWR   <span style="color: #75715E;">// </span><span style="color: #75715E;">open the file read-write.</span>
+    O_APPEND int = syscall.O_APPEND <span style="color: #75715E;">// </span><span style="color: #75715E;">append data to the file when writing.</span>
+    O_CREATE int = syscall.O_CREAT  <span style="color: #75715E;">// </span><span style="color: #75715E;">create a new file if none exists.</span>
+    O_EXCL   int = syscall.O_EXCL   <span style="color: #75715E;">// </span><span style="color: #75715E;">used with O_CREATE, file must not exist</span>
+    O_SYNC   int = syscall.O_SYNC   <span style="color: #75715E;">// </span><span style="color: #75715E;">open for synchronous I/O.</span>
+    O_TRUNC  int = syscall.O_TRUNC  <span style="color: #75715E;">// </span><span style="color: #75715E;">if possible, truncate file when opened.</span>
+)
+</pre>
+</div>
+<p>
+在写入文件的时候，第三个参数必须是0666，而对于读的时候可以忽略。
+如果写入的内容过多，可以通过bufio来创建一个有缓冲的写入器:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">bufio.<span style="color: #A6E22E;">NewWriter</span>(outputFile)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org56a04ec" class="outline-3">
+<h3 id="org56a04ec">文件覆盖</h3>
+<div class="outline-text-3" id="text-org56a04ec">
+<p>
+文件覆盖在打开文件的时候，一定要加上os.O<sub>TRUNC,或者在open</sub> file后调用 file.Trunscate(0),否则达不到文件覆盖的效果 
+</p>
+<div class="org-src-container">
+<pre class="src src-go">outputFile,err := os.<span style="color: #A6E22E;">OpenFile</span>(<span style="color: #E6DB74;">"test.go"</span>,os.O_WRONLY|os.O_CREATE|os_O_TRUNC,0666)
+<span style="color: #75715E;">// </span><span style="color: #75715E;">or outputFile.Trunscate(0)</span>
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span>{
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#38169;&#35823;"</span>)
+}
+<span style="color: #F92672;">defer</span> outputFile.<span style="color: #A6E22E;">Close</span>()
+outputFile.<span style="color: #A6E22E;">WriteString</span>(<span style="color: #E6DB74;">"&#21704;&#21704;&#21704;&#65292;&#25105;&#35206;&#30422;&#20102;&#25991;&#20214;"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org147ab96" class="outline-2">
+<h2 id="org147ab96">文件拷贝</h2>
+<div class="outline-text-2" id="text-org147ab96">
+<p>
+<code>io.Copy(target,source)</code>
+但是注意source文件可以通过os.Open读取，而target文件必须使用os.OpenFile来读取，并赋予os.O<sub>WRONLY标志或者其他可写标志</sub>。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1c3af83" class="outline-2">
+<h2 id="org1c3af83">命令行读取</h2>
+<div class="outline-text-2" id="text-org1c3af83">
+<p>
+命令行读取可以通过 <code>os.Args</code> 来获取命令的参数，同样可以通过flag包来设置参数。
+比如输入: <code>./goTest hahaha lalal</code> 那么os.Args中存放的就是[./goTest,hahaha,lalal]，可以通过os.Args[1]这种方式来取出。
+</p>
+
+<p>
+但是如果我想要 <code>./goTest -name Mike</code> 这种方式来取数据怎么办呢，方法就是通过flag包。
+比如:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">name := flag.<span style="color: #A6E22E;">String</span>(<span style="color: #E6DB74;">"name"</span>,<span style="color: #E6DB74;">""</span>,<span style="color: #E6DB74;">"&#36755;&#20837;&#20320;&#30340;&#21517;&#23383;~"</span>)
+flag.<span style="color: #A6E22E;">Parse</span>()
+fmt.<span style="color: #A6E22E;">Println</span>(*name)
+</pre>
+</div>
+<p>
+注意name是一个指针类型，通过flag.Parse()方法可以解析命令行参数，通过 <code>*name</code> 将输入取出， <code>flag.String</code> 的第一个参数表示命令行中的参数名，如输入 <code>./goTest -name "hahah"</code> ，其中 <code>-name</code> 就是对应第一个参数，第二个参数是name的默认值，如果没有输入，name的值就是这个默认值，第三个参数是说明，一般只有在 <code>help</code> 中出现。
+</p>
+
+<p>
+当然不仅仅有 <code>flag.String</code> 还有 <code>flag.Bool</code> 等方法。
+<code>falg.StringVar</code> 跟 <code>flag.String</code> 一样，只不过 <code>flag.StringVar</code> 没有返回值，而是将name指针传给了该方法: <code>flag.StringVar(&amp;name,"name","","输入你的名字~")</code> 
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

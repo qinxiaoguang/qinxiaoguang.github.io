@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-06-27 Thu 12:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>js常见问题</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">js常见问题</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org7ea05b0">中文本换行符替换为&lt;br&gt;</a></li>
+<li><a href="#org199cb37">url encode/decode</a></li>
+<li><a href="#org8e270e7">标签操作</a>
+<ul>
+<li><a href="#org7deaae9">获取指定标签</a></li>
+<li><a href="#org6ec995a">修改标签参数</a></li>
+</ul>
+</li>
+<li><a href="#org71f60e6">字符串包含另一字符串</a></li>
+<li><a href="#orge8cd47c">获取当前网页的host/path等</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7ea05b0" class="outline-2">
+<h2 id="org7ea05b0">中文本换行符替换为&lt;br&gt;</h2>
+<div class="outline-text-2" id="text-org7ea05b0">
+<p>
+td中的数据如果有换行一般不会解析为换行，所以有的时候需要使用js将这些换行符换成对应的&lt;br&gt;标签
+</p>
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #F92672;">var</span> <span style="color: #FD971F;">string</span> = <span style="color: #E6DB74;">"&#21704;&#21704;&#21704;\r\n"</span>
+string = string.replace(<span style="color: #E6DB74;">/\r\n/</span>g,<span style="color: #E6DB74;">"&lt;br&gt;"</span>).replace(<span style="color: #E6DB74;">/\n/</span>g,<span style="color: #E6DB74;">"&lt;br&gt;"</span>);
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org199cb37" class="outline-2">
+<h2 id="org199cb37">url encode/decode</h2>
+<div class="outline-text-2" id="text-org199cb37">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #F92672;">var</span> <span style="color: #FD971F;">input</span> = <span style="color: #E6DB74;">"&#22079;&#65281;&#21704;&#65281;  "</span>; 
+encodeInput = encodeURIComponent();  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#32534;&#30721;</span>
+input = decodeURIComponent(encodeInput); <span style="color: #75715E;">//</span><span style="color: #75715E;">&#35299;&#30721;</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org8e270e7" class="outline-2">
+<h2 id="org8e270e7">标签操作</h2>
+<div class="outline-text-2" id="text-org8e270e7">
+</div>
+<div id="outline-container-org7deaae9" class="outline-3">
+<h3 id="org7deaae9">获取指定标签</h3>
+<div class="outline-text-3" id="text-org7deaae9">
+<div class="org-src-container">
+<pre class="src src-js">inputs = document.querySelectorAll(<span style="color: #E6DB74;">"input#su.bg.s_btn"</span>) <span style="color: #75715E;">//</span><span style="color: #75715E;">&#33719;&#21462;input&#26631;&#31614;&#19988;id&#20026;su,class&#20026;bg,s_btn&#30340;&#26631;&#31614;,&#27880;&#24847;&#36820;&#22238;&#30340;&#26159;&#25968;&#32452;</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org6ec995a" class="outline-3">
+<h3 id="org6ec995a">修改标签参数</h3>
+<div class="outline-text-3" id="text-org6ec995a">
+<div class="org-src-container">
+<pre class="src src-js">inputs = document.querySelectorAll(<span style="color: #E6DB74;">"input#su.bg.s_btn"</span>);
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#33719;&#21462;&#26631;&#31614;&#21442;&#25968;</span>
+onclickValue = inputs[0].getAttribute(<span style="color: #E6DB74;">"onclick"</span>);
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20462;&#25913;&#26631;&#31614;&#21442;&#25968;</span>
+inputs[0].setAttribute(<span style="color: #E6DB74;">'value'</span>,<span style="color: #E6DB74;">"&#30334;&#24230;&#20004;&#19979;"</span>);
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20462;&#25913;&#26679;&#24335;</span>
+inputs[0].style.backgroundColor = <span style="color: #E6DB74;">"red"</span>;
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org71f60e6" class="outline-2">
+<h2 id="org71f60e6">字符串包含另一字符串</h2>
+<div class="outline-text-2" id="text-org71f60e6">
+<div class="org-src-container">
+<pre class="src src-js">first = <span style="color: #E6DB74;">"hhhhha"</span>;
+sub = <span style="color: #E6DB74;">"hh"</span>;
+<span style="color: #F92672;">if</span> (first.indexOf(sub) != 1){
+    console.log(<span style="color: #E6DB74;">"&#21253;&#21547;"</span>)
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge8cd47c" class="outline-2">
+<h2 id="orge8cd47c">获取当前网页的host/path等</h2>
+<div class="outline-text-2" id="text-orge8cd47c">
+<div class="org-src-container">
+<pre class="src src-js">host = location.host; 
+pathname = location.pathname; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#22914;www.baidu.com/s&#36820;&#22238; /s,&#33509;&#26080;path&#21017;&#36820;&#22238;/</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

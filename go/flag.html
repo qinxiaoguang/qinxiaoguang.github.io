@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-06-27 Thu 12:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>flag使用方法</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">flag使用方法</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org28ce7e3">flag操作</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org28ce7e3" class="outline-2">
+<h2 id="org28ce7e3">flag操作</h2>
+<div class="outline-text-2" id="text-org28ce7e3">
+<p>
+首先说明flag是干什么的。
+我们都看到过在linux下这样执行的命令:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">cmd -name value
+</pre>
+</div>
+<p>
+那么我想在go执行的时候，也加上-name value这样的命令，并且能够接受到，怎么做呢，方法就是使用flag包。
+如下所示:
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">func</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #F92672;">var</span> q = flag.<span style="color: #A6E22E;">Bool</span>(<span style="color: #E6DB74;">"name"</span>,<span style="color: #AE81FF;">false</span>,<span style="color: #E6DB74;">"tips"</span>)  <span style="color: #75715E;">//</span><span style="color: #75715E;">&#21019;&#24314;name&#21517;&#31216;&#32465;&#23450;&#30340;&#21464;&#37327;&#65292;&#27880;&#24847;&#65292;q&#26159;&#25351;&#38024;&#31867;&#22411;&#30340;&#65292;&#40664;&#35748;&#26159;false</span>
+  <span style="color: #F92672;">var</span> p = flag.<span style="color: #A6E22E;">String</span>(<span style="color: #E6DB74;">"p"</span>,<span style="color: #E6DB74;">"82220"</span>,<span style="color: #E6DB74;">"port"</span>)
+    flag.<span style="color: #A6E22E;">Parse</span>()  <span style="color: #75715E;">//</span><span style="color: #75715E;">&#36890;&#36807;flag.Parse&#26469;&#35299;&#26512;&#21629;&#20196;&#34892;&#20013;&#30340;&#21464;&#37327;&#20540;&#65292;&#22914;&#26524;&#27809;&#26377;&#23601;&#20351;&#29992;&#40664;&#35748;&#20540;</span>
+    fmt.<span style="color: #A6E22E;">Println</span>(*q) <span style="color: #75715E;">//</span><span style="color: #75715E;">&#25171;&#21360;&#35813;&#20540;</span>
+  fmt.<span style="color: #A6E22E;">Println</span>(*q)
+}
+</pre>
+</div>
+<p>
+调用方式就是`./main -name true`
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

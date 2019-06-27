@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-06-27 Thu 12:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>emacs lisp</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">emacs lisp</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org1a623e2">相关教程</a></li>
+<li><a href="#org99ecb3a">简介</a></li>
+<li><a href="#org0aea187">变量</a>
+<ul>
+<li><a href="#org134ad6c">使用set函数赋值</a></li>
+<li><a href="#org2e3d454">使用setq函数</a></li>
+<li><a href="#org70cd743">使用let函数</a></li>
+<li><a href="#orgcd45546">求值</a></li>
+<li><a href="#orgac6aac8">缓冲区</a></li>
+</ul>
+</li>
+<li><a href="#org688ea41">编写函数</a>
+<ul>
+<li><a href="#org04f0696">交互函数</a></li>
+</ul>
+</li>
+<li><a href="#org518b7f5">if</a></li>
+<li><a href="#org028a785">真假</a></li>
+<li><a href="#orgd6cafcd">save-excursion函数</a></li>
+<li><a href="#org27849e8">while</a></li>
+<li><a href="#org48b9aef">cond</a></li>
+<li><a href="#org18ea9b4">与缓冲区有关的函数</a></li>
+<li><a href="#org625d2d6">基本函数</a></li>
+<li><a href="#org6792fc1">配置文件</a></li>
+<li><a href="#org53b2442">绑定键</a></li>
+<li><a href="#orgbff8303">加载文件</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1a623e2" class="outline-2">
+<h2 id="org1a623e2">相关教程</h2>
+<div class="outline-text-2" id="text-org1a623e2">
+<ol class="org-ol">
+<li>《GNU emacs lisp编程入门》</li>
+<li><a href="http://ergoemacs.org/emacs/elisp_basics.html">http://ergoemacs.org/emacs/elisp_basics.html</a></li>
+</ol>
+<p>
+看了第二个李杀教程，我觉得笔记记录的没必要了。
+</p>
+</div>
+</div>
+<div id="outline-container-org99ecb3a" class="outline-2">
+<h2 id="org99ecb3a">简介</h2>
+<div class="outline-text-2" id="text-org99ecb3a">
+<ul class="org-ul">
+<li>lisp:list processing, 列表处理，括号是列表的边界，有时候个列表用一个单引号或 <code>'</code> 开头。</li>
+<li><code>'(rose violet daisy)</code></li>
+<li><code>(+ 2 5)</code></li>
+<li><code>(expt 2 3)</code> 表示次方</li>
+<li>列表通俗来说就是函数调用。</li>
+<li>组成列表的元素为原子，如 <code>+</code> 即为原子。</li>
+<li>原子和列表的书面表示被称作 <code>符号表达式</code> 或 <code>s-表达式</code></li>
+<li>双引号中的文本，不论是句子还是一个段落，都是一个原子。被称作为string,</li>
+<li>列表中空格无关紧要，换行也被当做空格处理，多余的换行和列表只是更易于阅读。</li>
+<li><code>‘</code> 单引号在一个列表前，则该列表不被执行，被当成引用,执行时原样输出。</li>
+<li>在emacs中可以使用 <code>C-x C-e</code> 对当前光标前的列表进行执行，并将结果打印在回显区中，使用 <code>C-u C-x C-e</code> 打印结果则显示在当前光标后。</li>
+<li>处理textinfo 的所有函数都以 <code>textinfo-</code> 开头，阅读电子邮件的函数都以 <code>rmail-</code> 开头。</li>
+<li><code>.elc</code> 文件是字节编码文件，可以在 <code>emacs/lisp</code> 看到这两种文件</li>
+<li><code>C-x C-e</code> 实际上就是执行的 <code>eval-last-sexp</code> 即对最近一个s-表达式求值</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org0aea187" class="outline-2">
+<h2 id="org0aea187">变量</h2>
+<div class="outline-text-2" id="text-org0aea187">
+<ul class="org-ul">
+<li>在文件中键入fill-column，并使用 <code>C-x C-e</code> 就可以查看其被赋的值</li>
+<li>对一个变量求值时，周围没有括号，是因为不想把其当做函数来使用</li>
+<li>可以使用 <code>set setq let</code> 等函数对变量赋值</li>
+</ul>
+</div>
+<div id="outline-container-org134ad6c" class="outline-3">
+<h3 id="org134ad6c">使用set函数赋值</h3>
+<div class="outline-text-3" id="text-org134ad6c">
+<ul class="org-ul">
+<li>使用set赋值时，需要在变量前使用单引号，否则会被当做求值进行处理，如： <code>(set 'flowers '(heihei))</code> 而不能写为 <code>(set flower '(heihei))</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2e3d454" class="outline-3">
+<h3 id="org2e3d454">使用setq函数</h3>
+<div class="outline-text-3" id="text-org2e3d454">
+<ul class="org-ul">
+<li>和set函数的区别是，setq要赋值的变量不需要单引号。同时，setq可以给多个变量赋值，如: <code>(setq flower '(heihei))</code>  <code>(setq flower "1" flower2 "2")</code></li>
+<li>set和setq都可以将列表赋值给某个变量，如上述的 <code>(setq flower '(heihei))</code> 注意列表前需要单引号，否则被求值。</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org70cd743" class="outline-3">
+<h3 id="org70cd743">使用let函数</h3>
+<div class="outline-text-3" id="text-org70cd743">
+<p>
+和haskell中的let ..in 类似。
+</p>
+<ul class="org-ul">
+<li>let创建局部变量，且一次可创建多个变量</li>
+<li>let表达式第一部分是let符号，第二部分是一个列表，为变量列表，该列表每个元素是个符号或是一个两元素的列表，第三部分是let表达式的主体，这个主体有一个或多个列表组成,   其实就是要执行的命令。</li>
+<li>第二部分如 <code>(var1 (var2 3))</code> 表示var1初始值为nil,var2初始值为3</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgcd45546" class="outline-3">
+<h3 id="orgcd45546">求值</h3>
+<div class="outline-text-3" id="text-orgcd45546">
+<ul class="org-ul">
+<li>每次在emacs中做一些编辑命令，如移动光标，都是在对表达式求值，如插入一个字符的时候，实际调用的是 <code>self-insert-command</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgac6aac8" class="outline-3">
+<h3 id="orgac6aac8">缓冲区</h3>
+<div class="outline-text-3" id="text-orgac6aac8">
+<p>
+使用emacs对一个文件进行编辑的时候，通常是对缓冲区编辑，不会影响文件，如果保存了编辑内容，才会把缓冲区内容输入到文件中。
+</p>
+<ul class="org-ul">
+<li><code>(buffer-name)</code> 表示当前缓冲区名，通常是当前文件名</li>
+<li><code>(buffer-file-name)</code> 表示与当前缓冲区关联的文件的文件名，通常是当前文件的完整文件名</li>
+<li><code>(current-buffer)</code> 指向当前缓冲区，注意与 <code>(buffer-name)</code> 的区别， <code>(buffer-name)</code> 只是缓冲区名字</li>
+<li><code>(other-buffer)</code> 返回最近使用过的缓冲区。</li>
+<li><code>(switch-to-buffer)</code> 是切换buffer的命令，执行 <code>C-x b</code> 的时候实际调用的就是这条命令，如执行 <code>C-x b</code> 并输入 <code>*scratch*</code> 时，则切换到 <code>*scratch*</code> 缓冲区，如果 <code>(other-buffer)</code> 只返回 <code>*scratch*</code> ,则效果和 <code>(switch-to-buffer (other-buffer))</code> 一样。</li>
+<li><code>(set-buffer)</code> 屏幕显示的缓冲区并不改变，它将计算机的注意力切换到另外一个缓冲区</li>
+<li><code>(buffer-size)</code> ：当前缓冲区的大小，或总字符个数</li>
+<li><code>(point)</code> 当前光标所在的位置</li>
+<li><code>(point-min)</code> 返回光标可能所在位置的最小值， <code>(point-max)</code> 返回光标可能所在位置的最大值。</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org688ea41" class="outline-2">
+<h2 id="org688ea41">编写函数</h2>
+<div class="outline-text-2" id="text-org688ea41">
+<ul class="org-ul">
+<li>使用 <code>defun</code> 定义函数,包含几个部分(函数名、参数名、文档描述、交互信息(可选)、主体)等。</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">func-name</span>(arguments ...)                                               
+    <span style="color: #E6DB74;">"operation-documention..."</span>
+    (interactive argument-passing-info)<span style="color: #75715E;">;optional</span>
+    body...)
+</pre>
+</div>
+<p>
+如定义乘7的函数:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">multiply-by-seven</span> (number)
+    <span style="color: #E6DB74;">"multiply NUMBER by seven"</span>
+    (* 7 number))
+</pre>
+</div>
+<ul class="org-ul">
+<li>键入 <code>C-h f</code> 输入函数名所查看到的内容就是"operation-documention"的内容</li>
+<li>永久安装函数：1. 在.emacs文件中编写，2. load函数 3. 在site-init.el文件中编写。</li>
+</ul>
+</div>
+<div id="outline-container-org04f0696" class="outline-3">
+<h3 id="org04f0696">交互函数</h3>
+<div class="outline-text-3" id="text-org04f0696">
+<ul class="org-ul">
+<li>关键字 <code>(interactive)</code></li>
+<li>用户键入 <code>M-x</code> 和函数名就可以激活一个交互函数，或者键入绑定的键序列(如C-n绑定next-line)</li>
+<li><code>(interactive "p")</code> 中"p"告诉emacs将你正在键入的C-u后加上一个数字或Meta加一个数字，将这个数字传递给函数。如 <code>C-u (参数) M-x func-name</code> 或 <code>M-(参数) M-x func-name</code></li>
+<li>interactive后边可有很多字符，如字符“r”表示将当前光标点的开始值和结束值作为函数的两个参量。“B”则为缓冲区的名字作为参量, interactive在传多个参量的时候，之间用"\n"分割，如"B\nr"传入了"B"和"r"</li>
+<li>interactive也可以没有参量，如果一个函数中设置了(interactive)则表示该函数可进行交互，就能通过 <code>M-x</code> 来进行调用。</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org518b7f5" class="outline-2">
+<h2 id="org518b7f5">if</h2>
+<div class="outline-text-2" id="text-org518b7f5">
+<p>
+第一种无else的表达式，格式为:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">if</span> true-or-false
+    true-action)
+</pre>
+</div>
+<p>
+如:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">if</span> (&gt; 5 4)
+    (message <span style="color: #E6DB74;">"5 is greater than 4"</span>))
+</pre>
+</div>
+<p>
+第二种有else的表达式如:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">if</span> true-or-false
+    true-action
+  false-action)
+</pre>
+</div>
+<p>
+其中else-part紧跟then-part后，但缩进比then-part少，如：
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">if</span> (&gt; 5 4)
+    (message <span style="color: #E6DB74;">"5 is bigger than 4"</span>)
+  (message <span style="color: #E6DB74;">"5 is smaller than 4"</span>))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org028a785" class="outline-2">
+<h2 id="org028a785">真假</h2>
+<div class="outline-text-2" id="text-org028a785">
+<p>
+lisp中nil即为假，nil一方面表示假，一方面也表示空列表，可以将nil写为()或nil。非nil即为真。
+如
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">testTrue</span> ()
+  <span style="color: #E6DB74;">""</span>
+  (message <span style="color: #E6DB74;">"ha"</span>))
+(<span style="color: #F92672;">if</span> (testTrue)
+    (message <span style="color: #E6DB74;">"5 is bigger than 4"</span>)
+  (message <span style="color: #E6DB74;">"5 is smaller than 4"</span>))
+</pre>
+</div>
+<p>
+会输出"5 is bigger than 4",因为testTrue返回的有值。
+再如:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">if</span> 4
+    'true
+  'false)
+(<span style="color: #F92672;">if</span> nil
+    'true
+  'false)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd6cafcd" class="outline-2">
+<h2 id="orgd6cafcd">save-excursion函数</h2>
+<div class="outline-text-2" id="text-orgd6cafcd">
+<p>
+在对其主体进行求值时候，会保存当前缓冲区中的标记(mark)和位点(point)以及当前缓冲区，在求值完成后恢复原来位点和标记 值以及缓冲区。lisp中的某些函数在操作的时候，经常会移动位点(point),如count-lines-region.
+表达式模板:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(save-excursion 
+  body...)
+</pre>
+</div>
+<p>
+函数体是一个或者多个表达式，被依次求值，最后一个表达式的返回值被当做结果。
+在elisp中，save-excursion表达式经常出现在let表达式主体中，如：
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">let</span> varlist
+  (save-excursion
+    body...))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org27849e8" class="outline-2">
+<h2 id="org27849e8">while</h2>
+<div class="outline-text-2" id="text-org27849e8">
+<p>
+模板
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">while</span> true-or-false
+  body...)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org48b9aef" class="outline-2">
+<h2 id="org48b9aef">cond</h2>
+<div class="outline-text-2" id="text-org48b9aef">
+<p>
+类似switch，如:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #F92672;">let</span> ((number 1))
+  (<span style="color: #F92672;">cond</span> ((&lt; number 0) 0)
+    ((&gt; number 0) 1)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org18ea9b4" class="outline-2">
+<h2 id="org18ea9b4">与缓冲区有关的函数</h2>
+<div class="outline-text-2" id="text-org18ea9b4">
+<ul class="org-ul">
+<li><code>beginning-of-buffer</code> 是将光标移动到缓冲区的开始位置，并在之前的位置放入标记(push-mark)。与 <code>M-&lt;</code> 绑定</li>
+<li><code>end-of-buffer</code> 是将光标移动到缓冲区的结束位置，并在之前的位置放入标记(push-mark)。与 <code>M-&gt;</code> 绑定</li>
+<li><code>mark-whole-buffer</code>  在当前位点及末尾点放置标记，并跳转到缓冲区开头处。</li>
+<li><code>append-to-buffer</code> 从当前缓冲区中拷贝一个域(即缓冲区中介于位点和标记之间的区域)</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org625d2d6" class="outline-2">
+<h2 id="org625d2d6">基本函数</h2>
+<div class="outline-text-2" id="text-org625d2d6">
+<ul class="org-ul">
+<li><code>car</code> 返回列表中第一个元素，如 <code>(car '(rose flower))</code> 返回rose</li>
+<li><code>cdr</code> 返回列表中除了第一个元素的其余部分，如 <code>(cdr '(rose flower hei))</code> 返回(flower hei)</li>
+<li><code>cons</code> 构造列表，如 <code>(cons 'hei '(haha  hengheng))</code> 返回 <code>(hei haha hengheng)</code> ,其中第一个参量是被插入的元素么，第二个参量必须是列表。</li>
+<li><code>length</code> 查看列表中有多少个元素 <code>(length '(haha hei)</code> 返回2</li>
+<li><code>nthcdr</code> 除了头几个元素的剩余的所有元素，nthcdr表示执行n次cdr，如 <code>(nthcdr 2 '(1 2 3 4 5))</code> 返回 <code>(3 4 5)</code></li>
+<li><code>setcar</code> 是将一个列表的初始元素设置为新的值，如 <code>(setq animal '(dog cat))</code>  <code>(setcar animal 'bee)</code> 则animal的结果为 <code>(bee cat)</code></li>
+<li><code>setcdr</code> 是将列表中除了第一个元素的其余值进行替换。</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org6792fc1" class="outline-2">
+<h2 id="org6792fc1">配置文件</h2>
+<div class="outline-text-2" id="text-org6792fc1">
+<p>
+<code>site-start.el</code> -&gt; <code>.emacs</code> -&gt; <code>default.el</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org53b2442" class="outline-2">
+<h2 id="org53b2442">绑定键</h2>
+<div class="outline-text-2" id="text-org53b2442">
+<ul class="org-ul">
+<li><code>(global-set-key "\C-cw" 'compare-windows)</code> 表示将 <code>compare-windows</code> 函数绑定给 <code>C-c w</code></li>
+<li>取消的方式为 <code>(global-unset-key "\C-cw")</code></li>
+<li><code>(define-key )</code> ????</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbff8303" class="outline-2">
+<h2 id="orgbff8303">加载文件</h2>
+<div class="outline-text-2" id="text-orgbff8303">
+<ul class="org-ul">
+<li>从其他文件中加载对应的方法，如 <code>(load "~/emacs/kfill")</code> 即加载文件~/emacs/kfill.el(c)，可类比shell中的source</li>
+<li>autoload是自动加载，emacs启动的时候，不会加载其内容，而是等到第一次使用其内部的方法的时候才会加载。该函数包含五个参量，第一个是自动加载的方法名，第二个参量是被加载的文件名，第三个是为这个函数编写的文档，第四个参量告知该函数是否能被交互调用，第五个告诉对象是什么类型的。</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

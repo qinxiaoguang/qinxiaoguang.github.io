@@ -1,0 +1,9 @@
+#+TITLE: 恢复误删文件
+* 概述
+偶尔会使用 =find ./ -mtime +7 -name "*" -exec rm -fv {} \;= 来删除过期的文件，但是有时候会失误把脚本文件 =*.sh= 也给误删掉了，但是好在这些文件一直在后台运行，所以，可以通过lsof来恢复文件。
+#+BEGIN_VERSE
+1. lsof | grep deleted | grep sh 找到对应的进程的pid
+2. cd /proc/$pid/fd
+3. ll 来查看哪个文件软链到了删掉的文件上
+4. cat file > /path
+#+END_VERSE

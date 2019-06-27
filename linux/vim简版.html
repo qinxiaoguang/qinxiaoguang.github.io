@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-17 Wed 17:09 -->
+<!-- 2019-06-27 Thu 12:58 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -35,6 +35,10 @@
 <div id="outline-container-org18e620d" class="outline-2">
 <h2 id="org18e620d">tips</h2>
 <div class="outline-text-2" id="text-org18e620d">
+<p>
+哪个命令不会，就输入 <code>:h &lt;cmd&gt;</code> 来查看。
+vim很多命令都是{operation}+{motion}的组合，如d是{operation},w是{motion}，移动光标到单词结尾，那么组合到一起就是删除光标到单词结尾。有些{operation}是多个字母组成，如 <code>gU</code> 当前光标处字母变大写。
+</p>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -45,8 +49,8 @@
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="org-left">操作名</th>
-<th scope="col" class="org-left">解释</th>
+<th scope="col" class="org-left">命令</th>
+<th scope="col" class="org-left">命令说明</th>
 </tr>
 </thead>
 <tbody>
@@ -59,6 +63,214 @@
 <td class="org-left">shift-i</td>
 <td class="org-left">矩形插入</td>
 </tr>
+
+<tr>
+<td class="org-left"><code>vim -u ~/vimrc/.vimrc</code></td>
+<td class="org-left">读取指定配置文件来启动vim</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>.</code></td>
+<td class="org-left">重复上次修改</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&gt;G</code></td>
+<td class="org-left">从当前行到最后一行都执行TAB操作</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&gt;gg</code></td>
+<td class="org-left">从当前行到第一行都执行TAB操作，且跳转到第一行</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>$</code></td>
+<td class="org-left">移动到行尾</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>0</code></td>
+<td class="org-left">移动到行首</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>a</code></td>
+<td class="org-left">当前光标后插入</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>A</code></td>
+<td class="org-left">类 <code>$a</code> ，当前行尾插入</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>c</code></td>
+<td class="org-left">起始命令，删除并进入插入模式，如 <code>c$</code> 表示删除当前光标至末尾并进入插入模式， <code>cc</code> 删除当前行并进入插入模式，其中 <code>cc</code> 和 <code>c$</code> 的区别是，一个删除了换行符，一个未删</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C</code></td>
+<td class="org-left">类 <code>c$</code></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>s</code></td>
+<td class="org-left">类 <code>cl</code> ，删除当前字母并进入插入模式</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>S</code></td>
+<td class="org-left">类 <code>^C</code> ，删除当前行并进入插入模式</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>I</code></td>
+<td class="org-left">类 <code>^I</code> ,到行首并进入插入模式·</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>o</code></td>
+<td class="org-left">类 <code>A&lt;CR&gt;</code> 在行下另起一行，并进入插入模式</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>O</code></td>
+<td class="org-left">类 <code>ko</code> , 在行上另起一行，并进入插入模式</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>f{char}/t{char}</code></td>
+<td class="org-left">查找本行下一个{char}出现的位置，并移动光标到此处。</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>;</code></td>
+<td class="org-left">使用 <code>f</code> 查找后，可使用 <code>;</code> 重复查找</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>u</code></td>
+<td class="org-left">(undo)撤销上次修改</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;C-r&gt;</code></td>
+<td class="org-left">撤销 <code>u</code> 的修改</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/{word}</code></td>
+<td class="org-left">全局向下查找{word}</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>?{word}</code></td>
+<td class="org-left">全局向上查找{word}</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>*</code></td>
+<td class="org-left">全局向下查找当前光标处单词</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>daw</code></td>
+<td class="org-left">删除当前光标的单词</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;C-a&gt;</code></td>
+<td class="org-left">对当前光标的数字进行加+1操作，前边可跟数字</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&lt;C-x&gt;</code></td>
+<td class="org-left">对当前光标的数字进行减-1操作，前边可跟数字</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>~</code></td>
+<td class="org-left">当前光标大写小写互换</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+单独的operation是不会产生影响的，需要结合{motion}才能有影响。
+而VIM有一个额外的规则，当前的{operation}操作两次，则会作用于当前行，如 <code>dd</code> 则为删除当前行， <code>&gt;&gt;</code> 则为缩进当前行， <code>gUgU</code> 比较特殊，也可以用 <code>gUU</code> 来达到同样的效果。
+operation列表
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">name</th>
+<th scope="col" class="org-left">des</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>c</code></td>
+<td class="org-left">修改</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>d</code></td>
+<td class="org-left">delete 删除</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>gU</code></td>
+<td class="org-left">字母大写</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>gu</code></td>
+<td class="org-left">字母小写</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>&gt;</code></td>
+<td class="org-left">缩进，类tab</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+motion列表
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">name</th>
+<th scope="col" class="org-left">des</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>ap</code></td>
+<td class="org-left">当前光标整个段落</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>aw</code></td>
+<td class="org-left">当前光标的整个单词</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -66,7 +278,7 @@
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-04-17 Wed 17:09</p>
+<p class="date">Created: 2019-06-27 Thu 12:58</p>
 <p class="validation"></p>
 </div>
 </body>

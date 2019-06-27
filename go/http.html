@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-06-27 Thu 12:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>http请求</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">http请求</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgf762aea">get</a></li>
+<li><a href="#org881c807">post</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgf762aea" class="outline-2">
+<h2 id="orgf762aea">get</h2>
+<div class="outline-text-2" id="text-orgf762aea">
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">func</span> <span style="color: #A6E22E;">httpGet</span>() {
+    resp, err := http.<span style="color: #A6E22E;">Get</span>(<span style="color: #E6DB74;">"url"</span>)
+    <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">handle error</span>
+    }
+
+    <span style="color: #F92672;">defer</span> resp.Body.<span style="color: #A6E22E;">Close</span>()
+    body, err := ioutil.<span style="color: #A6E22E;">ReadAll</span>(resp.Body)
+    <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">handle error</span>
+    }
+
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #A6E22E;">string</span>(body))
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org881c807" class="outline-2">
+<h2 id="org881c807">post</h2>
+<div class="outline-text-2" id="text-org881c807">
+<p>
+一种是使用http.Post方式
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">func</span> <span style="color: #A6E22E;">httpPost</span>() {
+    resp, err := http.<span style="color: #A6E22E;">Post</span>(<span style="color: #E6DB74;">"http://www.01happy.com/demo/accept.php"</span>,
+        <span style="color: #E6DB74;">"application/x-www-form-urlencoded"</span>,
+        strings.<span style="color: #A6E22E;">NewReader</span>(<span style="color: #E6DB74;">"name=cjb"</span>))
+    <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+        fmt.<span style="color: #A6E22E;">Println</span>(err)
+    }
+
+    <span style="color: #F92672;">defer</span> resp.Body.<span style="color: #A6E22E;">Close</span>()
+    body, err := ioutil.<span style="color: #A6E22E;">ReadAll</span>(resp.Body)
+    <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">handle error</span>
+    }
+
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #A6E22E;">string</span>(body))
+}
+</pre>
+</div>
+<p>
+传递json的话，将strings.NewReader()换成bytes.NewReader()，contentType换为`application/json`即可。
+Tips：传递string使用这个方法的话，第二个参数要设置成”application/x-www-form-urlencoded”，否则post参数无法传递。
+</p>
+
+<p>
+一种是使用http.PostForm方法
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">func</span> <span style="color: #A6E22E;">httpPostForm</span>() {
+    resp, err := http.<span style="color: #A6E22E;">PostForm</span>(<span style="color: #E6DB74;">"http://www.01happy.com/demo/accept.php"</span>,
+        url.<span style="color: #66D9EF;">Values</span>{<span style="color: #E6DB74;">"key"</span>: {<span style="color: #E6DB74;">"Value"</span>}, <span style="color: #E6DB74;">"id"</span>: {<span style="color: #E6DB74;">"123"</span>}})
+
+    <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">handle error</span>
+    }
+
+    <span style="color: #F92672;">defer</span> resp.Body.<span style="color: #A6E22E;">Close</span>()
+    body, err := ioutil.<span style="color: #A6E22E;">ReadAll</span>(resp.Body)
+    <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">handle error</span>
+    }
+
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #A6E22E;">string</span>(body))
+
+}
+</pre>
+</div>
+
+<p>
+复杂的请求，需要传递cookie,header等数据
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">func</span> <span style="color: #A6E22E;">httpDo</span>() {
+    client := &amp;http.<span style="color: #66D9EF;">Client</span>{}
+
+    req, err := http.<span style="color: #A6E22E;">NewRequest</span>(<span style="color: #E6DB74;">"POST"</span>, <span style="color: #E6DB74;">"http://www.01happy.com/demo/accept.php"</span>, strings.<span style="color: #A6E22E;">NewReader</span>(<span style="color: #E6DB74;">"name=cjb"</span>))
+    <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">handle error</span>
+    }
+
+    req.Header.<span style="color: #A6E22E;">Set</span>(<span style="color: #E6DB74;">"Content-Type"</span>, <span style="color: #E6DB74;">"application/x-www-form-urlencoded"</span>)
+    req.Header.<span style="color: #A6E22E;">Set</span>(<span style="color: #E6DB74;">"Cookie"</span>, <span style="color: #E6DB74;">"name=anny"</span>)
+
+    resp, err := client.<span style="color: #A6E22E;">Do</span>(req)
+
+    <span style="color: #F92672;">defer</span> resp.Body.<span style="color: #A6E22E;">Close</span>()
+
+    body, err := ioutil.<span style="color: #A6E22E;">ReadAll</span>(resp.Body)
+    <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">handle error</span>
+    }
+
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #A6E22E;">string</span>(body))
+}
+</pre>
+</div>
+
+<p>
+如果又要设置header又要设置post from的参数，可以按照以下格式写：
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">func</span>(){
+    v := url.<span style="color: #66D9EF;">Values</span>{}
+    v.<span style="color: #A6E22E;">Set</span>(<span style="color: #E6DB74;">"testKey"</span>, <span style="color: #E6DB74;">"hello world"</span>)
+    body := ioutil.<span style="color: #A6E22E;">NopCloser</span>(strings.<span style="color: #A6E22E;">NewReader</span>(v.<span style="color: #A6E22E;">Encode</span>())) <span style="color: #75715E;">//</span><span style="color: #75715E;">&#25226;form&#25968;&#25454;&#32534;&#19979;&#30721;</span>
+    client := &amp;http.<span style="color: #66D9EF;">Client</span>{}
+    req, _ := http.<span style="color: #A6E22E;">NewRequest</span>(<span style="color: #E6DB74;">"POST"</span>, <span style="color: #E6DB74;">"http://heiheihei"</span>, body)
+    req.Header.<span style="color: #A6E22E;">Set</span>(<span style="color: #E6DB74;">"Content-Type"</span>, <span style="color: #E6DB74;">"application/x-www-form-urlencoded"</span>) <span style="color: #75715E;">//</span><span style="color: #75715E;">&#36825;&#20010;&#19968;&#23450;&#35201;&#21152;&#65292;&#19981;&#21152;form&#30340;&#20540;post&#19981;&#36807;&#21435;&#65292;&#34987;&#22353;&#20102;&#20004;&#23567;&#26102;</span>
+    fmt.<span style="color: #A6E22E;">Printf</span>(<span style="color: #E6DB74;">"%+v\n"</span>, req)                                                         <span style="color: #75715E;">//</span><span style="color: #75715E;">&#30475;&#19979;&#21457;&#36865;&#30340;&#32467;&#26500;</span>
+    resp, err := client.<span style="color: #A6E22E;">Do</span>(req) <span style="color: #75715E;">//</span><span style="color: #75715E;">&#21457;&#36865;</span>
+    <span style="color: #F92672;">defer</span> resp.Body.<span style="color: #A6E22E;">Close</span>()     <span style="color: #75715E;">//</span><span style="color: #75715E;">&#19968;&#23450;&#35201;&#20851;&#38381;resp.Body</span>
+    data, _ := ioutil.<span style="color: #A6E22E;">ReadAll</span>(resp.Body)
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #A6E22E;">string</span>(data), err)
+}
+</pre>
+</div>
+
+<p>
+如果像要设置host，参考golang中的文档：
+</p>
+<p class="verse">
+<i>/ If a server received a request with header lines,<br />
+&#xa0;/</i><br />
+&#xa0;<i>/	Host: example.com<br />
+&#xa0;/</i> accept-encoding: gzip, deflate<br />
+&#xa0;<i>/	Accept-Language: en-us<br />
+&#xa0;/</i> fOO: Bar<br />
+&#xa0;<i>/	foo: two<br />
+&#xa0;/</i><br />
+&#xa0;<i>/ then<br />
+&#xa0;/</i><br />
+&#xa0;<i>/	Header = map[string][]string{<br />
+&#xa0;/</i>  "Accept-Encoding": {"gzip, deflate"},<br />
+&#xa0;<i>/		"Accept-Language": {"en-us"},<br />
+&#xa0;/</i>  "Foo": {"Bar", "two"},<br />
+&#xa0;<i>/	}<br />
+&#xa0;/</i><br />
+&#xa0;<i>/ For incoming requests, the Host header is promoted to the<br />
+&#xa0;/</i> Request.Host field and removed from the Header map.<br />
+</p>
+<p>
+不能将host设置到req.Header中，而是使用req.Host来进行设置。
+</p>
+
+<p>
+postman如果要设置host需要下载postman interceptor插件，并在postman中启用。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

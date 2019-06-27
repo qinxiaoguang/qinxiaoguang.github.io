@@ -9,8 +9,11 @@ https://rustcc.gitbooks.io/rustprimer/content/
 5. ~export RUST_SRC_PATH="/path/to/rust/src"~
 6. emacs环境: ~(setenv "RUST_SRC_PATH" "/path/to/rust/src")~
 * update
-=rustup update= : stable版本更新
+=rustup update= : stable和nightly版本更新
 =rustup install nightly= nightly版本更新
+=rustup self update= rustup升级
+=rustup run nightly rustc --verion= 查询版本
+=rustup default nightly= 选择nightly版本
 
 * emacs配置
 #+BEGIN_SRC elisp
@@ -1208,4 +1211,21 @@ fn main() {
         process::exit(1);
     }
 }
+#+END_SRC
+** use的使用
+#+BEGIN_SRC rust
+// 复杂的用法
+use {
+    hyper::{
+        Body, Client, Request, Response, Server, Uri,
+        service::service_fn,
+        rt::run,
+    },
+    futures::{
+        compat::TokioDefaultSpawner,
+        future::{FutureExt, TryFutureExt},
+    },
+    std::net::SocketAddr,
+    tokio::await,
+};
 #+END_SRC

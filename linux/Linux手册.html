@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-06-04 Tue 00:03 -->
+<!-- 2019-06-27 Thu 12:58 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Linux手册</title>
@@ -17,6 +17,28 @@
 <script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="/static/js/readtheorg.js"></script>
 <script type="text/javascript" src="/static/js/orgscript.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="org-div-home-and-up">
@@ -30,11 +52,21 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#org50204b0">常用</a></li>
+<li><a href="#orgc295632">常见目录</a></li>
+<li><a href="#org7f003f5">目录处理命令</a>
+<ul>
+<li><a href="#orgd4aa589">mkdir</a></li>
+<li><a href="#org2acb4dd">rmdir</a></li>
+<li><a href="#org3325336">rm</a></li>
+<li><a href="#org1ae0a2d">cp</a></li>
+</ul>
+</li>
 <li><a href="#org1f52eb1">数组</a></li>
 <li><a href="#org3344349">map</a></li>
 <li><a href="#orgad3f8bf">字符串</a></li>
 <li><a href="#orgb0bf51d">循环</a></li>
 <li><a href="#orgd600db0">常用if</a></li>
+<li><a href="#org0034e7b">ls</a></li>
 <li><a href="#orge5e177a">sleep</a></li>
 <li><a href="#orgdc32fbc">sed</a>
 <ul>
@@ -54,7 +86,104 @@
 <li><a href="#org1c61eb9">针对目录建立链接</a></li>
 </ul>
 </li>
-<li><a href="#org6ca6642">后记</a></li>
+<li><a href="#org356723f">搜索</a>
+<ul>
+<li><a href="#org8d22f4b">locate</a></li>
+<li><a href="#orged90924">whereis和which</a></li>
+<li><a href="#orga37f9a9">which</a></li>
+<li><a href="#orgaf128ba">find</a></li>
+<li><a href="#orgb0484e6">grep</a></li>
+</ul>
+</li>
+<li><a href="#org0f94915">用户和组</a>
+<ul>
+<li><a href="#org8547c5f">用户组</a></li>
+<li><a href="#orgd65eedb">用户</a></li>
+<li><a href="#org2339453">其他</a></li>
+</ul>
+</li>
+<li><a href="#org69c24d4">权限</a></li>
+<li><a href="#org1315da5">nohup加其他指令同时运行</a></li>
+<li><a href="#orgc41dc9d">shell函数/方法</a></li>
+<li><a href="#orge9db322">shell</a>
+<ul>
+<li><a href="#org2bcf479">echo命令</a></li>
+<li><a href="#org86db3f2">第一个脚本</a></li>
+<li><a href="#org906ae03">bash基本功能</a>
+<ul>
+<li><a href="#orge2dd6d6">命令别名</a></li>
+</ul>
+</li>
+<li><a href="#org40e67e5">常用快捷键</a></li>
+<li><a href="#org302f0b0">历史命令</a></li>
+<li><a href="#org2df987f">重定向</a>
+<ul>
+<li><a href="#orgd2d1558">输出重定向</a></li>
+<li><a href="#orge852c8d">输入重定向</a></li>
+</ul>
+</li>
+<li><a href="#org3326c30">多命令</a></li>
+<li><a href="#org6a0bdb0">变量规则</a>
+<ul>
+<li><a href="#orga5fc2f3">位置参数变量</a></li>
+<li><a href="#org103b7a3">预定义变量</a></li>
+<li><a href="#org5674bd1">输入</a></li>
+</ul>
+</li>
+<li><a href="#orgf963a24">shell运算符</a>
+<ul>
+<li><a href="#org6e54d46">declare命令</a></li>
+<li><a href="#org38f7d94">数值运算方法</a></li>
+<li><a href="#org9d37e1d">环境变量配置文件</a>
+<ul>
+<li><a href="#org118f79f">其他配置文件</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org05e49af">正则</a>
+<ul>
+<li><a href="#orgb024660">cut命令</a></li>
+<li><a href="#org87a942d">awk</a>
+<ul>
+<li><a href="#org14eecfc">NR,FNR,NF,FS,RT,RS等</a></li>
+<li><a href="#org00e3a7b">BEGIN,END</a></li>
+</ul>
+</li>
+<li><a href="#org569243e">sed</a></li>
+<li><a href="#orgde5ab9d">sort</a></li>
+<li><a href="#org98f3c01">wc</a></li>
+</ul>
+</li>
+<li><a href="#orgd01592e">shell流程控制</a>
+<ul>
+<li><a href="#orgedd5861">条件判断</a>
+<ul>
+<li><a href="#orgae8bfa1">文件类型判断</a></li>
+<li><a href="#orgffc12ba">根据文件权限判断</a></li>
+<li><a href="#orgbf9b5ad">文件比较</a></li>
+<li><a href="#org9a28a41">两个整数之间的比较</a></li>
+<li><a href="#org08a7364">字符串之间的比较</a></li>
+<li><a href="#org3cf0d74">多重条件判断</a></li>
+</ul>
+</li>
+<li><a href="#org7594794">if</a>
+<ul>
+<li><a href="#orgda5c2ed">单分支if条件语句</a></li>
+<li><a href="#org2ed05d9">双分支if</a></li>
+<li><a href="#org6d63bda">多分支if</a></li>
+<li><a href="#org6ddf69f">多条件判断</a></li>
+<li><a href="#org41d010f">tips</a></li>
+</ul>
+</li>
+<li><a href="#org773f7e8">case</a></li>
+<li><a href="#orgd6f46a6">for</a></li>
+<li><a href="#org9fa5b53">while</a></li>
+<li><a href="#orgdceb7c8">until</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -70,9 +199,99 @@
 <li><code>paste file1 file2</code> 将两个文件相同的行合并到一行，并用 <code>\t</code> 分割</li>
 <li><code>cwd=$(cd `dirname $0`;pwd)</code> 获取当前文件的绝对路径，不能直接使用  <code>pwd</code> 获取,若在其他路径执行，则路径就变成了其他路径</li>
 <li><code>export LESSCHARSET=utf-8</code> 解决less乱码</li>
+<li><code>sed/^$\n//g</code> 删除空行</li>
 </ul>
 </div>
 </div>
+<div id="outline-container-orgc295632" class="outline-2">
+<h2 id="orgc295632">常见目录</h2>
+<div class="outline-text-2" id="text-orgc295632">
+<ul class="org-ul">
+<li>/ 根目录</li>
+<li>/bin 存放必要的命令</li>
+<li>/boot 存放内核以及启动所需的文件等</li>
+<li>/dev 存放设备文件</li>
+<li>/etc 存放系统的配置文件</li>
+<li>/home 用户文件的主目录，用户数据存放在其主目录中</li>
+<li>/lib 存放必要的运行库</li>
+<li>/mnt 存放临时的映射文件系统，我们常把软驱和光驱挂装在这里的-
+floppy和cdrom子目录下。</li>
+<li>/proc 存放存储进程和系统信息</li>
+<li>/root 超级用户的主目录</li>
+<li>/sbin 存放系统管理程序</li>
+<li>/tmp 存放临时文件的目录</li>
+<li>/usr 包含了一般不需要修改的应用程序，命令程序文件、程序库、手册和其它文档。</li>
+<li>/var 包含系统产生的经常变化的文件</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7f003f5" class="outline-2">
+<h2 id="org7f003f5">目录处理命令</h2>
+<div class="outline-text-2" id="text-org7f003f5">
+</div>
+<div id="outline-container-orgd4aa589" class="outline-3">
+<h3 id="orgd4aa589">mkdir</h3>
+<div class="outline-text-3" id="text-orgd4aa589">
+<p class="verse">
+mkdir [-p] [目录名]<br />
+</p>
+<ul class="org-ul">
+<li>-p 递归创建</li>
+</ul>
+<p>
+创建一个目录不需要使用-p参数，但是如果创建多级目录，并且每级目录都不存在，需要使用-p参数。如 <code>mkdir -p qxg/qqxg</code>
+</p>
+</div>
+</div>
+<div id="outline-container-org2acb4dd" class="outline-3">
+<h3 id="org2acb4dd">rmdir</h3>
+<div class="outline-text-3" id="text-org2acb4dd">
+<p class="verse">
+rmdir [目录名]<br />
+</p>
+<p>
+用于删除空白目录，如果目录中有内容，则无法删除。通常删除目录使用的命令是 <code>rm</code>
+</p>
+</div>
+</div>
+<div id="outline-container-org3325336" class="outline-3">
+<h3 id="org3325336">rm</h3>
+<div class="outline-text-3" id="text-org3325336">
+<p class="verse">
+rm [选项] [目录]<br />
+</p>
+<ul class="org-ul">
+<li>r 删除目录</li>
+<li>f 强制删除，不会进行交互询问是否删除</li>
+<li>v 删除时候打印删除拆数据</li>
+</ul>
+
+<p>
+比如 <code>rm -rf /</code> 会删除linux根目录下的所有文件。 <code>rm -rf /tmp/</code> 是删除/tmp这个目录，而 <code>rm -rf /tmp/*</code> 是删除/tmp目录下的所有目录。
+通常不论删除目录还是文件，都会使用 <code>rm -rf</code> 这种习惯用法。
+</p>
+</div>
+</div>
+<div id="outline-container-org1ae0a2d" class="outline-3">
+<h3 id="org1ae0a2d">cp</h3>
+<div class="outline-text-3" id="text-org1ae0a2d">
+<p class="verse">
+cp [选项] [原文件或目录]  [目标目录]<br />
+</p>
+<ul class="org-ul">
+<li>-r 复制目录</li>
+<li>-p 连带文件属性复制</li>
+<li>-d 若源文件是链接文件，则复制链接属性</li>
+<li>-a 相当于 -pdr。如果想要复制的文件或目录和原来的一模一样，只要加上-a命令就ok了。</li>
+</ul>
+
+<p>
+该命令可以复制文件也可以复制目录。
+</p>
+</div>
+</div>
+</div>
+
 <div id="outline-container-org1f52eb1" class="outline-2">
 <h2 id="org1f52eb1">数组</h2>
 <div class="outline-text-2" id="text-org1f52eb1">
@@ -156,6 +375,28 @@ cat &lt;&lt;EOF
 </ul>
 </div>
 </div>
+<div id="outline-container-org0034e7b" class="outline-2">
+<h2 id="org0034e7b">ls</h2>
+<div class="outline-text-2" id="text-org0034e7b">
+<p>
+<code>ls [选项] [文件或目录]</code>
+选项:
+</p>
+<ul class="org-ul">
+<li>-a:显示所有文件，包括隐藏文件</li>
+<li>-l:显示所有详细信息</li>
+<li>-d:查看目录属性,如 <code>ls -ld /etc</code> 可以直接查看etc目录的属性</li>
+<li>-h:人性化显示文件大小,一般与-l协同使用</li>
+<li>-i:显示inode，每个文件都有一个节点号，就是inode.</li>
+</ul>
+
+<p>
+通常使用 <code>ls -l</code> 比较多，但是 <code>ls -l</code> 有个别名: <code>ll</code> 所以如果需要使用 <code>ls -l</code> ，只要敲 <code>ll</code> 就可以了。
+通过ls - l可以获取详细信息，其中第一列表示文件权限，第二列表示当前文件引用次数，第三列表示文件的所有者，第四列表示文件的所属组。
+</p>
+</div>
+</div>
+
 <div id="outline-container-orge5e177a" class="outline-2">
 <h2 id="orge5e177a">sleep</h2>
 <div class="outline-text-2" id="text-orge5e177a">
@@ -237,6 +478,7 @@ sed -n <span style="color: #E6DB74;">"${i}p"</span> xx
 <p>
 通过-i 参数,如 <code>sed -i "s/first/second/g" filename.txt</code>
 修改整行:通过正则表达式,如匹配有 port 的行,并整行替换: <code>sed -i 's/^port.*/port:8080/g' tmp.txt</code>
+如果要替换的内容有转义符号如`/`，可以将s//g中的符号换掉，如 <code>sed -i 's#first#second#g' filename</code> ,s后紧跟的命令就会被认为是新的分隔符。
 </p>
 </div>
 </div>
@@ -269,18 +511,1130 @@ sed -n <span style="color: #E6DB74;">"${i}p"</span> xx
 </div>
 </div>
 </div>
-<div id="outline-container-org6ca6642" class="outline-2">
-<h2 id="org6ca6642">后记</h2>
-<div class="outline-text-2" id="text-org6ca6642">
-<p>
-本来想把linux的笔记从简书搬运过来，但是太多内容了，还是算了吧，以后再说吧
+<div id="outline-container-org356723f" class="outline-2">
+<h2 id="org356723f">搜索</h2>
+<div class="outline-text-2" id="text-org356723f">
+</div>
+<div id="outline-container-org8d22f4b" class="outline-3">
+<h3 id="org8d22f4b">locate</h3>
+<div class="outline-text-3" id="text-org8d22f4b">
+<p class="verse">
+locate 文件名<br />
 </p>
+
+<p>
+locate的特点是搜索速度比较快，其在后台数据库中按文件名搜索，其中 <code>/var/lib/mlocate</code> 就是其所搜索的数据库。但是如果创建一个新的文件的时候，不会被搜索到，因为数据库不是实时更新的。但是可以通过 <code>updatedb</code> 命令来强制进行更新，然后再搜索就可以找到。
+但是locate的弱点是只能搜索文件名。
+</p>
+
+<p>
+locate搜索的规则是按照/etc/updatedb.conf配置文件进行搜索
+</p>
+</div>
+</div>
+<div id="outline-container-orged90924" class="outline-3">
+<h3 id="orged90924">whereis和which</h3>
+<div class="outline-text-3" id="text-orged90924">
+<p class="verse">
+whereis 命令名<br />
+</p>
+<ul class="org-ul">
+<li>b 只查找可执行文件</li>
+<li>m 只查找帮助文件</li>
+</ul>
+
+<p>
+搜索命令所在路径以及帮助文档所在位置。
+如: <code>whereis ls</code> 会打印出:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">ls: /bin/ls /usr/share/man/man1/ls.1.gz /usr/share/man/man1p/ls.1p.gz
+</pre>
+</div>
+<p>
+类似这种样式的命令还有很多，比如想要知道我是谁用 <code>whoami</code> ，想要知道命令是干什么用 <code>whatis</code> .
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga37f9a9" class="outline-3">
+<h3 id="orga37f9a9">which</h3>
+<div class="outline-text-3" id="text-orga37f9a9">
+<p>
+同样也是搜索命令的执行文件，并且如果该命令有对应的别名，也会被显示出来。
+如执行 <code>which ls</code> 会打印:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">alias</span> <span style="color: #FD971F;">ls</span>=<span style="color: #E6DB74;">'ls --color=auto'</span>
+        /bin/ls
+</pre>
+</div>
+<p>
+可以看到 <code>ls</code> 其实是执行的 <code>ls --color=auto</code> ，表示不同的文件以不同的颜色列出。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaf128ba" class="outline-3">
+<h3 id="orgaf128ba">find</h3>
+<div class="outline-text-3" id="text-orgaf128ba">
+<p class="verse">
+find [搜索范围] [搜索条件]<br />
+</p>
+
+<p>
+find搜索的内容会和名字一模一样，如果想要模糊搜索，可以使用通配符，通配符有以下几种:
+</p>
+<ul class="org-ul">
+<li>\* 匹配任意内容</li>
+<li>? 匹配任意一个字符</li>
+<li>[] 匹配任意一个括号以内的字符</li>
+</ul>
+
+<p>
+eg: 
+</p>
+<ul class="org-ul">
+<li><code>find / -name install.sh</code> 在根目录搜索install.sh名字的文件。</li>
+<li><code>find /root -iname install.sh</code> 不区分大小写搜索</li>
+<li><code>find /root -user root</code> 按照所有者搜索</li>
+<li><code>find /root -nouser</code> 查找没有所有者的文件</li>
+<li><code>find /var/log/ -mtime +10</code> 查找10天前修改的文件，-10表示10天内，10表示10天当天。-atime表示文件访问，-ctime 表示修改文件属性。</li>
+<li><code>find . -size 25k</code> 按照文件大小搜索，+25k表示大于25k的文件，-25k表示小于25k的文件。k表示千字节,M表示兆字节，注意k不能是大写，M不能是小写。</li>
+<li><code>find . -inum 252342</code> 查找inode节点为252342的文件</li>
+</ul>
+<p>
+复杂eg:
+</p>
+<ul class="org-ul">
+<li><code>find /etc -size +20k -a -size -50k</code> 其中-a 表示and ，左右两个条件都要满足，所以该命令表示查找大于20k小于50k的文件。当然也有-o 表示or。</li>
+<li><code>find /etc -size +20k -a -size -50k -exec ls -lh {} \;</code>  查找大于20k且小于50k的文件，并且通过ls -lh显示出来。其中`-exec 命令 {} \;`表示对搜索结果执行操作。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb0484e6" class="outline-3">
+<h3 id="orgb0484e6">grep</h3>
+<div class="outline-text-3" id="text-orgb0484e6">
+<p class="verse">
+grep [选项] 字符串 文件名<br />
+</p>
+<ul class="org-ul">
+<li>-i 忽略大小写</li>
+<li>-v 排除指定字符串</li>
+</ul>
+
+<p>
+在某文件中匹配符合条件的字符串,如 <code>grep "some" test.sh</code> 在test.sh中查找some字符串。
+</p>
+
+<p>
+find 和 grep的区别是，find是在系统中搜索文件，grep是在文件中包含的字符串。find是通配符匹配，grep是正则表达式匹配。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0f94915" class="outline-2">
+<h2 id="org0f94915">用户和组</h2>
+<div class="outline-text-2" id="text-org0f94915">
+<p>
+一个用户可以有多个用户组，一个主组其他附组。
+</p>
+
+<ul class="org-ul">
+<li>/etc/group保存的是用户的组信息，其格式为 `组名称:组密码占位符:组编号:组中用户名列表`其中1~499编号是用户装的软件所使用</li>
+<li>/etc/gshaow存储当前系统中用户组的密码信息，其格式为:`组名称:组密码:组管理者:组中用户名列表`</li>
+<li>/etc/passwd 存储当前系统中所有用户的信息，其格式为:`用户名:密码占位符:用户编号:用户组编号:用户注释信息:用户主目录:shell类型`</li>
+<li>/etc/shadow 存储用户密码</li>
+</ul>
+</div>
+<div id="outline-container-org8547c5f" class="outline-3">
+<h3 id="org8547c5f">用户组</h3>
+<div class="outline-text-3" id="text-org8547c5f">
+<ul class="org-ul">
+<li><code>groupadd</code> 添加组</li>
+<li><code>groupmod -n [修改后的组名] [修改前的组名]</code> 修改组名</li>
+<li><code>groupmod -g [修改后的pid] 要修改的组名</code> 修改组编号</li>
+<li><code>groupadd -g 888 boss</code> 创建888编号的用户组boss</li>
+<li><code>groupdel</code> 删除用户组，删除前，先删除用户组中的用户</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd65eedb" class="outline-3">
+<h3 id="orgd65eedb">用户</h3>
+<div class="outline-text-3" id="text-orgd65eedb">
+<ul class="org-ul">
+<li><code>useradd -g [用户组] [用户]</code> 将某一用户添加到用户组里</li>
+<li><code>useradd -d /home/qxg -m qxg</code> 创建qxg的时候指定主目录,默认和名字一样,-m表示没有目录则创建目录</li>
+<li>如果创建用户没有指定用户组的时候，会默认创建和用户同名的用户组</li>
+<li><code>useradd -c [注释] [用户]</code> 给用户添加注释</li>
+<li><code>usermod -l [新用户名] [老用户名]</code> 更改用户名</li>
+<li><code>usermod -g [目标group] [user]</code> 将用户修改到目标用户组</li>
+<li><code>userdel [user]</code> 删除用户，不删除目录 <code>userdel -r [user]</code> 删除用户并删除主目录</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org2339453" class="outline-3">
+<h3 id="org2339453">其他</h3>
+<div class="outline-text-3" id="text-org2339453">
+<ul class="org-ul">
+<li><code>touch /etc/nologin</code> 禁止除root用户 登录到系统中</li>
+<li><code>passwd -l [user]</code> 锁定某个用户</li>
+<li><code>passwd -u [user]</code> 解锁某个用户</li>
+<li><code>passwd -d [user]</code> 用户无密码登录</li>
+<li><code>passwd [user]</code> 修改用户密码</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org69c24d4" class="outline-2">
+<h2 id="org69c24d4">权限</h2>
+<div class="outline-text-2" id="text-org69c24d4">
+<p>
+使用 <code>ls -l`</code> 列出来的文件信息，第一列的内容就是权限内容: <code>-rw-r--r--</code> .
+其中第一位表示文件类型(- 文件，d 目录， l 软链接文件)，后边三位一组，每组分别表示文件所有者的权限，所属组的权限，非所属组的权限。完整的一组权限为rwx,r表示读,w表示写,x表示执行。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1315da5" class="outline-2">
+<h2 id="org1315da5">nohup加其他指令同时运行</h2>
+<div class="outline-text-2" id="text-org1315da5">
+<div class="org-src-container">
+<pre class="src src-shell">nohup xxx &amp; <span style="color: #F92672;">echo</span> <span style="color: #E6DB74;">"hha"</span>
+nohup xx1 &amp; nohup xx2 &amp;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc41dc9d" class="outline-2">
+<h2 id="orgc41dc9d">shell函数/方法</h2>
+<div class="outline-text-2" id="text-orgc41dc9d">
+<div class="org-src-container">
+<pre class="src src-shell">// []&#21253;&#25324;&#30340;&#37117;&#26159;&#21487;&#36873;&#21442;&#25968;
+[<span style="color: #F92672;">function</span>] name[()] {
+     <span style="color: #F92672;">echo</span> <span style="color: #E6DB74;">"&#31532;&#19968;&#20010;&#21442;&#25968; $1"</span>
+     <span style="color: #F92672;">echo</span> <span style="color: #E6DB74;">"&#25152;&#26377;&#21442;&#25968; $*"</span>
+     <span style="color: #F92672;">echo</span> <span style="color: #E6DB74;">"&#21442;&#25968;&#20010;&#25968; $#"</span>
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge9db322" class="outline-2">
+<h2 id="orge9db322">shell</h2>
+<div class="outline-text-2" id="text-orge9db322">
+</div>
+<div id="outline-container-org2bcf479" class="outline-3">
+<h3 id="org2bcf479">echo命令</h3>
+<div class="outline-text-3" id="text-org2bcf479">
+<p class="verse">
+echo [选项] [输出内容]<br />
+</p>
+<ul class="org-ul">
+<li>-e 支持反斜杠控制的字符转换</li>
+<li>-n 不输出换行</li>
+</ul>
+<p>
+如 \a表示警告音，\b表示退格键，\r表示换行等等
+</p>
+
+<p>
+还可以通过-e将输出的内容显示出某种颜色。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org86db3f2" class="outline-3">
+<h3 id="org86db3f2">第一个脚本</h3>
+<div class="outline-text-3" id="text-org86db3f2">
+<p>
+在shell中#号表示注释，但是第一行的#!/bin/bash不能省略，表示linux的标准脚本。
+</p>
+
+<p>
+比如创建一个脚本hello.sh:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #75715E;">#</span><span style="color: #75715E;">!/bin/</span><span style="color: #F92672;">bash</span>
+<span style="color: #F92672;">echo</span> <span style="color: #E6DB74;">"lalala"</span>
+</pre>
+</div>
+<p>
+那么运行脚本的方式有两种:
+</p>
+<ul class="org-ul">
+<li>chmod 755 hello.sh 赋予运行权限，然后./hello.sh直接运行</li>
+<li>sh hello.sh运行 或者bash hello.sh</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org906ae03" class="outline-3">
+<h3 id="org906ae03">bash基本功能</h3>
+<div class="outline-text-3" id="text-org906ae03">
+</div>
+<div id="outline-container-orge2dd6d6" class="outline-4">
+<h4 id="orge2dd6d6">命令别名</h4>
+<div class="outline-text-4" id="text-orge2dd6d6">
+<ul class="org-ul">
+<li>alias 查看系统中所有命令的别名</li>
+<li>alias 别名 = '原命令' 来创建别名。</li>
+<li>将别名写入到~/.bashrc 中，则永久生效</li>
+<li>unalias 别名  用来删除别名</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org40e67e5" class="outline-3">
+<h3 id="org40e67e5">常用快捷键</h3>
+<div class="outline-text-3" id="text-org40e67e5">
+<ul class="org-ul">
+<li>ctrl + c 强制终止当前命令</li>
+<li>ctrl + l 清屏</li>
+<li>ctrl + a 光标移动到命令行首</li>
+<li>ctrl + e 光标移动到命令行尾</li>
+<li>ctrl + u 从光标所在位置删除到行首</li>
+<li>ctrl + z 把命令放入后台</li>
+<li>ctrl + r 在历史命令中搜索</li>
+<li>ctrl + d 表示退出(exit)</li>
+<li><code>shift + PageUp</code> 显示上一个屏幕内容，使用clear后，可以使用这个命令查看</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org302f0b0" class="outline-3">
+<h3 id="org302f0b0">历史命令</h3>
+<div class="outline-text-3" id="text-org302f0b0">
+<p class="verse">
+history [选项] [历史命令保存文件]<br />
+</p>
+<ul class="org-ul">
+<li>-c 清空历史命令</li>
+<li>-w 把缓存中的历史命令写入历史命令保存文件</li>
+<li>!n 表示重复执行第n条历史命令</li>
+<li>!! 重复执行上一条命令</li>
+<li>!字符串 重复执行最后一次以这个字符串开头的命令</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2df987f" class="outline-3">
+<h3 id="org2df987f">重定向</h3>
+<div class="outline-text-3" id="text-org2df987f">
+</div>
+<div id="outline-container-orgd2d1558" class="outline-4">
+<h4 id="orgd2d1558">输出重定向</h4>
+<div class="outline-text-4" id="text-orgd2d1558">
+<ul class="org-ul">
+<li>&gt; 覆盖</li>
+<li>&gt;&gt; 追加</li>
+<li>2&gt;标准错误输出</li>
+<li>2&gt;&gt; 标准错误输出 追加方式，左右没空格</li>
+<li>命令 &amp;&gt; 文件，覆盖方式把正确和错误信息都重定向</li>
+<li>命令 &amp;&gt;&gt;文件 不解释</li>
+<li>命令&gt;&gt;文件1 2&gt;&gt;文件2</li>
+</ul>
+<p>
+ls &amp;&gt; /dev/null  命令操作后，显示的内容直接丢到垃圾桶里。
+</p>
+</div>
+</div>
+<div id="outline-container-orge852c8d" class="outline-4">
+<h4 id="orge852c8d">输入重定向</h4>
+<div class="outline-text-4" id="text-orge852c8d">
+<ul class="org-ul">
+<li>wc &lt; log.log</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org3326c30" class="outline-3">
+<h3 id="org3326c30">多命令</h3>
+<div class="outline-text-3" id="text-org3326c30">
+<ul class="org-ul">
+<li>cmd1;cmd2 命令之剑没有逻辑关系，但是cmd1执行完后cmd2执行</li>
+<li>cmd1&amp;&amp;cmd2 命令1执行完后，命令2才执行，命令1执行不正确命令2不执行。</li>
+<li>cmd1 || cmd2 命令1未正确执行则命令2才执行，命令1执行正确，则命令2不执行。</li>
+</ul>
+
+<p>
+历史命令默认保存1000条，如果觉得不够，可以到/etc/profile中修改HISTSIZE
+历史命令保存在~/.bash<sub>history下</sub>
+</p>
+</div>
+</div>
+<div id="outline-container-org6a0bdb0" class="outline-3">
+<h3 id="org6a0bdb0">变量规则</h3>
+<div class="outline-text-3" id="text-org6a0bdb0">
+<ul class="org-ul">
+<li>单引号中的专业字符均无用，双引号中$有特殊含义</li>
+<li>赋值方式是aa=123</li>
+<li>而如果想要将命令结果赋给aa，可以使用$() ,如 aa = $(ls),将ls的结果赋给aa。</li>
+<li>变量赋值的时候左右不能加空格。</li>
+<li>调用变量需要在前边加上 <code>$</code> 如有个变量x=5,调用x变量需要使用 <code>$x</code></li>
+<li>所有的变量都是字符串类型，比如 <code>x=5</code> ，那么 <code>$x</code> 是字符串，不能对其做加减等运算。</li>
+<li>如果想要做加减运算，需要使用 <code>$(())</code> ，如 <code>$(( 10 + 20 ))</code></li>
+<li><code>x="$x"456</code> / <code>x=$(x)456</code> 都是变量叠加，将原来的x加上后缀456</li>
+<li><code>set</code> 命令会查询到当前系统中所以的变量。 <code>set -u</code> 执行后，那么 <code>echo $a</code> 当a变量不存在就会显$示错误信息，而默认情况是显示空字符。</li>
+<li><code>unset</code> 删除变量， <code>unset x</code> 不需要加上 <code>$</code> ，同样也可以删除环境变量</li>
+<li><code>export 变量名=变量值</code> ，定义环境变量方式 eg: <code>export x=5</code> 。</li>
+<li><code>env</code> 查看环境变量</li>
+<li>建议将环境变量写成大写</li>
+<li>PS1变量：用于定义命令行前边那一串的格式，如 <code>ubuntu@localhost:/home/ubuntu #</code> ,具体怎么改，百度一下</li>
+<li><code>locale</code> 用于显示当前语系变量，重要的是 <code>LANG</code> 和 <code>LC_ALL</code> , <code>LANG</code> 是定义系统主语系的变量， <code>LC_ALL</code> 定义整体语系变量。</li>
+<li><code>locale -a</code> 会显示当前支持的所有语言环境。</li>
+</ul>
+</div>
+<div id="outline-container-orga5fc2f3" class="outline-4">
+<h4 id="orga5fc2f3">位置参数变量</h4>
+<div class="outline-text-4" id="text-orga5fc2f3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">位置参数变量</th>
+<th scope="col" class="org-left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>$n</code></td>
+<td class="org-left">n为数字，$0表示命令本身，$1~\(9表示参数从第一个到第九个，10个以上需要使用大括号 =\){10}=</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>$*</code></td>
+<td class="org-left">表示命令行中所有参数</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>$@</code></td>
+<td class="org-left">命令行中所有参数，不过区分对待,比如使用for n in $@的时候就会起作用</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>$#</code></td>
+<td class="org-left">参数个数</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org103b7a3" class="outline-4">
+<h4 id="org103b7a3">预定义变量</h4>
+<div class="outline-text-4" id="text-org103b7a3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">预定义变量</th>
+<th scope="col" class="org-left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>$?</code></td>
+<td class="org-left">如果值为0，表示上一个命令执行成功，其实多命令执行就是根据这个来的</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>$$</code></td>
+<td class="org-left">当前进程的进程号pid</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>$!</code></td>
+<td class="org-left">后台运行的最后一个进程的pid</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org5674bd1" class="outline-4">
+<h4 id="org5674bd1">输入</h4>
+<div class="outline-text-4" id="text-org5674bd1">
+<p>
+read命令用于读取间盘输入，并且赋给某个变量
+</p>
+<ul class="org-ul">
+<li><code>read -p "请输入名字" name</code> ，-p表示输出提示信息</li>
+<li><code>read -p "请输入名字" -t 30 name</code> ,-t表示30s后将会直接停止。</li>
+<li><code>read -p "请输入密码" -s passwd</code> ,-s表示键盘输入的内容，命令行上不显示</li>
+<li><code>read -p "输入[y/n]" -t 1 input</code> -t表示只接受对应个数的字符，接受完直接运行。</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf963a24" class="outline-3">
+<h3 id="orgf963a24">shell运算符</h3>
+<div class="outline-text-3" id="text-orgf963a24">
+</div>
+<div id="outline-container-org6e54d46" class="outline-4">
+<h4 id="org6e54d46">declare命令</h4>
+<div class="outline-text-4" id="text-org6e54d46">
+<p>
+声明变量类型，如果不声明变量类型，则默认是字符串类型。
+</p>
+<p class="verse">
+declare [+/-] [选项] 变量名<br />
+</p>
+<ul class="org-ul">
+<li>- :给变量设定类型属性</li>
+<li>+ :取消变量类型属性</li>
+<li>-a:数组</li>
+<li>-i:整数</li>
+<li>-x:环境变量</li>
+<li>-r:只读变量</li>
+<li>-p:显示变量被声明的类型</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org38f7d94" class="outline-4">
+<h4 id="org38f7d94">数值运算方法</h4>
+<div class="outline-text-4" id="text-org38f7d94">
+<ul class="org-ul">
+<li><code>declare -i cc=$aa+$bb</code></li>
+<li><code>cc=$(expr $aa + $bb)</code> +号左右必须有空格</li>
+<li><code>cc=$(($aa+$bb))</code></li>
+<li><code>cc=$[$aa+$bb]</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org9d37e1d" class="outline-4">
+<h4 id="org9d37e1d">环境变量配置文件</h4>
+<div class="outline-text-4" id="text-org9d37e1d">
+<p>
+系统主要生效的环境变量有:
+</p>
+<ul class="org-ul">
+<li>/etc/profile</li>
+<li>/etc/profile.d/*.sh</li>
+<li>~/.bash<sub>profile</sub></li>
+<li>~/.bashrc</li>
+<li>/etc/bashrc</li>
+</ul>
+
+<p>
+正常登录:
+<a href="http://upload-images.jianshu.io/upload_images/8598337-d91a2c452141548d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">http://upload-images.jianshu.io/upload_images/8598337-d91a2c452141548d.png?imageMogr2/auto-orient/strip|imageView2/2/w/1240</a>
+</p>
+
+<p>
+非正常登录:
+/etc/bashrc -&gt; /etc/profile.d/*.sh 
+</p>
+</div>
+
+<div id="outline-container-org118f79f" class="outline-5">
+<h5 id="org118f79f">其他配置文件</h5>
+<div class="outline-text-5" id="text-org118f79f">
+<ul class="org-ul">
+<li>~/.bash<sub>logout</sub> 登出的时候环境变量会生效</li>
+<li>~/.bash<sub>history</sub> 历史命令的保存位置</li>
+<li>/etc/issue 登录前显示的信息</li>
+<li>/etc/issue.net 远程登录前显示信息</li>
+<li>/etc/motd 登录成功后显示的信息，</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org05e49af" class="outline-3">
+<h3 id="org05e49af">正则</h3>
+<div class="outline-text-3" id="text-org05e49af">
+<p>
+awk,grep,sed是支持正则的，而find,cp,ls等只能使用通配符。
+Linux中的基础正则:
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">字符</th>
+<th scope="col" class="org-left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">*</td>
+<td class="org-left">0次或多次</td>
+</tr>
+
+<tr>
+<td class="org-left">.</td>
+<td class="org-left">除换行符的任意字符</td>
+</tr>
+
+<tr>
+<td class="org-left">^</td>
+<td class="org-left">行首</td>
+</tr>
+
+<tr>
+<td class="org-left">$</td>
+<td class="org-left">行尾</td>
+</tr>
+
+<tr>
+<td class="org-left">[]</td>
+<td class="org-left">括号内任意字符</td>
+</tr>
+
+<tr>
+<td class="org-left">[^]</td>
+<td class="org-left">非括号内任意字符</td>
+</tr>
+
+<tr>
+<td class="org-left">\</td>
+<td class="org-left">转义，注意shell中的{}是特殊符号，用在正则中需要转义</td>
+</tr>
+
+<tr>
+<td class="org-left">\{n\}</td>
+<td class="org-left">出现n次</td>
+</tr>
+
+<tr>
+<td class="org-left">\{n,\}</td>
+<td class="org-left">不小于n次</td>
+</tr>
+
+<tr>
+<td class="org-left">\{n,m\}</td>
+<td class="org-left">n~m次</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div id="outline-container-orgb024660" class="outline-4">
+<h4 id="orgb024660">cut命令</h4>
+<div class="outline-text-4" id="text-orgb024660">
+<p>
+cut命令用来进行列提取，grep是行提取
+</p>
+<p class="verse">
+cut [OPTIONS] 文件名<br />
+</p>
+<ul class="org-ul">
+<li>f 提取第几列</li>
+<li>d 分隔符，默认使用制表符</li>
+</ul>
+
+<p>
+但是这个命令的智商比较低，只能截取规律的文件，如果目标文件的内容是多个空格隔开的，那么cut就不能起作用了。这个时候就要使用awk命令。
+eg： <code>cut -f 2,4 student.txt</code> 
+</p>
+</div>
+</div>
+<div id="outline-container-org87a942d" class="outline-4">
+<h4 id="org87a942d">awk</h4>
+<div class="outline-text-4" id="text-org87a942d">
+<p>
+awk中的输出命令只认识print或printf，没有echo命令。
+</p>
+<p class="verse">
+awk '条件1{动作1} 条件2{动作2}&#x2026;' 文件名<br />
+</p>
+<ul class="org-ul">
+<li>条件一般使用关系表达式作为条件</li>
+<li>动作一般是格式化输出如print,或流程控制等。</li>
+</ul>
+<p>
+比如有以下文件:
+</p>
+<p class="verse">
+Name Age Location<br />
+Mike 10  henan<br />
+Tok  20  hunan<br />
+</p>
+<p>
+使用awk如何输出第1列和第3列，因为分隔符是空格，cut是没法完成这个任务，那么使用awk呢？
+答案如下: <code>awk '{printf $1 "\t" $3 "\n"}' student.txt</code> 或者 <code>awk '{print $1 "\t" $3}' student.txt</code> .
+awk是按行执行命令，因为这个命令没有条件，所以每行都要执行，但是注意，其读取完行，才开始执行动作。而$1表示输入的第一个参数，所以可以按每行的输入执行对应的输出。
+</p>
+
+<p>
+再说个问题：执行df -h 后，找到磁盘使用量大于的20%的，如果有就报警，这个怎么做呢？
+<code>df -h|grep "/dev/sda5" | awk '{print $5}'|cut -d "%" -f 1</code> 
+</p>
+
+<p>
+如果awk参数需要使用外部变量，则需要使用-v 参数，如： <code>awk -v a=$out '{print $a}'</code> 
+</p>
+</div>
+<div id="outline-container-org14eecfc" class="outline-5">
+<h5 id="org14eecfc">NR,FNR,NF,FS,RT,RS等</h5>
+<div class="outline-text-5" id="text-org14eecfc">
+<ul class="org-ul">
+<li>NR :表示awk开始执行程序后所读取的数据行数，如</li>
+</ul>
+<p>
+<code>awk '{print NR}' file1</code> 如果file1有5行，则输出 <code>1\n2\n3\n4\n5</code> 
+</p>
+<ul class="org-ul">
+<li>FNR: 与NR类似，不过FNR每打开一个新文件都会从0开始计数，因为可以给awk传入多个文件。如 <code>awk '{print NR}' file1 file2</code> 和 <code>awk '{print FNR} file1 file2'</code> 是不一样的，一个输出1~n，一个输出1~m 1~j</li>
+<li>FS：FS表示分隔符，可指定正则，如 <code>awk FS="[[:space]+]" '{print $1}' file</code> 或 <code>awk 'BEGIN{FS=":"}{print $1}' file</code> 。也可以通过-F来指定分隔符,如 <code>awk -F ':' '{print $0}' file</code></li>
+<li>NF: 表示每行有多少个fileds,如有一行内容为 <code>1 2 3</code> ，那么NF则为3.</li>
+<li>RS：行分隔符，默认为""，awk会解析为"(\n)*",可以通过 <code>awk 'BEGIN{RS="|"}'</code> 来指定RS</li>
+<li>RT：行分隔符，表示当前行是以谁为分隔符来进行分割的，如RS为[a-z]，表示按字母进行分割，如果有一行内容为 <code>1a2</code> ，那么此时以 <code>a</code> 进行分割，则RT的值为 <code>a</code></li>
+<li>ORS: 输出时的行分割符，默认为 <code>\n</code> ， 如 <code>echo -e "a\nb\nc" | awk 'BEGIN{ORS="|"}{print $0}'</code> 则输出 <code>a|b|c</code></li>
+<li>OFS :同上，输出的列分隔符</li>
+</ul>
+<p>
+eg:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">awk -F <span style="color: #E6DB74;">\|</span> <span style="color: #E6DB74;">'NR==FNR{a[$2]=$0;next}{print a[$1]"|"$2}'</span> file
+</pre>
+</div>
+<p>
+其中next表示跳过后续命令，继续下一行。
+其中NR==FNR表示读取的是第一个文件时候，为条件。若不为真，则执行第二个大括号内的内容。
+</p>
+</div>
+</div>
+<div id="outline-container-org00e3a7b" class="outline-5">
+<h5 id="org00e3a7b">BEGIN,END</h5>
+<div class="outline-text-5" id="text-org00e3a7b">
+<p>
+<code>awk 'BEGIN{printf "This is a transcript\n"} {printf $2 "\t" $4 "\n"}' student.txt</code>
+BEGIN是一个表达式，表示在最开始的时候执行后边的动作。
+而END是在最后的时候执行后边的动作。
+</p>
+
+<p>
+那么这个东东又有什么用呢？
+比如/etc/passwd中的文件，我想截取其中第一列的内容，使用cut轻松完成 <code>cat /etc/passwd| cut -d ":" -f 1</code> ，那么使用awk的话，就需要借助于BEGIN：
+<code>cat /etc/passwd | awk 'BEGIN{FS=":"} {printf $1"\n"}'</code> , <code>FS=":"</code> 中的FS是内置的一个变量，表示的是分隔符，可指定正则，在刚开始的时候就指定分隔符，这样就可以输出对应的变量了。
+还有一种指定分隔符的方法是使用-F参数，如 <code>awk -F ':' '{print $1}'</code> ,而如果想要多个分割符，可使用正则，如 <code>awk -F '[:|,]' '{print $1}'</code> 
+而如果不加BEGIN： <code>cat /etc/passwd | awk '{FS=":"} {printf $1"\n"}'</code> ,那么执行结果将是这样的:
+</p>
+<p class="verse">
+root:x:0:0:root:/root:/bin/bash<br />
+user1<br />
+user2<br />
+</p>
+<p>
+原因就是，读取第一行后，先赋变量，然后才开始执行动作，而这条命令是每行都会执行，但是第一行执行前，分隔符依然是 <code>:</code> 所以就导致了以上的结果出现，解决办法就是加上 <code>BEGIN</code> 
+</p>
+
+<p>
+再看一个例子：
+<code>cat student.txt|grep -v Name | awk '$4&gt;70{printf $2 "\n"}'</code> ，表示大于70分的打印出名字。
+注意 <code>grep -v Name</code> 表示取反，有Name的那一行不要.
+</p>
+
+<p>
+使用awk还可以创建数组并进行统计，如
+<code>awk '{a[$1]++}END{for (i in a) print i" "a[i]}' file</code> 
+</p>
+
+<p>
+更可以统计某些数字的和：
+<code>awk '{res=res+$1}END{print res}'</code>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org569243e" class="outline-4">
+<h4 id="org569243e">sed</h4>
+<div class="outline-text-4" id="text-org569243e">
+<p>
+对数据进行选取，替换，删除 ，新增的命令
+</p>
+<p class="verse">
+sed [OPTIONS] '[动作]' 文件名<br />
+</p>
+<ul class="org-ul">
+<li>-n:一般sed会把所有数据输出到屏幕，而使用-n后，只会把经过sed命令处理的行输出到屏幕</li>
+<li>-e: 允许输入多条动作</li>
+<li>-i: 一般sed不会修改文件，只会将结果显示在屏幕，但是加上-i会修改文件。</li>
+</ul>
+
+<p>
+如果sed中的参数需要使用变量，则需要将单引号转变为双引号如
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #FD971F;">i</span>=1
+sed -n <span style="color: #E6DB74;">"${i}p"</span> xx
+</pre>
+</div>
+<p>
+使用-i参数可以替换文本中的内容么，如 <code>sed -i "s/first/second/g" filename.txt</code> 将filename.txt中的first替换为second
+动作:
+</p>
+<ul class="org-ul">
+<li>a:追加，在某一行的后边添加一行或多行</li>
+<li>c:行替换，用c后面的字符串替换原数据行</li>
+<li>i:插入，在某一行的前边插入一行或多行。</li>
+<li>d:删除，删除指定行</li>
+<li>p:输出指定行</li>
+<li>s:字符替换，用一个字符串替换另外一个字符串，与vim中的替换类似 <code>行范围s/新字符串/旧字符串/g</code></li>
+
+<li><code>sed -n '2p' student.txt</code> :查看当前文件的第二行,注意一定加上-n，如果没有-n将输出所有行。</li>
+<li><code>sed '2,4d' student.txt</code> 删除第二行到第四行的数据</li>
+<li><code>sed '2a something' student.txt</code> :在第二行的后边加入一行内容</li>
+<li><code>sed '2i something' student.txt</code> :在第二行的前边加入一行内容</li>
+<li><code>sed '4c something' student.txt</code> :将第4行替换为something</li>
+<li><code>sed '4s/70/100/g' student.txt</code> 将第四行的70替换为100，如果不加行数，则会替换全文内容。</li>
+<li><code>sed -e 's/furong//g;s/fengjie//g' student.txt</code>  -e指定多条命令，命令之间使用 <code>;</code> 隔开。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgde5ab9d" class="outline-4">
+<h4 id="orgde5ab9d">sort</h4>
+<div class="outline-text-4" id="text-orgde5ab9d">
+<p class="verse">
+sort [选项] 文件名<br />
+</p>
+<ul class="org-ul">
+<li>-f : 忽略大小写</li>
+<li>-n:以数值形进行排序，默认使用字符串</li>
+<li>-r：反向排序</li>
+<li>-t:指定分隔符，默认是制表符</li>
+<li>-k n[,m] 按照指定的字段范围排序，一般与-t结合使用，-t将每行分为多个字段，然后通过-k n,m来指定按照第某个字段排序。如果-k后跟的小数，如a.b则表示按第a个字段的第b个字符排序。当然n和m都可以是小数，则取其间隔即可。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org98f3c01" class="outline-4">
+<h4 id="org98f3c01">wc</h4>
+<div class="outline-text-4" id="text-org98f3c01">
+<p class="verse">
+wc [选项] 文件名<br />
+</p>
+<ul class="org-ul">
+<li>-l:只统计行数</li>
+<li>-w:只统计单词数</li>
+<li>-m:只统计字符数</li>
+</ul>
+<p>
+默认会都统计。
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd01592e" class="outline-3">
+<h3 id="orgd01592e">shell流程控制</h3>
+<div class="outline-text-3" id="text-orgd01592e">
+</div>
+<div id="outline-container-orgedd5861" class="outline-4">
+<h4 id="orgedd5861">条件判断</h4>
+<div class="outline-text-4" id="text-orgedd5861">
+</div>
+<div id="outline-container-orgae8bfa1" class="outline-5">
+<h5 id="orgae8bfa1">文件类型判断</h5>
+<div class="outline-text-5" id="text-orgae8bfa1">
+<p>
+以下都是判断文件是否存在，但是对应的文件类型有不同，格式是 <code>[选项] 文件名</code>
+</p>
+<ul class="org-ul">
+<li>-b 块设备文件</li>
+<li>-c 字符设备文件</li>
+<li>-d 目录文件</li>
+<li>-e 单纯判断文件是否存在</li>
+<li>-f 普通文件</li>
+<li>-L 符号链接文件</li>
+<li>p 管道文件</li>
+<li>-s 非空文件</li>
+<li>-S 套接字文件</li>
+</ul>
+
+<p>
+用的最多的是 <code>-d</code> , <code>-e</code> , <code>-f</code> 。
+比如:
+<code>[ -e /root/install.log ]</code> 或 <code>test -e /root/install.log</code> 表示判断/root/install.log是否存在
+以上写法都对，但是一般用第一种写法，但是第一种写法中括号两边要有空格。
+<code>[ -e /root/install.log]  &amp;&amp; echo yese || echo no</code> 文件存在会打印yes，不存在打印no。可以将来 <code>cmd&amp;&amp;cmd||cmd</code> 理解为 <code>if esle</code> 语句。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgffc12ba" class="outline-5">
+<h5 id="orgffc12ba">根据文件权限判断</h5>
+<div class="outline-text-5" id="text-orgffc12ba">
+<p>
+以下都是判断文件是否存在，同时判断文件是否有对应的权限
+</p>
+<ul class="org-ul">
+<li>-r 读权限</li>
+<li>-w 写权限</li>
+<li>-x 执行权限</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbf9b5ad" class="outline-5">
+<h5 id="orgbf9b5ad">文件比较</h5>
+<div class="outline-text-5" id="text-orgbf9b5ad">
+<ul class="org-ul">
+<li>文件1 -nt 文件2 ：判断文件1的修改时间是否比文件2的新，nt： new than</li>
+<li>文件1 -ot 文件2 ：old than</li>
+<li>文件1 -ef 文件2：判断文件1是否和文件2的Inode号一致。</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org9a28a41" class="outline-5">
+<h5 id="org9a28a41">两个整数之间的比较</h5>
+<div class="outline-text-5" id="text-org9a28a41">
+<p>
+格式是 <code>num1 [选项] num2</code> 
+</p>
+<ul class="org-ul">
+<li>-eq :判断两个整数是否相等</li>
+<li>-ne:不相等</li>
+<li>-gt:大于</li>
+<li>-lt:小于</li>
+<li>-ge:大于等于</li>
+<li>-le:小于等于</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org08a7364" class="outline-5">
+<h5 id="org08a7364">字符串之间的比较</h5>
+<div class="outline-text-5" id="text-org08a7364">
+<ul class="org-ul">
+<li>-z 字符串 判断字符串是否为空</li>
+<li>-n  判断字符串是否非空</li>
+<li>字符串 ==字符串2</li>
+<li>字符串 != 字符串2</li>
+</ul>
+
+<p>
+但是判断的时候要加上双引号，否则会出错，比如 <code>[ -z $name ]</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3cf0d74" class="outline-5">
+<h5 id="org3cf0d74">多重条件判断</h5>
+<div class="outline-text-5" id="text-org3cf0d74">
+<ul class="org-ul">
+<li>判断1 -a 判断2：逻辑与</li>
+<li>判断1 -o 判断2：逻辑或</li>
+<li>！判断：逻辑非</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7594794" class="outline-4">
+<h4 id="org7594794">if</h4>
+<div class="outline-text-4" id="text-org7594794">
+</div>
+<div id="outline-container-orgda5c2ed" class="outline-5">
+<h5 id="orgda5c2ed">单分支if条件语句</h5>
+<div class="outline-text-5" id="text-orgda5c2ed">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">if</span> [ &#26465;&#20214;&#21028;&#26029; ];<span style="color: #F92672;">then</span>
+  &#31243;&#24207;
+<span style="color: #F92672;">fi</span>
+</pre>
+</div>
+<p>
+或者
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">if</span> [ &#26465;&#20214;&#21028;&#26029; ]
+  <span style="color: #F92672;">then</span>
+  &#31243;&#24207;
+<span style="color: #F92672;">fi</span> 
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2ed05d9" class="outline-5">
+<h5 id="org2ed05d9">双分支if</h5>
+<div class="outline-text-5" id="text-org2ed05d9">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">if</span> [ &#26465;&#20214;&#21028;&#26029; ]
+  <span style="color: #F92672;">then</span>
+    &#26465;&#20214;&#25104;&#31435;&#65292;&#25191;&#34892;
+  <span style="color: #F92672;">else</span>
+    &#26465;&#20214;&#19981;&#25104;&#31435;&#65292;&#25191;&#34892;
+<span style="color: #F92672;">fi</span>
+</pre>
+</div>
+
+<p>
+如,判断读取的字符串是不是一个目录
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #75715E;">#</span><span style="color: #75715E;">!/bin/</span><span style="color: #F92672;">bash</span>
+
+<span style="color: #F92672;">read</span> -t  30 -p <span style="color: #E6DB74;">"input"</span> dir
+<span style="color: #F92672;">if</span> [ -d $<span style="color: #FD971F;">dir</span> ]
+  <span style="color: #F92672;">then</span>
+    <span style="color: #F92672;">echo</span> <span style="color: #E6DB74;">"&#26159;&#30446;&#24405;"</span>
+  <span style="color: #F92672;">else</span>
+    <span style="color: #F92672;">echo</span> <span style="color: #E6DB74;">"&#19981;&#26159;"</span>
+<span style="color: #F92672;">fi</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6d63bda" class="outline-5">
+<h5 id="org6d63bda">多分支if</h5>
+<div class="outline-text-5" id="text-org6d63bda">
+<div class="org-src-container">
+<pre class="src src-shell">
+<span style="color: #F92672;">if</span> [ &#26465;&#20214;1 ]
+  <span style="color: #F92672;">then</span>
+    &#31243;&#24207;
+<span style="color: #F92672;">elif</span> [ &#26465;&#20214;2 ]
+  <span style="color: #F92672;">then</span>
+    &#31243;&#24207;
+...
+<span style="color: #F92672;">else</span>
+  &#31243;&#24207;
+<span style="color: #F92672;">fi</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org6ddf69f" class="outline-5">
+<h5 id="org6ddf69f">多条件判断</h5>
+<div class="outline-text-5" id="text-org6ddf69f">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">if</span> [ &#26465;&#20214;1 ] &amp;&amp; [&#26465;&#20214;2];<span style="color: #F92672;">then</span>
+  <span style="color: #F92672;">do</span>
+<span style="color: #F92672;">fi</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org41d010f" class="outline-5">
+<h5 id="org41d010f">tips</h5>
+<div class="outline-text-5" id="text-org41d010f">
+<ul class="org-ul">
+<li>在判断字符相等时利用 == 判断要注意两边都要有空格。</li>
+<li>if [ -n "$num1" -a -n "$num2" -a -n "$op" ]</li>
+</ul>
+<p>
+shell编程类似的这种对于变量的判断一定要记得加双引号，虽然有时候显得没必要，但是在程序比较大时可能会因为这种小细节出错，这种问题应该调试半天也不一定能发现.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org773f7e8" class="outline-4">
+<h4 id="org773f7e8">case</h4>
+<div class="outline-text-4" id="text-org773f7e8">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">case</span> $<span style="color: #FD971F;">&#21464;&#37327;&#21517;</span><span style="color: #F92672;"> in</span>
+  <span style="color: #E6DB74;">"&#20540;1"</span>)
+    &#31243;&#24207;1
+    ;;
+  <span style="color: #E6DB74;">"&#20540;2"</span>)
+    &#31243;&#24207;2
+    ;;
+  *)
+    &#40664;&#35748;&#31243;&#24207;
+    ;;
+<span style="color: #F92672;">esac</span>
+</pre>
+</div>
+<p>
+其中对于每个匹配的值，都可以使用正则来表示
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd6f46a6" class="outline-4">
+<h4 id="orgd6f46a6">for</h4>
+<div class="outline-text-4" id="text-orgd6f46a6">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">for</span> &#21464;&#37327;<span style="color: #F92672;"> in</span> &#20540;1 &#20540;2 &#20540;3...
+  <span style="color: #F92672;">do</span>
+    &#31243;&#24207;
+  <span style="color: #F92672;">done</span>
+</pre>
+</div>
+<p>
+如
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">for</span> i<span style="color: #F92672;"> in</span> 1 2 3 4 5
+  <span style="color: #F92672;">do</span> 
+    <span style="color: #F92672;">echo</span> $<span style="color: #FD971F;">i</span>
+  <span style="color: #F92672;">done</span>
+</pre>
+</div>
+<p>
+另一种格式:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">for</span> (( <span style="color: #FD971F;">i</span>=1;i&lt;=100;i++))
+  <span style="color: #F92672;">do</span>
+    &#31243;&#24207;
+  <span style="color: #F92672;">done</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org9fa5b53" class="outline-4">
+<h4 id="org9fa5b53">while</h4>
+<div class="outline-text-4" id="text-org9fa5b53">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">while</span> [ &#26465;&#20214;&#21028;&#26029; ]
+  <span style="color: #F92672;">do</span>
+    &#31243;&#24207;
+  <span style="color: #F92672;">done</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdceb7c8" class="outline-4">
+<h4 id="orgdceb7c8">until</h4>
+<div class="outline-text-4" id="text-orgdceb7c8">
+<p>
+until和while刚相反,until是条件成立才终止
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">until</span> [ &#26465;&#20214;&#21028;&#26029; ]
+  <span style="color: #F92672;">do</span>
+    &#31243;&#24207;
+  <span style="color: #F92672;">done</span>
+</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-06-04 Tue 00:03</p>
+<p class="date">Created: 2019-06-27 Thu 12:58</p>
 <p class="validation"></p>
 </div>
 </body>

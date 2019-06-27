@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-06-27 Thu 12:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>struct嵌套解json</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">struct嵌套解json</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org22338b9">概述</a></li>
+<li><a href="#org58e78c1">方式</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org22338b9" class="outline-2">
+<h2 id="org22338b9">概述</h2>
+<div class="outline-text-2" id="text-org22338b9">
+<p>
+golang中可以通过json.Unmarshal将一个json字符串解为map对象，也可以解为struct对象，但json的嵌套足够多的时候struct同样嵌套很多，同时要创建很多struct结构，而有时候只是想获取json结构中的某一个值，写很多struct太复杂，所以考虑使用一个struct来获取其值
+</p>
+</div>
+</div>
+<div id="outline-container-org58e78c1" class="outline-2">
+<h2 id="org58e78c1">方式</h2>
+<div class="outline-text-2" id="text-org58e78c1">
+<p>
+使用匿名struct的方式，如
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">type</span> <span style="color: #66D9EF;">Person</span> <span style="color: #F92672;">struct</span>{
+    Family <span style="color: #F92672;">struct</span> {
+        Dad <span style="color: #F92672;">struct</span> {
+            Name string <span style="color: #E6DB74;">`json:"name"`</span>
+            age int <span style="color: #E6DB74;">`json:"age"`</span>
+        } <span style="color: #E6DB74;">`json:"dad"`</span>
+    } <span style="color: #E6DB74;">`json:"family"`</span>
+}
+
+<span style="color: #F92672;">type</span> <span style="color: #66D9EF;">ArrayPerson</span> <span style="color: #F92672;">struct</span> {
+    Persons []<span style="color: #F92672;">struct</span>{
+        Name string <span style="color: #E6DB74;">`json:"name"`</span>
+        Age int <span style="color: #E6DB74;">`json:"age"`</span>
+    } <span style="color: #E6DB74;">`json:"persons"`</span>
+}
+
+<span style="color: #F92672;">var</span> jsonValue = <span style="color: #E6DB74;">`</span>
+<span style="color: #E6DB74;">{ </span>
+<span style="color: #E6DB74;">    "family":{</span>
+<span style="color: #E6DB74;">        "dad": {</span>
+<span style="color: #E6DB74;">            "name":"dad",</span>
+<span style="color: #E6DB74;">            "age":18</span>
+<span style="color: #E6DB74;">        }</span>
+<span style="color: #E6DB74;">    }</span>
+<span style="color: #E6DB74;">}</span>
+<span style="color: #E6DB74;">`</span>
+
+<span style="color: #F92672;">var</span> arraryPersons = <span style="color: #E6DB74;">`</span>
+<span style="color: #E6DB74;">{</span>
+<span style="color: #E6DB74;">    "persons":[</span>
+<span style="color: #E6DB74;">        {</span>
+<span style="color: #E6DB74;">            "name":"haha",</span>
+<span style="color: #E6DB74;">            "age":18</span>
+<span style="color: #E6DB74;">        },</span>
+<span style="color: #E6DB74;">        {</span>
+<span style="color: #E6DB74;">            "name":"heihei",</span>
+<span style="color: #E6DB74;">            "age":19</span>
+<span style="color: #E6DB74;">        }</span>
+<span style="color: #E6DB74;">    ]</span>
+<span style="color: #E6DB74;">}</span>
+<span style="color: #E6DB74;">`</span>
+
+<span style="color: #F92672;">func</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #F92672;">var</span>  p Person
+    <span style="color: #F92672;">var</span> ps ArrayPerson
+    json.<span style="color: #A6E22E;">Unmarshal</span>([]<span style="color: #A6E22E;">byte</span>(arraryPersons), &amp;ps)
+    json.<span style="color: #A6E22E;">Unmarshal</span>([]<span style="color: #A6E22E;">byte</span>(jsonValue), &amp;p)
+    fmt.<span style="color: #A6E22E;">Println</span>(p)
+    fmt.<span style="color: #A6E22E;">Println</span>(p.Family.Dad)
+    fmt.<span style="color: #A6E22E;">Println</span>(ps)
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

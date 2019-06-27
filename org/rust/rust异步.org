@@ -1,0 +1,18 @@
+#+TITLE: rust异步
+* 概览
+rust的异步由几个关键字组成async/await/Future等，但是看了官方文档，真是像吞粪一样，太晦涩难懂，于是参考其他语言的async,await才把这个关键搞懂。
+rust的协程和go有很大的出入，其实现方式和java中的，js中的都非常类似，首先要弄懂其协程，就要先搞懂aysnc,await的含义。
+简单来说，async是修饰一个函数，使其成为异步函数，如
+#+BEGIN_SRC rust
+use std::{thread,time};
+async fn test(){
+    println!("{}","我后执行");
+}
+
+fn main(){
+    test();
+    println!("{}","我先执行"); // 先执行此处
+    let one_second = time::Duration::from_millis(1000);
+    thread::sleep(one_second);
+}
+#+END_SRC

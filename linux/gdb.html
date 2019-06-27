@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-06-27 Thu 12:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>gdb笔记</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">gdb笔记</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org99a8912">概述</a></li>
+<li><a href="#orgb9728ba">调试命令</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org99a8912" class="outline-2">
+<h2 id="org99a8912">概述</h2>
+<div class="outline-text-2" id="text-org99a8912">
+<p>
+gdb是一个调试工具，重点是调试工具，而不是c/c++的相关工具，其是由GNU开源的工具.
+参考:<a href="https://blog.csdn.net/liigo/article/details/582231">https://blog.csdn.net/liigo/article/details/582231</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orgb9728ba" class="outline-2">
+<h2 id="orgb9728ba">调试命令</h2>
+<div class="outline-text-2" id="text-orgb9728ba">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">命令</th>
+<th scope="col" class="org-left">解释</th>
+<th scope="col" class="org-left">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">file &lt;filename&gt;</td>
+<td class="org-left">加载被调试的可执行文件</td>
+<td class="org-left">(gdb) file somefile</td>
+</tr>
+
+<tr>
+<td class="org-left">r</td>
+<td class="org-left">run的简写，运行被调试的程序</td>
+<td class="org-left">(gdb) r</td>
+</tr>
+
+<tr>
+<td class="org-left">c</td>
+<td class="org-left">continue的简写，继续执行程序，直到下一个断点</td>
+<td class="org-left">(gdb) c</td>
+</tr>
+
+<tr>
+<td class="org-left">b &lt;行号&gt;</td>
+<td class="org-left">breakpoint 设置断点。 b &lt;行号&gt; 在指定行号加断点，b &lt;函数名称&gt;/ *&lt;函数名称&gt;/*&lt;代码地址&gt;</td>
+<td class="org-left">(gdb) b 8/main/*main/*0x804823c</td>
+</tr>
+
+<tr>
+<td class="org-left">d</td>
+<td class="org-left">delete breakpoint 删除断点</td>
+<td class="org-left">(gdb) d</td>
+</tr>
+
+<tr>
+<td class="org-left">s</td>
+<td class="org-left">step into: 执行一行源程序代码，如果此行代码中有函数调用，则进入该函数。</td>
+<td class="org-left">(gdb) s</td>
+</tr>
+
+<tr>
+<td class="org-left">n</td>
+<td class="org-left">step over: 执行一行源程序代码，此行代码中的函数也一并执行。</td>
+<td class="org-left">(gdb) n</td>
+</tr>
+
+<tr>
+<td class="org-left">si,ni</td>
+<td class="org-left">与s/n命令相同，不同的是si/ni针对的是汇编指令，而s/n针对的是源程序</td>
+<td class="org-left">(gdb) si/ni</td>
+</tr>
+
+<tr>
+<td class="org-left">p &lt;变量名称&gt;</td>
+<td class="org-left">print的简写，显示指定变量(临时变量或全局变量)的值</td>
+<td class="org-left">(gdb) p i</td>
+</tr>
+
+<tr>
+<td class="org-left">display &#x2026;/ undisplay&lt;编号&gt;</td>
+<td class="org-left">display,设置程序中断后欲显示的数据及格式，如display /i $pc可查看中断后的下一条汇编指令，undisplay取消先前dispaly设置</td>
+<td class="org-left">(gdb) display /i $pc</td>
+</tr>
+
+<tr>
+<td class="org-left">i</td>
+<td class="org-left">info的简写，用于显示各类信息</td>
+<td class="org-left">(gdb) i r</td>
+</tr>
+
+<tr>
+<td class="org-left">q</td>
+<td class="org-left">quit的简写，退出gdb</td>
+<td class="org-left">(gdb) q</td>
+</tr>
+
+<tr>
+<td class="org-left">help &lt;命令名称&gt;</td>
+<td class="org-left">帮助</td>
+<td class="org-left">(gdb) help display</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>
