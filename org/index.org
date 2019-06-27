@@ -6,9 +6,8 @@
   * [2019-04-17 Wed] [[file:git/git-push到多个仓库.org][git-push到多个仓库]]
   * [2019-05-31 Fri] [[file:git/gitFAQ.org][git常见问题]]
 * go
-  * [2019-06-21 Fri] [[file:go/file.org][file读写]]
   * [2019-06-17 Mon] [[file:go/flag.org][flag使用方法]]
-  * [2019-06-25 Tue] [[file:go/go源码剖析笔记.org][go源码剖析笔记]]
+  * [2019-06-27 Thu] [[file:go/go源码剖析笔记.org][go源码剖析笔记]]
   * [2019-06-19 Wed] [[file:go/read.org][go读写数据]]
   * [2019-06-25 Tue] [[file:go/go高阶规划.org][go高阶规划]]
   * [2019-06-20 Thu] [[file:go/http.org][http请求]]
