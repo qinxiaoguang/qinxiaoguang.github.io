@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-07-03 Wed 22:14 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>go channel相关</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">go channel相关</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgf14953b">TIPs</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgf14953b" class="outline-2">
+<h2 id="orgf14953b">TIPs</h2>
+<div class="outline-text-2" id="text-orgf14953b">
+<ul class="org-ul">
+<li><code>runtime.GOMAXPROCS(numCores)</code> 用来设置使用的核心数量</li>
+<li><code>runtime.Goexit()</code> 终止协程</li>
+<li>channel定义的方式是: <code>var identifiier chan datatype</code> ,注意 <code>chan func()</code> 这种也是channel类型，不过他的通道的内容是函数而已。</li>
+<li>channel是引用类型，所以可以在函数中传来传去</li>
+<li>同一个channel，可以传入元素值，也可以传入指针</li>
+<li>channel必须使用make()来创建，如果 <code>var ch chan int</code> 创建，则初始值是nil，无法使用</li>
+<li>channel可以传入空字节，如 <code>type Empty interface{}</code> 可以创建 <code>ch := make(chan Empty)</code></li>
+<li>channel默认是无缓冲的，也就是说在main中执行 ch&lt;- 1 的时候会阻塞，同样执行 &lt;-ch的时候也会阻塞。</li>
+<li>创建带有缓冲的channel方式是: <code>make(chan int,100)</code></li>
+<li>通道也可以用在range上 <code>for v:= range ch{}</code></li>
+<li><code>chan&lt;-int</code> 表示只接受内容的通道不允许发送，这种通道无法关闭， <code>&lt;-chan int</code> 表示只发送的通道</li>
+<li>可以将双向通道转换为单向通道</li>
+<li>关闭通道的方式是 <code>close(ch)</code> ,在关闭之后，可以通过 <code>v,ok := &lt;- ch</code> 来检测是否被阻塞，如果ok为false,表示ch被关闭。</li>
+<li>如果 <code>v,ok := &lt;-ch</code> 来检测通道是否关闭有点繁琐，有更简单的方式是使用 for: <code>for v:=range ch{}</code></li>
+<li>如果channel被关闭，不能重复再关闭，也不能向channel中写数据，但是channel中剩余的数据还是可以读的。</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">select</span> {
+<span style="color: #F92672;">case</span> u:= &lt;- ch1:
+        ...
+<span style="color: #F92672;">case</span> v:= &lt;- ch2:
+        ...
+        ...
+<span style="color: #F92672;">default</span>: <span style="color: #75715E;">// </span><span style="color: #75715E;">no value ready to be received</span>
+        ...
+}
+</pre>
+</div>
+<ul class="org-ul">
+<li>select是轮询机制，如果有default，那么每次select都会瞬间执行其中一个分支，如果case都没有成功，就会执行default，否则执行case中的某一个。</li>
+<li>而如果没有default，那么case如果都阻塞，select也会发生阻塞，直到有一个case成功。</li>
+</ul>
+
+<p>
+可以通过 <code>time.Tick(time.Second*2)</code> 来创建定时器，其中的通道会隔一段时间向通道内发送内容，如：
+</p>
+<div class="org-src-container">
+<pre class="src src-go">ticker := time.<span style="color: #A6E22E;">Tick</span>(time.Second*2)
+<span style="color: #F92672;">for</span>{
+    &lt;-ticker
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"hah"</span>)
+}
+</pre>
+</div>
+<p>
+上述代码会隔两秒打印一次 <code>hah</code>
+也可以通过 <code>time.NewTicker(time.Second*2)</code> 创建定时器，不过返回的是一个结构体，如:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">ticker := time.<span style="color: #A6E22E;">NewTicker</span>(time.Second*2)
+<span style="color: #F92672;">for</span>{
+    &lt;-ticker.C
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"hah"</span>)
+}
+</pre>
+</div>
+<p>
+第二种写法调用的时候，需要指明其中通道，这种方式的通道名为 <code>C</code> ,所以获取该定时器的方式就是 <code>ticker.C</code> 
+</p>
+
+<p>
+<code>time.After()</code> 只会向通道内发送一次内容，将select和这个结合，可以实现超时的功能：
+</p>
+<div class="org-src-container">
+<pre class="src src-go">after := time.<span style="color: #A6E22E;">After</span>(time.Second*5)
+ch := <span style="color: #F92672;">make</span>(<span style="color: #F92672;">chan</span> <span style="color: #66D9EF;">int</span>)
+<span style="color: #F92672;">select</span>{
+<span style="color: #F92672;">case</span> &lt;- ch:
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#26469;&#21862;"</span>)
+<span style="color: #F92672;">case</span> &lt;-after:
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#36229;&#26102;&#25289;"</span>)
+}
+</pre>
+</div>
+<p>
+同样有更简便的写法:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">ch := <span style="color: #F92672;">make</span>(<span style="color: #F92672;">chan</span> <span style="color: #66D9EF;">int</span>)
+<span style="color: #F92672;">select</span>{
+<span style="color: #F92672;">case</span> &lt;- ch:
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#26469;&#21862;"</span>)
+<span style="color: #F92672;">case</span> &lt;-time.<span style="color: #A6E22E;">After</span>(5e9):
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#36229;&#26102;&#25289;"</span>)
+}
+</pre>
+</div>
+<p>
+<code>1e9</code> 就是1s
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-07-03 Wed 22:14</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

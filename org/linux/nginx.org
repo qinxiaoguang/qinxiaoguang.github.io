@@ -13,10 +13,10 @@ mac : =brew install nginx=
 * 配置
 nginx配置文件位于 =/usr/local/etc/nginx/nginx.conf= 下。
 详细配置:http://www.nginx.cn/76.html
-** =worker_processes=
+** worker_processes
 指明nginx开启的进程数，一般为CPU核数的1~2倍，通过`cat /proc/cpuinfo| grep "cpu cores"| uniq`查看CPU核数。
-** =worker_cpu_affinity=
-这个要结合worker_processes 来使用，进程开了多少个，worker_cpu_affinity后的参数就有多少个，比如:
+** worker_cpu_affinity
+这个要结合 =worker_processes= 来使用，进程开了多少个，worker_cpu_affinity后的参数就有多少个，比如:
 #+BEGIN_SRC nginx
 worker_processes     2;
 worker_cpu_affinity 01 10;
@@ -27,16 +27,16 @@ worker_processes     2;
 worker_cpu_affinity 0101 1010;
 #+END_SRC
 上述示例表示，第一个进程对应第一和第三个内核，第二个进程对应第二个和第四个内核。
-** =worker\_rlimit_nofile=
+** worker_rlimit_nofile
 worker_rlimit_nofile 更改worker进程的最大打开文件数限制。如果没设置的话，这个值为操作系统的限制。设置后你的操作系统和Nginx可以处理比“ulimit -a”更多的文件，所以把这个值设高，这样nginx就不会有“too many open files”问题了。
-** error\_log
-nginx的error_log类型如下（从左到右：debug最详细 crit最少）： 
+** error_log
+nginx的 =error_log= 类型如下（从左到右：debug最详细 crit最少）： 
 [ debug | info | notice | warn | error | crit ] 
 #+BEGIN_SRC nginx
 error_log logs/error.log notice
 #+END_SRC
 表示以notice类型来记录错误日志，打印到error.log中。
-如果想要关闭日志功能，需要配置`error_log /dev/null notice`
+如果想要关闭日志功能，需要配置 =error_log /dev/null notice=
 ** pid
 #+BEGIN_SRC nginx
 pid logs/nginx.pid

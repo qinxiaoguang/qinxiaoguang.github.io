@@ -12,7 +12,7 @@ Entry point: 0x104e8b0
 #+BEGIN_VERSE
 Breakpoint 1 at 0x104e8b0: file /usr/local/go/src/runtime/rt0_darwin_amd64.s, line 8.
 #+END_VERSE
-所以入口文件为 =file /usr/local/go/src/runtime/rt0_darwin_amd64.s= 
+所以入口文件为 =file /usr/local/go/src/runtime/rt0_darwin_amd64.s=  
 按照这个流程可以找出go程序的执行流程:
 1. 汇编
 2. 初始化runtime
@@ -27,3 +27,5 @@ Breakpoint 1 at 0x104e8b0: file /usr/local/go/src/runtime/rt0_darwin_amd64.s, li
 - runtime.mstart()
 init的执行顺序为，先执行本包中import中的包中的init函数，这些函数的init执行顺序是按照file名的字母顺序执行，且同一个文件中的init函数，按照前后顺序执行。执行完毕后，会执行本代码所处的包文件中的init函数,注意init函数是可以存在多个的。
 注意所有init的函数都是在同一个goroutine内执行的。
+** 内存管理
+内存管理使用的TcMalloc,请查阅:https://www.jianshu.com/p/11082b443ddf 来了解什么是TcMalloc

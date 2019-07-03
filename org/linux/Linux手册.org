@@ -409,7 +409,8 @@ declare [+/-] [选项] 变量名
 - /etc/bashrc
 
 正常登录:
-[[http://upload-images.jianshu.io/upload_images/8598337-d91a2c452141548d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240]]
+[[Linux手册_normal_login.png][http://q.qxgzone.com/static/img/Linux手册_normal_login.png]]
+
 
 非正常登录:
 /etc/bashrc -> /etc/profile.d/*.sh 

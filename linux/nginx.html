@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-06-27 Thu 12:58 -->
+<!-- 2019-06-27 Thu 19:37 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>nginx手册</title>
@@ -36,8 +36,8 @@
 <ul>
 <li><a href="#org4f2bcd1"><code>worker_processes</code></a></li>
 <li><a href="#orgbfad01e"><code>worker_cpu_affinity</code></a></li>
-<li><a href="#org1161a63"><code>worker\_rlimit_nofile</code></a></li>
-<li><a href="#orgcb60380">error\<sub>log</sub></a></li>
+<li><a href="#org59f8204"><code>worker_rlimit_nofile</code></a></li>
+<li><a href="#org1215646"><code>error_log</code></a></li>
 <li><a href="#orgbfc6e85">pid</a></li>
 <li><a href="#org4aaa590">Events 模块</a></li>
 <li><a href="#org7fd0cb3">http模块</a></li>
@@ -103,7 +103,7 @@ nginx配置文件位于 <code>/usr/local/etc/nginx/nginx.conf</code> 下。
 <h3 id="orgbfad01e"><code>worker_cpu_affinity</code></h3>
 <div class="outline-text-3" id="text-orgbfad01e">
 <p>
-这个要结合worker<sub>processes</sub> 来使用，进程开了多少个，worker<sub>cpu</sub><sub>affinity后的参数就有多少个</sub>，比如:
+这个要结合 <code>worker_processes</code> 来使用，进程开了多少个，worker_cpu_affinity后的参数就有多少个，比如:
 </p>
 <div class="org-src-container">
 <pre class="src src-nginx">worker_processes     2;
@@ -123,19 +123,19 @@ worker_cpu_affinity 0101 1010;
 </p>
 </div>
 </div>
-<div id="outline-container-org1161a63" class="outline-3">
-<h3 id="org1161a63"><code>worker\_rlimit_nofile</code></h3>
-<div class="outline-text-3" id="text-org1161a63">
+<div id="outline-container-org59f8204" class="outline-3">
+<h3 id="org59f8204"><code>worker_rlimit_nofile</code></h3>
+<div class="outline-text-3" id="text-org59f8204">
 <p>
-worker<sub>rlimit</sub><sub>nofile</sub> 更改worker进程的最大打开文件数限制。如果没设置的话，这个值为操作系统的限制。设置后你的操作系统和Nginx可以处理比“ulimit -a”更多的文件，所以把这个值设高，这样nginx就不会有“too many open files”问题了。
+worker_rlimit_nofile 更改worker进程的最大打开文件数限制。如果没设置的话，这个值为操作系统的限制。设置后你的操作系统和Nginx可以处理比“ulimit -a”更多的文件，所以把这个值设高，这样nginx就不会有“too many open files”问题了。
 </p>
 </div>
 </div>
-<div id="outline-container-orgcb60380" class="outline-3">
-<h3 id="orgcb60380">error\<sub>log</sub></h3>
-<div class="outline-text-3" id="text-orgcb60380">
+<div id="outline-container-org1215646" class="outline-3">
+<h3 id="org1215646"><code>error_log</code></h3>
+<div class="outline-text-3" id="text-org1215646">
 <p>
-nginx的error<sub>log类型如下</sub>（从左到右：debug最详细 crit最少）： 
+nginx的 <code>error_log</code> 类型如下（从左到右：debug最详细 crit最少）： 
 [ debug | info | notice | warn | error | crit ] 
 </p>
 <div class="org-src-container">
@@ -144,7 +144,7 @@ nginx的error<sub>log类型如下</sub>（从左到右：debug最详细 crit最�
 </div>
 <p>
 表示以notice类型来记录错误日志，打印到error.log中。
-如果想要关闭日志功能，需要配置`error<sub>log</sub> /dev/null notice`
+如果想要关闭日志功能，需要配置 <code>error_log /dev/null notice</code>
 </p>
 </div>
 </div>
@@ -173,12 +173,12 @@ nginx.pid中放的是nginx开启的时候的进程号，所以如果更改进程
 </pre>
 </div>
 <p>
-worker<sub>connections</sub> 设置可由一个worker进程同时打开的最大连接数。总的最大链接数是进程数量和worker<sub>connections的乘积</sub>。如果设置了上面提到的worker<sub>rlimit</sub><sub>nofile</sub>，我们可以将这个值设得很高。但是这个还有其他原因限制，所以不能不切实际的设置很高
+worker_connections 设置可由一个worker进程同时打开的最大连接数。总的最大链接数是进程数量和worker_connections的乘积。如果设置了上面提到的worker_rlimit_nofile，我们可以将这个值设得很高。但是这个还有其他原因限制，所以不能不切实际的设置很高
 </p>
 
 <p>
-accept<sub>mutex如果打开了</sub>，连接会以串行方式运行，一个Worker进程被唤醒，其他进程保持休眠，如果没有打开，所有的worker被唤醒，不过只有一个Worker获取链接，其他的Worker重新进入休眠状态，这就是[惊群问题]。
-但是如果连接数量少的时候，一般是建议打开accept<sub>mutex的</sub>，但是如果连接数量比较多的时候，是建议关闭的。
+accept_mutex如果打开了，连接会以串行方式运行，一个Worker进程被唤醒，其他进程保持休眠，如果没有打开，所有的worker被唤醒，不过只有一个Worker获取链接，其他的Worker重新进入休眠状态，这就是[惊群问题]。
+但是如果连接数量少的时候，一般是建议打开accept_mutex的，但是如果连接数量比较多的时候，是建议关闭的。
 </p>
 
 <p>
@@ -301,7 +301,7 @@ ent_header_buffers配置将生效
 </pre>
 </div>
 <p>
-用 (“|”) 来分隔你想保护的文件的扩展名,valid<sub>referers指令包含允许访问资源的网站列表,不在列表中请求的返回403</sub>
+用 (“|”) 来分隔你想保护的文件的扩展名,valid_referers指令包含允许访问资源的网站列表,不在列表中请求的返回403
 </p>
 
 <p>
@@ -336,7 +336,7 @@ upstream配置负载均衡
 <li>~*    表示执行一个正则匹配，不区分大小写</li>
 <li>^~    表示普通字符匹配，如果该选项匹配，只匹配该选项，不匹配别的选项，一般用来匹配目录</li>
 <li>=      进行普通字符精确匹配</li>
-<li>@     "@" 定义一个命名的 location，使用在内部定向时，例如 error<sub>page</sub>, try<sub>files</sub></li>
+<li>@     "@" 定义一个命名的 location，使用在内部定向时，例如 error_page, try_files</li>
 </ul>
 
 <p>
@@ -398,7 +398,7 @@ location ~* .(gif|jpg|jpeg)$ {
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="date">Created: 2019-06-27 Thu 19:37</p>
 <p class="validation"></p>
 </div>
 </body>
