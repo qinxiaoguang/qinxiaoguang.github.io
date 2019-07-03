@@ -409,7 +409,7 @@ declare [+/-] [选项] 变量名
 - /etc/bashrc
 
 正常登录:
-[[Linux手册_normal_login.png][http://q.qxgzone.com/static/img/Linux手册_normal_login.png]]
+[[http://q.qxgzone.com/static/img/Linux手册_normal_login.png]]
 
 
 非正常登录:

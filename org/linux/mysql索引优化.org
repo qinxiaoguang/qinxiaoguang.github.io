@@ -4,7 +4,7 @@
 
 * join
 首先来说join,join一般分7种如下:
-[[mysql索引优化_mysqljoin.png][http://q.qxgzone.com/static/img/mysql索引优化_mysqljoin.png]]
+[[http://q.qxgzone.com/static/img/mysql索引优化_mysqljoin.png]]
 如何去记忆,首先对于两表关联,采用的方式为笛卡尔积,如TableA有4条记录,TableB有5条记录,那么最终的结果是20条记录,接着再套上述的七种查表方式,比如inner join,内连接,其找的就是AB共有的部分,即20条记录中A.key = B.key的部分,而对于left join而言,不但要找A.key = B.key的部分,还要找A独有的部分,独有部分没有B部分,此时补空.那么接着是A独有,前边说过,A独有的部分,没有B部分,那么B部分的key一定为null,所以条件为left join + where B.key = null.
 在mysql中并没有full outer join,但是通过union操作,可以将left join + right join组成的数据进行合并,这样就组成了full outer join.同样,最后一种,可以看图,是那两种的组合.
 

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-06-27 Thu 12:58 -->
+<!-- 2019-07-03 Wed 22:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Linux手册</title>
@@ -68,7 +68,7 @@
 <li><a href="#orgd600db0">常用if</a></li>
 <li><a href="#org0034e7b">ls</a></li>
 <li><a href="#orge5e177a">sleep</a></li>
-<li><a href="#orgdc32fbc">sed</a>
+<li><a href="#org569243e">sed</a>
 <ul>
 <li><a href="#org4af2c9c">[option]</a></li>
 <li><a href="#org75b2cd7">[action]</a></li>
@@ -150,7 +150,7 @@
 <li><a href="#org00e3a7b">BEGIN,END</a></li>
 </ul>
 </li>
-<li><a href="#org569243e">sed</a></li>
+<li><a href="#org6f79f01">sed</a></li>
 <li><a href="#orgde5ab9d">sort</a></li>
 <li><a href="#org98f3c01">wc</a></li>
 </ul>
@@ -409,9 +409,9 @@ cat &lt;&lt;EOF
 </ul>
 </div>
 </div>
-<div id="outline-container-orgdc32fbc" class="outline-2">
-<h2 id="orgdc32fbc">sed</h2>
-<div class="outline-text-2" id="text-orgdc32fbc">
+<div id="outline-container-org569243e" class="outline-2">
+<h2 id="org569243e">sed</h2>
+<div class="outline-text-2" id="text-org569243e">
 <p>
 对数据进行选取,替换,删除,新增的命令
 使用方式 <code>sed [option] '[action]' filename</code>
@@ -861,7 +861,7 @@ ls &amp;&gt; /dev/null  命令操作后，显示的内容直接丢到垃圾桶�
 
 <p>
 历史命令默认保存1000条，如果觉得不够，可以到/etc/profile中修改HISTSIZE
-历史命令保存在~/.bash<sub>history下</sub>
+历史命令保存在~/.bash_history下
 </p>
 </div>
 </div>
@@ -1027,15 +1027,16 @@ declare [+/-] [选项] 变量名<br />
 <ul class="org-ul">
 <li>/etc/profile</li>
 <li>/etc/profile.d/*.sh</li>
-<li>~/.bash<sub>profile</sub></li>
+<li>~/.bash_profile</li>
 <li>~/.bashrc</li>
 <li>/etc/bashrc</li>
 </ul>
 
 <p>
 正常登录:
-<a href="http://upload-images.jianshu.io/upload_images/8598337-d91a2c452141548d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">http://upload-images.jianshu.io/upload_images/8598337-d91a2c452141548d.png?imageMogr2/auto-orient/strip|imageView2/2/w/1240</a>
+<img src="http://q.qxgzone.com/static/img/Linux%E6%89%8B%E5%86%8C_normal_login.png" alt="Linux%E6%89%8B%E5%86%8C_normal_login.png" />
 </p>
+
 
 <p>
 非正常登录:
@@ -1047,8 +1048,8 @@ declare [+/-] [选项] 变量名<br />
 <h5 id="org118f79f">其他配置文件</h5>
 <div class="outline-text-5" id="text-org118f79f">
 <ul class="org-ul">
-<li>~/.bash<sub>logout</sub> 登出的时候环境变量会生效</li>
-<li>~/.bash<sub>history</sub> 历史命令的保存位置</li>
+<li>~/.bash_logout 登出的时候环境变量会生效</li>
+<li>~/.bash_history 历史命令的保存位置</li>
 <li>/etc/issue 登录前显示的信息</li>
 <li>/etc/issue.net 远程登录前显示信息</li>
 <li>/etc/motd 登录成功后显示的信息，</li>
@@ -1263,9 +1264,9 @@ user2<br />
 </div>
 </div>
 </div>
-<div id="outline-container-org569243e" class="outline-4">
-<h4 id="org569243e">sed</h4>
-<div class="outline-text-4" id="text-org569243e">
+<div id="outline-container-org6f79f01" class="outline-4">
+<h4 id="org6f79f01">sed</h4>
+<div class="outline-text-4" id="text-org6f79f01">
 <p>
 对数据进行选取，替换，删除 ，新增的命令
 </p>
@@ -1634,7 +1635,7 @@ until和while刚相反,until是条件成立才终止
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="date">Created: 2019-07-03 Wed 22:24</p>
 <p class="validation"></p>
 </div>
 </body>

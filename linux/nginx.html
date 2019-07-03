@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-06-27 Thu 19:37 -->
+<!-- 2019-07-03 Wed 22:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>nginx手册</title>
@@ -34,10 +34,10 @@
 <li><a href="#org2868dd6">启动/停止</a></li>
 <li><a href="#org6aeabba">配置</a>
 <ul>
-<li><a href="#org4f2bcd1"><code>worker_processes</code></a></li>
-<li><a href="#orgbfad01e"><code>worker_cpu_affinity</code></a></li>
-<li><a href="#org59f8204"><code>worker_rlimit_nofile</code></a></li>
-<li><a href="#org1215646"><code>error_log</code></a></li>
+<li><a href="#orgb46fd7f">worker_processes</a></li>
+<li><a href="#org5810688">worker_cpu_affinity</a></li>
+<li><a href="#org9e32abc">worker_rlimit_nofile</a></li>
+<li><a href="#org72dbf1c">error_log</a></li>
 <li><a href="#orgbfc6e85">pid</a></li>
 <li><a href="#org4aaa590">Events 模块</a></li>
 <li><a href="#org7fd0cb3">http模块</a></li>
@@ -91,17 +91,17 @@ nginx配置文件位于 <code>/usr/local/etc/nginx/nginx.conf</code> 下。
 详细配置:<a href="http://www.nginx.cn/76.html">http://www.nginx.cn/76.html</a>
 </p>
 </div>
-<div id="outline-container-org4f2bcd1" class="outline-3">
-<h3 id="org4f2bcd1"><code>worker_processes</code></h3>
-<div class="outline-text-3" id="text-org4f2bcd1">
+<div id="outline-container-orgb46fd7f" class="outline-3">
+<h3 id="orgb46fd7f">worker_processes</h3>
+<div class="outline-text-3" id="text-orgb46fd7f">
 <p>
 指明nginx开启的进程数，一般为CPU核数的1~2倍，通过`cat /proc/cpuinfo| grep "cpu cores"| uniq`查看CPU核数。
 </p>
 </div>
 </div>
-<div id="outline-container-orgbfad01e" class="outline-3">
-<h3 id="orgbfad01e"><code>worker_cpu_affinity</code></h3>
-<div class="outline-text-3" id="text-orgbfad01e">
+<div id="outline-container-org5810688" class="outline-3">
+<h3 id="org5810688">worker_cpu_affinity</h3>
+<div class="outline-text-3" id="text-org5810688">
 <p>
 这个要结合 <code>worker_processes</code> 来使用，进程开了多少个，worker_cpu_affinity后的参数就有多少个，比如:
 </p>
@@ -123,17 +123,17 @@ worker_cpu_affinity 0101 1010;
 </p>
 </div>
 </div>
-<div id="outline-container-org59f8204" class="outline-3">
-<h3 id="org59f8204"><code>worker_rlimit_nofile</code></h3>
-<div class="outline-text-3" id="text-org59f8204">
+<div id="outline-container-org9e32abc" class="outline-3">
+<h3 id="org9e32abc">worker_rlimit_nofile</h3>
+<div class="outline-text-3" id="text-org9e32abc">
 <p>
 worker_rlimit_nofile 更改worker进程的最大打开文件数限制。如果没设置的话，这个值为操作系统的限制。设置后你的操作系统和Nginx可以处理比“ulimit -a”更多的文件，所以把这个值设高，这样nginx就不会有“too many open files”问题了。
 </p>
 </div>
 </div>
-<div id="outline-container-org1215646" class="outline-3">
-<h3 id="org1215646"><code>error_log</code></h3>
-<div class="outline-text-3" id="text-org1215646">
+<div id="outline-container-org72dbf1c" class="outline-3">
+<h3 id="org72dbf1c">error_log</h3>
+<div class="outline-text-3" id="text-org72dbf1c">
 <p>
 nginx的 <code>error_log</code> 类型如下（从左到右：debug最详细 crit最少）： 
 [ debug | info | notice | warn | error | crit ] 
@@ -398,7 +398,7 @@ location ~* .(gif|jpg|jpeg)$ {
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-06-27 Thu 19:37</p>
+<p class="date">Created: 2019-07-03 Wed 22:24</p>
 <p class="validation"></p>
 </div>
 </body>
