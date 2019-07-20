@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-06-27 Thu 12:58 -->
+<!-- 2019-07-20 Sat 10:18 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>rust异步</title>
@@ -30,6 +30,7 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#org1a53203">概览</a></li>
+<li><a href="#org11bf69a">参考</a></li>
 </ul>
 </div>
 </div>
@@ -55,12 +56,43 @@ rust的协程和go有很大的出入，其实现方式和java中的，js中的�
 }
 </pre>
 </div>
+<p>
+而await表示当前执行的命令如果造成阻塞，就转去执行其他协程。
+</p>
+
+<p>
+在js中，理解async/await的前提是理解generator及yield.
+不详述，用语言简单描述下，generator函数中会使用yield，其中yield关键字的作用是暂停执行点，并回传yield后的表达式的值。其中generator在创建后并不会立马执行，而是在执行.next方法后，会执行到第一处yield处，并返回，注意加yield和不加yield程序都是可以运行的，区别就是一个可以暂停，一个不可以。
+如
+</p>
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #F92672;">function</span> * <span style="color: #A6E22E;">gen</span>(){
+    <span style="color: #F92672;">yield</span> <span style="color: #E6DB74;">'1'</span>;
+    <span style="color: #F92672;">yield</span> <span style="color: #E6DB74;">'2'</span>;
+    <span style="color: #F92672;">return</span> <span style="color: #E6DB74;">'3'</span>;
+}
+
+<span style="color: #F92672;">var</span> <span style="color: #FD971F;">g</span> = gen(); <span style="color: #75715E;">//</span><span style="color: #75715E;">&#21019;&#24314;&#30340;&#26102;&#20505;&#19981;&#20250;&#25191;&#34892;&#12290;</span>
+g.next(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36820;&#22238; {value:'1', done: false}</span>
+g.next(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36820;&#22238; {value:'2', done: false}</span>
+g.next(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36820;&#22238; {value:'3', done: true}</span>
+g.next(); <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36820;&#22238; {value:'undefined', done: true},&#21518;&#36793;&#36820;&#22238;&#37117;&#19968;&#26679;&#12290;</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org11bf69a" class="outline-2">
+<h2 id="org11bf69a">参考</h2>
+<div class="outline-text-2" id="text-org11bf69a">
+<p>
+<a href="https://www.jianshu.com/p/b5e347b3a17c">https://www.jianshu.com/p/b5e347b3a17c</a>
+</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="date">Created: 2019-07-20 Sat 10:18</p>
 <p class="validation"></p>
 </div>
 </body>

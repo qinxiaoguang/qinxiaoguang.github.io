@@ -16,3 +16,23 @@ fn main(){
     thread::sleep(one_second);
 }
 #+END_SRC
+而await表示当前执行的命令如果造成阻塞，就转去执行其他协程。
+
+在js中，理解async/await的前提是理解generator及yield.
+不详述，用语言简单描述下，generator函数中会使用yield，其中yield关键字的作用是暂停执行点，并回传yield后的表达式的值。其中generator在创建后并不会立马执行，而是在执行.next方法后，会执行到第一处yield处，并返回，注意加yield和不加yield程序都是可以运行的，区别就是一个可以暂停，一个不可以。
+如
+#+BEGIN_SRC js
+function * gen(){
+    yield '1';
+    yield '2';
+    return '3';
+}
+
+var g = gen(); //创建的时候不会执行。
+g.next(); // 返回 {value:'1', done: false}
+g.next(); // 返回 {value:'2', done: false}
+g.next(); // 返回 {value:'3', done: true}
+g.next(); // 返回 {value:'undefined', done: true},后边返回都一样。
+#+END_SRC
+* 参考
+https://www.jianshu.com/p/b5e347b3a17c
