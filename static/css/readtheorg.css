@@ -49,7 +49,7 @@ html{
 }
 
 body{
-    background: #eaeaea;
+    background: url(/static/img/back/20.png);
     color: #404040;
     font-family:"Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
     font-weight:normal;
@@ -59,7 +59,7 @@ body{
 }
 
 #content{
-    background:#fcfcfc;
+    background:url(/static/img/back/14.png);
     height:100%;
     margin-left:300px;
     /* margin:auto; */
@@ -261,7 +261,7 @@ dl dd{
         background:rgba(0,0,0,0.05)}
 
     #content{
-        background: #ffffff;
+        background: url(/static/img/back/14.png);
         }
 }
 
@@ -897,7 +897,6 @@ footer p{
     width:300px;
     color:#fcfcfc;
     background: #333333;
-    border-top: solid 10px #444444;
     font-family:"Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
     font-size: 90%;
     z-index:400;
@@ -1110,7 +1109,7 @@ h2.footnotes{
     font-family:"Roboto Slab","ff-tisa-web-pro","Georgia",Arial,sans-serif}
 
 #table-of-contents::-webkit-scrollbar{
-    background:#444444;
+    background:url(/static/img/back/17.png);
     width:0px;
 }
 
