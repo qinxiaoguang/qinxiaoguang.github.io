@@ -793,7 +793,7 @@ hr{
     overflow-x:hidden;
     overflow-y:scroll;
     height:100%;
-    background: #444444;
+    background: url(/static/img/back/17.png);
     z-index:200;
     margin-right: 20px;
     scrollbar-base-color: #1F1D1D;
