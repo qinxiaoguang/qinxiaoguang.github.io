@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-07-24 Wed 13:48 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>连接mysql</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">连接mysql</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org2b7b5ed">概述</a></li>
+<li><a href="#orgd4addf8">使用方法</a>
+<ul>
+<li><a href="#orgf4be400">初始化</a></li>
+<li><a href="#org22a301e">select</a></li>
+<li><a href="#orgc798dec">&#x2026;</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2b7b5ed" class="outline-2">
+<h2 id="org2b7b5ed">概述</h2>
+<div class="outline-text-2" id="text-org2b7b5ed">
+<p>
+使用 <code>github.com/go-sql-driver/mysql</code> 进行连接。
+另一种方法是使用 gorm: <code>https://github.com/jinzhu/gorm</code> ,先不记录。
+</p>
+</div>
+</div>
+<div id="outline-container-orgd4addf8" class="outline-2">
+<h2 id="orgd4addf8">使用方法</h2>
+<div class="outline-text-2" id="text-orgd4addf8">
+</div>
+<div id="outline-container-orgf4be400" class="outline-3">
+<h3 id="orgf4be400">初始化</h3>
+<div class="outline-text-3" id="text-orgf4be400">
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #75715E;">// </span><span style="color: #75715E;">&#24517;&#39035;&#24341;&#20837;&#30340;&#20004;&#20010;&#24211;&#26159; database/sql&#21644; github.com/go-sql-driver/mysql</span>
+<span style="color: #F92672;">import</span> (
+    <span style="color: #E6DB74;">"database/sql"</span>
+    <span style="color: #E6DB74;">"fmt"</span>
+    <span style="color: #E6DB74;">"os"</span>
+    _ <span style="color: #E6DB74;">"github.com/go-sql-driver/mysql"</span>
+)
+
+<span style="color: #F92672;">func</span> <span style="color: #A6E22E;">initDB</span>() {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">USER &#36830;&#25509;&#30340;&#29992;&#25143;&#21517;</span>
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">PASSWORD &#23494;&#30721;</span>
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">HOST host</span>
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">PORT port</span>
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">DB_NAME &#25968;&#25454;&#24211;&#21517;</span>
+    path := fmt.<span style="color: #A6E22E;">Sprintf</span>(<span style="color: #E6DB74;">"%v:%v@tcp(%v:%v)/%v?charset=utf8"</span>,
+        USER, PASSWORD, HOST, PORT, DB_NAME)
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992; mysql&#39537;&#21160;&#65292;&#38656;&#35201;&#24341;&#20837;github.com/go-sql-driver/mysql&#21021;&#22987;&#21270;</span>
+    DB, _ = sql.<span style="color: #A6E22E;">Open</span>(<span style="color: #E6DB74;">"mysql"</span>, path)
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#35774;&#32622;&#26368;&#22823;&#36830;&#25509;&#25968;</span>
+    DB.<span style="color: #A6E22E;">SetConnMaxLifetime</span>(100)
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#35774;&#32622;&#31354;&#38386;&#36830;&#25509;&#25968;</span>
+    DB.<span style="color: #A6E22E;">SetMaxIdleConns</span>(10)
+    <span style="color: #F92672;">if</span> err := DB.<span style="color: #A6E22E;">Ping</span>(); err != <span style="color: #AE81FF;">nil</span> {
+        fmt.<span style="color: #A6E22E;">Printf</span>(<span style="color: #E6DB74;">"open database failed, err is %v\n"</span>, err)
+        os.<span style="color: #A6E22E;">Exit</span>(-1)
+    }
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"open database success"</span>)
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org22a301e" class="outline-3">
+<h3 id="org22a301e">select</h3>
+<div class="outline-text-3" id="text-org22a301e">
+<p>
+查找一个数据
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">var</span> jobGroup JobGroup
+err = DB.<span style="color: #A6E22E;">QueryRow</span>(<span style="color: #E6DB74;">"select name,job_type from job_groups where id = ?"</span>, id).<span style="color: #A6E22E;">Scan</span>(&amp;jobGroup.Name, &amp;jobGroup.JobType)
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+    fmt.<span style="color: #A6E22E;">Printf</span>(<span style="color: #E6DB74;">"rows run failed : %v\n"</span>, err)
+    <span style="color: #F92672;">continue</span>
+}
+</pre>
+</div>
+
+<p>
+查找多个数据
+</p>
+<div class="org-src-container">
+<pre class="src src-go">rows, err := DB.<span style="color: #A6E22E;">Query</span>(<span style="color: #E6DB74;">"select group_id, package_id, service_address from jobs"</span>)
+<span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+    fmt.<span style="color: #A6E22E;">Printf</span>(<span style="color: #E6DB74;">"query failed:%v\n"</span>, err)
+}
+<span style="color: #F92672;">for</span> rows.<span style="color: #A6E22E;">Next</span>() {
+    <span style="color: #F92672;">var</span> job Job
+    err := rows.<span style="color: #A6E22E;">Scan</span>(&amp;job.GroupId, &amp;job.PackageId, &amp;job.ServiceAddress)
+    <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span> {
+        fmt.<span style="color: #A6E22E;">Printf</span>(<span style="color: #E6DB74;">"rows run failed : %v\n"</span>, err)
+        <span style="color: #F92672;">continue</span>
+    }
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">...</span>
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc798dec" class="outline-3">
+<h3 id="orgc798dec">&#x2026;</h3>
+<div class="outline-text-3" id="text-orgc798dec">
+<p>
+lazy handle模式，用不上的先不记录，用上的时候再进行记录。
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-07-24 Wed 13:48</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

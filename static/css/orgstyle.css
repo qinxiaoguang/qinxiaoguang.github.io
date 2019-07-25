@@ -10,19 +10,21 @@
     position:fixed;
     right: 0;
 }
-#org-div-home-and-up a:hover{
-    color:#614ad3;
-    font-size:18px;
-    outline: none;
-	text-decoration: none;
-	position: relative;
-	line-height: 1;
-	display: inline-block;
-	font-weight: bold;
-    animation: font-big 0.1s;
-    -moz-animation: font-biig 0.1s;	/* Firefox */
-    -webkit-animation: font-big 0.1s;	/* Safari 和 Chrome */
-    -o-animation: font-big 0.1s;	/* Opera */
+@media screen and (min-width: 1400px){
+    #org-div-home-and-up a:hover{
+        color:#614ad3;
+        font-size:18px;
+        outline: none;
+    	text-decoration: none;
+    	position: relative;
+    	line-height: 1;
+    	display: inline-block;
+    	font-weight: bold;
+        animation: font-big 0.1s;
+        -moz-animation: font-biig 0.1s;	/* Firefox */
+        -webkit-animation: font-big 0.1s;	/* Safari 和 Chrome */
+        -o-animation: font-big 0.1s;	/* Opera */
+    }
 }
 
 .outline-text-2 a{

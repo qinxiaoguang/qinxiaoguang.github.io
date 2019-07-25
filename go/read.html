@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-06-27 Thu 12:58 -->
+<!-- 2019-07-24 Wed 13:48 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>go读写数据</title>
@@ -294,7 +294,7 @@ fmt.<span style="color: #A6E22E;">Println</span>(err)
 另一种方法是通过 <code>os.OpenFile</code> 来打开文件，并且赋予打开的方式，如:
 </p>
 <div class="org-src-container">
-<pre class="src src-go">outputFile,err := os.<span style="color: #A6E22E;">OpenFile</span>(<span style="color: #E6DB74;">"test.go"</span>,os.O_WRONLY|os.O_CREATE,0666)
+<pre class="src src-go">outputFile,err := os.<span style="color: #A6E22E;">OpenFile</span>(<span style="color: #E6DB74;">"test.go"</span>,os.O_WRONLY|os.O_CREATE,os.ModePerm)
 <span style="color: #F92672;">if</span> err != <span style="color: #AE81FF;">nil</span>{
     fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"&#38169;&#35823;"</span>)
 }
@@ -332,7 +332,7 @@ outputFile.<span style="color: #A6E22E;">WriteString</span>(<span style="color: 
 <h3 id="org56a04ec">文件覆盖</h3>
 <div class="outline-text-3" id="text-org56a04ec">
 <p>
-文件覆盖在打开文件的时候，一定要加上os.O<sub>TRUNC,或者在open</sub> file后调用 file.Trunscate(0),否则达不到文件覆盖的效果 
+文件覆盖在打开文件的时候，一定要加上os.O_TRUNC,或者在open file后调用 file.Trunscate(0),否则达不到文件覆盖的效果 
 </p>
 <div class="org-src-container">
 <pre class="src src-go">outputFile,err := os.<span style="color: #A6E22E;">OpenFile</span>(<span style="color: #E6DB74;">"test.go"</span>,os.O_WRONLY|os.O_CREATE|os_O_TRUNC,0666)
@@ -352,7 +352,7 @@ outputFile.<span style="color: #A6E22E;">WriteString</span>(<span style="color: 
 <div class="outline-text-2" id="text-org147ab96">
 <p>
 <code>io.Copy(target,source)</code>
-但是注意source文件可以通过os.Open读取，而target文件必须使用os.OpenFile来读取，并赋予os.O<sub>WRONLY标志或者其他可写标志</sub>。
+但是注意source文件可以通过os.Open读取，而target文件必须使用os.OpenFile来读取，并赋予os.O_WRONLY标志或者其他可写标志。
 </p>
 </div>
 </div>
@@ -388,7 +388,7 @@ fmt.<span style="color: #A6E22E;">Println</span>(*name)
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="date">Created: 2019-07-24 Wed 13:48</p>
 <p class="validation"></p>
 </div>
 </body>

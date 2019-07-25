@@ -129,7 +129,7 @@ ioutil.ReadAll传入的是io.Reader，所以对于os.Open，其刚好返回io.Re
 这种方式要注意权限，如果没有权限就会写入不成功
 另一种方法是通过 =os.OpenFile= 来打开文件，并且赋予打开的方式，如:
 #+BEGIN_SRC go
-	outputFile,err := os.OpenFile("test.go",os.O_WRONLY|os.O_CREATE,0666)
+	outputFile,err := os.OpenFile("test.go",os.O_WRONLY|os.O_CREATE,os.ModePerm)
 	if err != nil{
 		fmt.Println("错误")
 	}
