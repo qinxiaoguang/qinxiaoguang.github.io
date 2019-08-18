@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-08-18 Sun 11:24 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>lsof</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">lsof</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org5cd727a">概述</a></li>
+<li><a href="#orgd72aea4">文件描述符</a></li>
+<li><a href="#orgbd2dc70">使用方法</a></li>
+<li><a href="#org096af99">应用</a>
+<ul>
+<li><a href="#org32b44d7">卸载时检查是否有人在用当前目录文件</a></li>
+<li><a href="#org524972b">恢复误删文件</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5cd727a" class="outline-2">
+<h2 id="org5cd727a">概述</h2>
+<div class="outline-text-2" id="text-org5cd727a">
+<p>
+lsof(list open file)，即列出打开的文件。linux中万物皆文件，而lsof是一个列出当前系统打开文件的工具，所以lsof可以列出几乎所有东西，比如列出程序已经打开的常规文件，甚至网络连接如socket等。
+</p>
+</div>
+</div>
+<div id="outline-container-orgd72aea4" class="outline-2">
+<h2 id="orgd72aea4">文件描述符</h2>
+<div class="outline-text-2" id="text-orgd72aea4">
+<p>
+以下内容摘自百度
+</p>
+<p class="verse">
+linux中内核通过文件描述符来访问文件，文件描述符是非负整数，打开现存文件或新建文件时，内核会返回一个文件描述符，读写文件也需要使用文件描述符来指定待读写的文件。<br />
+每一个文件描述符会与一个打开文件相对应，同时，不同的文件描述符也会指向同一个文件。相同的文件可以被不同的进程打开也可以在同一个进程中被多次打开。系统为每一个进程维护了一个文件描述符表，该表的值都是从0开始的，所以在不同的进程中你会看到相同的文件描述符，这种情况下相同文件描述符有可能指向同一个文件，也有可能指向不同的文件。<br />
+文件描述符：在linux系统中打开文件就会获得文件描述符，它是个很小的非负整数。每个进程在PCB（Process Control Block）中保存着一份文件描述符表，文件描述符就是这个表的索引，每个表项都有一个指向已打开文件的指针。<br />
+文件指针：C语言中使用文件指针做为I/O的句柄。文件指针指向进程用户区中的一个被称为FILE结构的数据结构。FILE结构包括一个缓冲区和一个文件描述符。而文件描述符是文件描述符表的一个索引，因此从某种意义上说文件指针就是句柄的句柄（在Windows系统上，文件描述符被称作文件句柄）。<br />
+</p>
+<p>
+而lsof就是通过操作文件描述符来进行的。
+</p>
+</div>
+</div>
+<div id="outline-container-orgbd2dc70" class="outline-2">
+<h2 id="orgbd2dc70">使用方法</h2>
+<div class="outline-text-2" id="text-orgbd2dc70">
+<ul class="org-ul">
+<li><code>lsof</code> 默认显示所有进程打开的所有文件。</li>
+<li><code>lsof filename</code> 显示开启该文件的进程</li>
+<li><code>lsof -c pname</code> 显示pname进程打开的文件,-c选项列出所有以pname开头的进程打开的文件。也可使用 <code>lsof -c panme1 -c panme2</code> 来列出多个进程打开的文件。</li>
+<li><code>lsof -p [pid]</code> 显示pid进程号的进程打开的文件, <code>lsof -p 123,456</code> 列出多个进程号对应的文件信息</li>
+<li><code>lsof +d /usr/local</code> 显示该目录下被进程打开的文件</li>
+<li><code>lsof +D /usr/local</code> 递归搜索该目录下被进程打开的文件</li>
+<li><code>lsof -d 4</code> 显示使用fd为4的进程</li>
+<li><code>lsof -u username</code> 显示用户打开的文件信息</li>
+<li><code>lsof -i</code> 列出所有的网络连接, <code>lsof -i tcp</code> 列出所有tcp网络连接信息， <code>lsof -i udp</code> 列出所有udp网络连接信息, <code>lsof -i:port</code> 列出谁在使用某个端口, <code>lsof -i udp:port</code> 列出谁在使用特定的udp端口。 <code>lsof -i tcp:80</code> 同上。 <code>lsof -a -u username -i</code> 列出某个用户所有活跃的网络端口。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org096af99" class="outline-2">
+<h2 id="org096af99">应用</h2>
+<div class="outline-text-2" id="text-org096af99">
+</div>
+<div id="outline-container-org32b44d7" class="outline-3">
+<h3 id="org32b44d7">卸载时检查是否有人在用当前目录文件</h3>
+<div class="outline-text-3" id="text-org32b44d7">
+<p>
+使用 <code>lsof /path</code> 可进行检查
+</p>
+</div>
+</div>
+<div id="outline-container-org524972b" class="outline-3">
+<h3 id="org524972b">恢复误删文件</h3>
+<div class="outline-text-3" id="text-org524972b">
+<p>
+偶尔会使用 <code>find ./ -mtime +7 -name "*" -exec rm -fv {} \;</code> 来删除过期的文件，但是有时候会失误把脚本文件 <code>*.sh</code> 也给误删掉了，但是好在这些文件一直在后台运行，所以，可以通过lsof来恢复文件。
+</p>
+<p class="verse">
+1. lsof | grep deleted | grep sh 找到对应的进程的pid<br />
+2. cd /proc/$pid/fd<br />
+3. ll 来查看哪个文件软链到了删掉的文件上<br />
+4. cat file &gt; /path<br />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-08-18 Sun 11:24</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

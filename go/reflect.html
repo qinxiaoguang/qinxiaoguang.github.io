@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-08-18 Sun 11:23 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>go反射相关</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">go反射相关</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org699ac19">基础</a></li>
+<li><a href="#orgd337935">相关函数</a>
+<ul>
+<li><a href="#orgc44524b">Value相关函数</a></li>
+</ul>
+</li>
+<li><a href="#org9eeb7c9">相关用法</a>
+<ul>
+<li><a href="#orgd3f503f">通过反射获取底层的某类型</a></li>
+<li><a href="#orgc92b458">通过反射调用其中的方法</a></li>
+<li><a href="#orgf5882c2">通过反射修改底层值</a></li>
+<li><a href="#org45c8389">判断是否是某类型</a></li>
+</ul>
+</li>
+<li><a href="#org98381b1">关于unsafe</a></li>
+<li><a href="#orga137266">反射中的一些技巧</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org699ac19" class="outline-2">
+<h2 id="org699ac19">基础</h2>
+<div class="outline-text-2" id="text-org699ac19">
+<p>
+go中的数据类型是静态的，如 <code>type Myint int</code> Myint就是一个静态类型。他不是int，他就是Myint。
+但go中一个类型的数据包含两个基础信息，一个是Type,一个是Value. 其中Type就是当前对象的静态类型是什么，而Value就是当前对象的值是什么。这个理解起来很简单，如: `var i interface{}; i=Myint(1)`那么i的Type就是Myint,而Value就是1
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd337935" class="outline-2">
+<h2 id="orgd337935">相关函数</h2>
+<div class="outline-text-2" id="text-orgd337935">
+<ul class="org-ul">
+<li>reflect.TypeOf() : 获取某个对象的Type(reflect.Type)</li>
+<li>reflect.ValueOf() : 获取某个对象的Value(reflect.Value)</li>
+</ul>
+</div>
+
+<div id="outline-container-orgc44524b" class="outline-3">
+<h3 id="orgc44524b">Value相关函数</h3>
+<div class="outline-text-3" id="text-orgc44524b">
+<p>
+Value通常包含以下几种数据:
+</p>
+<ul class="org-ul">
+<li>基础类型，如int,float64等</li>
+<li>函数类型, func(&#x2026;)&#x2026;</li>
+<li>struct类型</li>
+</ul>
+
+<p>
+相关函数：
+</p>
+<ul class="org-ul">
+<li>Kind() : 获取该value对应的类型名，被写死到了reflect包中，如reflect.Uint, reflect.Float64等。</li>
+<li>NumField() : 获取操作对象的字段的个数, 如 struct{int,string}就有两个字段</li>
+<li>Field(i) : 获取操作的对象中第i个字段的底层Value</li>
+<li>NumMethod() :与NumField不同的是，该方法获取的是操作对象的公开方法个数。</li>
+<li>Elem() : 如果操作的对象是一个指针，那么使用Elem()就可以将指针对应的底层值取出来。所以一个Value是指针的话，想要获取其值，就有必要使用Elem()来将底层Value取出来，那么如何判断Value是指针呢？使用Kind()方法</li>
+<li>SetXX() : 对操作对象修改其值，要求该操作对象是一个指针，否则修改不成功。</li>
+<li>CanSet() : 判断操作对象能否修改底层的值。</li>
+<li>Interface() : 将Value变为interface{}, 这样就可以通过类型断言来恢复其原有的样子，如 <code>var i int; i = reflct.Value(i).Interface().(int)</code></li>
+<li>Call() : 如果Value是一个方法，则可以通过此方法进行调用。</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org9eeb7c9" class="outline-2">
+<h2 id="org9eeb7c9">相关用法</h2>
+<div class="outline-text-2" id="text-org9eeb7c9">
+</div>
+<div id="outline-container-orgd3f503f" class="outline-3">
+<h3 id="orgd3f503f">通过反射获取底层的某类型</h3>
+<div class="outline-text-3" id="text-orgd3f503f">
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">type</span> <span style="color: #66D9EF;">Test</span> <span style="color: #F92672;">struct</span> {
+    NeedGet int  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#24453;&#33719;&#21462;&#25968;&#25454;</span>
+}
+<span style="color: #F92672;">var</span> t <span style="color: #F92672;">interface</span>{}
+t = <span style="color: #66D9EF;">Test</span>{1}
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#22914;&#26524;&#24213;&#23618;&#25968;&#25454;&#26159;&#25351;&#38024;</span>
+reflect.<span style="color: #A6E22E;">ValueOf</span>(&amp;t).<span style="color: #A6E22E;">Elem</span>().<span style="color: #A6E22E;">Field</span>(0).<span style="color: #A6E22E;">Interface</span>()
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#22914;&#26524;&#24213;&#23618;&#25968;&#25454;&#38750;&#25351;&#38024;</span>
+reflect.<span style="color: #A6E22E;">ValueOf</span>(t).<span style="color: #A6E22E;">Field</span>(0).<span style="color: #A6E22E;">Inteface</span>()
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc92b458" class="outline-3">
+<h3 id="orgc92b458">通过反射调用其中的方法</h3>
+</div>
+<div id="outline-container-orgf5882c2" class="outline-3">
+<h3 id="orgf5882c2">通过反射修改底层值</h3>
+</div>
+<div id="outline-container-org45c8389" class="outline-3">
+<h3 id="org45c8389">判断是否是某类型</h3>
+<div class="outline-text-3" id="text-org45c8389">
+<p>
+不需要使用 等号来判断，而是使用类型断言直接判断，如:
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">type</span> <span style="color: #66D9EF;">Test</span> <span style="color: #F92672;">struct</span> {
+
+}
+
+<span style="color: #F92672;">var</span> t <span style="color: #F92672;">interface</span>{}
+t = <span style="color: #66D9EF;">Test</span>{}
+
+tt, ok := t.(<span style="color: #66D9EF;">Test</span>)
+<span style="color: #F92672;">if</span> ok {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#26159;Test&#31867;&#22411;</span>
+} <span style="color: #F92672;">else</span> {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#38750;Test&#31867;&#22411;</span>
+}
+</pre>
+</div>
+
+<p>
+也可以使用switch来判断,如
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">switch</span> t.(<span style="color: #F92672;">type</span>) {
+    <span style="color: #F92672;">case</span> Test:
+    <span style="color: #A6E22E;">dosomething</span>()
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org98381b1" class="outline-2">
+<h2 id="org98381b1">关于unsafe</h2>
+<div class="outline-text-2" id="text-org98381b1">
+<ol class="org-ol">
+<li>uintptr和unsafe.Pointer的区别</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-orga137266" class="outline-2">
+<h2 id="orga137266">反射中的一些技巧</h2>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-08-18 Sun 11:23</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

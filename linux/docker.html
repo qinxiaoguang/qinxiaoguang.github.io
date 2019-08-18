@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-08-18 Sun 11:24 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>docker使用</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">docker使用</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org3ecd745">概述</a></li>
+<li><a href="#org64f80c6">安装</a></li>
+<li><a href="#orgc7ce738">使用</a>
+<ul>
+<li><a href="#org414c086">拉取镜像</a></li>
+<li><a href="#orgebc15b4">查看本机镜像</a></li>
+<li><a href="#org7e2dc10">运行镜像</a></li>
+<li><a href="#orgec621d9">docker ps</a></li>
+<li><a href="#orgaa58bcc">docker stop &lt;id&gt;</a></li>
+<li><a href="#org6e898ec">docker run -d -p 8080:80 nginx</a></li>
+<li><a href="#org62c6f16">制作镜像</a></li>
+<li><a href="#org9d7cf9b">看书笔记</a></li>
+<li><a href="#org4ee12c5">Dockfile的指令</a></li>
+<li><a href="#org1a9af1d">demo</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org3ecd745" class="outline-2">
+<h2 id="org3ecd745">概述</h2>
+<div class="outline-text-2" id="text-org3ecd745">
+<p>
+docker是容器，k8s是管理容器的。
+</p>
+</div>
+</div>
+<div id="outline-container-org64f80c6" class="outline-2">
+<h2 id="org64f80c6">安装</h2>
+<div class="outline-text-2" id="text-org64f80c6">
+<p>
+Windows except 10: <a href="https://get.daocloud.io/toolbox/">https://get.daocloud.io/toolbox/</a>
+Linux:apt install docker.io 
+Linux下安装完成后，还要运行daemon <code>service docker start</code> 
+Max: brew cask install docker
+mac在使用前需要打开/Application/Docker.app/Mac/Docker 来登录，之后才能在命令行运行。
+镜像：<a href="https://hub.docker.com/">https://hub.docker.com/</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orgc7ce738" class="outline-2">
+<h2 id="orgc7ce738">使用</h2>
+<div class="outline-text-2" id="text-orgc7ce738">
+</div>
+<div id="outline-container-org414c086" class="outline-3">
+<h3 id="org414c086">拉取镜像</h3>
+<div class="outline-text-3" id="text-org414c086">
+<p>
+cmd: <code>docker pull [OPTIONS] NAME[:TAG]</code> 
+拉取镜像，name是拉取镜像名称，默认:lasted.
+eg:  <code>docker pull hello-world</code> 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgebc15b4" class="outline-3">
+<h3 id="orgebc15b4">查看本机镜像</h3>
+<div class="outline-text-3" id="text-orgebc15b4">
+<p>
+cmd: <code>docker images [OPTIONS] [REPOSITORY[:TAG]]</code>
+查看本机有哪些镜像  
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7e2dc10" class="outline-3">
+<h3 id="org7e2dc10">运行镜像</h3>
+<div class="outline-text-3" id="text-org7e2dc10">
+<p>
+<code>docker run [OPTIONS] IMAGE[:TAG] [CMD] [arg ...]</code>
+运行镜像
+eg: <code>docker run hello-world</code> 
+</p>
+
+<p>
+运行复杂镜像nginx:
+</p>
+<ol class="org-ol">
+<li><code>docker pull nginx</code> : 拉取镜像</li>
+<li><code>docker -d run nginx</code> : 后台运行容器</li>
+<li><code>docker exec -it &lt;id&gt; bash</code> : 进入容器的内部，可以通过 <code>docker exec --help</code> 查看该命令的说明</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgec621d9" class="outline-3">
+<h3 id="orgec621d9">docker ps</h3>
+<div class="outline-text-3" id="text-orgec621d9">
+<p>
+查看当前运行的docker容器,可以看到各种信息，如端口映射。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaa58bcc" class="outline-3">
+<h3 id="orgaa58bcc">docker stop &lt;id&gt;</h3>
+<div class="outline-text-3" id="text-orgaa58bcc">
+<p>
+停止容器
+</p>
+</div>
+</div>
+<div id="outline-container-org6e898ec" class="outline-3">
+<h3 id="org6e898ec">docker run -d -p 8080:80 nginx</h3>
+<div class="outline-text-3" id="text-org6e898ec">
+<p>
+运行nginx，后台运行并且将主机的8080映射到容器的80端口。
+默认运行容器使用的是Bridge模式，这个模式需要host主机和容器进行端口映射，即上述所述的。这样完成之后，就可以通过localhost:8080来访问镜像。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org62c6f16" class="outline-3">
+<h3 id="org62c6f16">制作镜像</h3>
+<div class="outline-text-3" id="text-org62c6f16">
+<p>
+第一步 <code>vim Dockerfile</code>:
+为了描述方便，以下#表示注释(实际操作并没有)，但是其实Dockerfile是支持这种注释的
+</p>
+<div class="org-src-container">
+<pre class="src src-docker">FROM &lt;BASE-IMAGE&gt;   # 表示以某个镜像作为基础镜像，比如from tomcat，表示以tomcat这个镜像作为基础镜像
+MAINTAINER qxg # 表示所有者，可不写
+COPY &lt;LOCAL FILE &gt; /usr/local/tomcat/webapps # 将本地文件拷贝到容器的目录下
+RUN apt update &amp;&amp; apt install vim   #执行相应的命令，需要以RUN开头，
+EXPOSE 80 # 该指令告诉容器，容器的应用程序会使用80端口，表示向外公开80端口
+</pre>
+</div>
+<p>
+完了之后运行 <code>docker build .</code> 自动查找某目录的Dockerfile文件并构建，这样就构建成功了。
+使用 <code>docker images</code> 查看当前镜像，会发现有一行镜像的名称和版本都是none，这个镜像就是刚build的。一般build的时候都会起上名字： <code>docker build -t NAME:TAG</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9d7cf9b" class="outline-3">
+<h3 id="org9d7cf9b">看书笔记</h3>
+<div class="outline-text-3" id="text-org9d7cf9b">
+<ul class="org-ul">
+<li><code>docker run -i -t ubuntu /bin/bash</code> :执行ubuntu镜像，如果本地镜像不存在会到仓库中查找，如果仓库中存在自动下载，完成之后运行该景象，并在镜像中执行/bin/bash来启动一个shell。</li>
+<li><code>docker ps -a</code> 查看所有镜像，包括运行和停止的，而 <code>docker ps</code> 只能查看运行镜像</li>
+<li><code>docker run --name myname -i -t ubuntu /bin/bahs</code> 启动容器的时候，顺便给其命名，命名有助于区别不同的容器</li>
+<li><code>docker start [id]</code> 会启动一个容器，只是启动</li>
+<li><code>docker attach [id]</code> 附着对应的容器会话shell上</li>
+<li><code>docker run -d ubuntu /bin/sh -c "while true; do echo hello world; sleep 1; done"</code> 会以守护进程的方式运行容器，长期在后台执行后边的命令，也就是会一直打印hello world</li>
+<li><code>docker logs [id]</code> 可以查看对应的容器的logs，比如上一条中一直打印hello world的log</li>
+<li><code>docker -f logs [id]</code> 类似 <code>tail -f</code> 命令，持续监控log日志</li>
+<li><code>docker logs --tail 10 [id]</code> 查看最后10行日志</li>
+<li><code>docker logs --tail 0 -f [id]</code> 追踪最新日志</li>
+<li><code>docker top [id]</code> 查看容器的top</li>
+<li><code>docker status [id]</code> 查看容器的统计信息</li>
+<li><code>docker run [id/name] --restart</code>  &#x2013;restart会在容器异常停止的时候自动重启</li>
+<li><code>docker inspect [id]</code> 查看容器的更详细信息</li>
+<li><code>docker rm [id]</code> 删除容器</li>
+<li><code>docker rmi [name]</code> 删除镜像</li>
+<li><code>docker pull [name:tag]</code> 拉取镜像，其实就是下载镜像</li>
+<li><code>docker search [regx name]</code> 在hub仓库中查找镜像</li>
+<li><code>docker port [id] 80</code> 查看对应容器的端口号和外部映射的情况</li>
+
+<li><code>docker push [username/path]</code>  推送镜像到hub中</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4ee12c5" class="outline-3">
+<h3 id="org4ee12c5">Dockfile的指令</h3>
+<div class="outline-text-3" id="text-org4ee12c5">
+<ul class="org-ul">
+<li><code>CMD</code> :指定容器运行的时候运行的执行,eg <code>CMD ["/bin/bahs","-l"]</code> ,但是docker run命令如果指定了运行时的指令，将会覆盖CMD指定的指令</li>
+<li><code>WORKDIR</code>  指定容器的工作目录，CMD指定的命令会在该目录进行执行，如 <code>WORKDIR /opt/webapp</code></li>
+<li><code>ENV</code> 设置容器的环境变量 <code>ENV MY_PATH /home/path</code> ,而设置多个环境变量的方式为: <code>ENV MY_PATH1=/home/path1 MYPATH2=/home/path2</code></li>
+<li><code>USER</code> 指定启动的时候用哪个用户去执行，这个用户是宿主机中的用户，如果不指定则会使用root用户去执行。`USER qxg`</li>
+<li><code>VOLUME</code> 给容器添加卷，可以理解为共享的磁盘，多个容器间可以共享。 <code>VOLUME /opt/share</code></li>
+<li><code>ADD</code>  将本地环境的文件和目录复制到镜像中，如果是压缩文件，则会解压缩再复制过去</li>
+<li><code>COPY</code>  复制，但是不能解压缩</li>
+<li><code>SIGNSIGNAL</code> 停止容器的时候发送什么系统调用信号给容器</li>
+<li><code>FROM</code> 每个Dockfile都以FROM开头，以某个镜像为基础镜像</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1a9af1d" class="outline-3">
+<h3 id="org1a9af1d">demo</h3>
+<div class="outline-text-3" id="text-org1a9af1d">
+<ol class="org-ol">
+<li><code>mkdir decoker-demo</code> :创建项目名</li>
+<li><code>cd docker-demo</code></li>
+<li><code>mkdir html</code></li>
+<li><code>echo '&lt;h1&gt;hello docker&lt;/h1&gt;' &gt; html/index.html</code></li>
+<li><code>echo -en 'FROM nginx\nCOPY html/* /usr/share/nginx/html\n' &gt; Dockerfile</code></li>
+<li><code>docker build -t docker-demo:0.1 .</code> :构建</li>
+<li><code>docker image ls</code> 查看刚创建好的镜像</li>
+<li><code>docker run --name docker-demo -d -p 8080:80 docker-demo:0.1</code> :运行并将宿主的8080端口映射到容器的80端口。</li>
+<li><code>docker container ps</code> 查看正在运行的容器</li>
+<li>浏览器输入 <code>http://localhost:8080</code> 查看</li>
+<li><code>docker container stop docker-demo</code> 停止容器</li>
+<li><code>docker container rm docker-demo</code> 删除容器</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-08-18 Sun 11:24</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

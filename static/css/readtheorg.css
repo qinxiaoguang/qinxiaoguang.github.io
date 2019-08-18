@@ -291,7 +291,7 @@ dl dd{
 
 code{
     padding: 2px 4px;
-    font-size: 80%;
+    font-size: 100%;
     color: #c7254e;
     background-color: #f9f2f4;
     border-radius: 4px;
@@ -320,8 +320,8 @@ code{
     margin-bottom:24px}
 
 .codeblock,pre.src,#content .literal-block{
-    border-left: 5px solid #eee;
-    box-shadow: 3px 0px 8px -3px #cccccc;
+    border-left: 4px solid #eee;
+    box-shadow: 3px 0px 8px -6px #cccccc;
     padding:12px;
     overflow-x:auto;
     background:#fff;
@@ -329,14 +329,15 @@ code{
 
 pre.src{
     /* color:#404040; */
-    display:block;
-    font-family:Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
+    /* font-family:Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace; */
     font-size:12px;
     line-height:1.5;
-    margin:1px 0px 24px 0px;
-    overflow:auto;
-    padding:12px;
     white-space:pre;
+    overflow: auto;
+    margin: 0 0 1.275em;
+    padding: .85em 1em;
+    background: #f7f7f7;
+    word-wrap: normal;
 }
 
 .example{
@@ -414,6 +415,7 @@ table tr:nth-child(2n) td{
 #toggle-sidebar,
 #table-of-contents .close-sidebar {
     display: none;
+    float:right;
 }
 
 @media screen and (max-width: 768px) {

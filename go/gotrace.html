@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-08-18 Sun 11:23 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>go trace/pprof</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">go trace/pprof</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgf729d19">概述</a></li>
+<li><a href="#org4e4a9d8">trace使用方式</a></li>
+<li><a href="#orgd0d386f">pprof使用方式</a></li>
+<li><a href="#orgc1b991f">参考</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgf729d19" class="outline-2">
+<h2 id="orgf729d19">概述</h2>
+<div class="outline-text-2" id="text-orgf729d19">
+<p>
+<code>go tool trace</code> 是一个用于诊断性能及问题的工具，其能将当前的go程序的运行信息通过ui来展示出来。
+<code>go tool pprof</code> 也是一个性能诊断工具，但是其ui比较简陋,且其主要针对内存,cpu及协程等进行的分析。
+</p>
+</div>
+</div>
+<div id="outline-container-org4e4a9d8" class="outline-2">
+<h2 id="org4e4a9d8">trace使用方式</h2>
+<div class="outline-text-2" id="text-org4e4a9d8">
+<p>
+简单举例:
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #F92672;">package</span> main
+
+<span style="color: #F92672;">import</span>(
+    <span style="color: #E6DB74;">"os"</span>
+    <span style="color: #E6DB74;">"fmt"</span>
+    <span style="color: #E6DB74;">"runtime/trace"</span>
+)
+
+<span style="color: #F92672;">func</span> <span style="color: #A6E22E;">main</span>(){
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21019;&#24314;&#19968;&#20010;trace&#30340;&#25991;&#20214;</span>
+    f, err := os.<span style="color: #A6E22E;">Create</span>(<span style="color: #E6DB74;">"trace.out"</span>)
+    <span style="color: #A6E22E;">checkErr</span>(err)
+    <span style="color: #F92672;">defer</span> f.<span style="color: #A6E22E;">Close</span>()
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#24320;&#22987;trace</span>
+    err = trace.<span style="color: #A6E22E;">Start</span>(f)
+    <span style="color: #A6E22E;">checkErr</span>(err)
+    <span style="color: #F92672;">defer</span> trace.<span style="color: #A6E22E;">Stop</span>()
+
+    fmt.<span style="color: #A6E22E;">Println</span>(<span style="color: #E6DB74;">"Hello,Trace"</span>)
+}
+</pre>
+</div>
+
+<p>
+之后只需要运行程序，程序会生成一个trace.out文件，之后运行 <code>go tool trace trace.out</code> 即可进行解析，在浏览器打开相应的地址即可。
+</p>
+</div>
+</div>
+<div id="outline-container-orgd0d386f" class="outline-2">
+<h2 id="orgd0d386f">pprof使用方式</h2>
+<div class="outline-text-2" id="text-orgd0d386f">
+<p>
+简单举例:
+</p>
+<div class="org-src-container">
+<pre class="src src-go"><span style="color: #75715E;">// </span><span style="color: #75715E;">pprof &#30340;init&#20989;&#25968;&#20250;&#23558;pprof&#37324;&#30340;&#19968;&#20123;handler&#27880;&#20876;&#21040;http.DefaultServeMux&#19978;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#24403;&#19981;&#20351;&#29992;http.DefaultServeMux&#26469;&#25552;&#20379;http api&#26102;&#65292;&#21487;&#20197;&#26597;&#38405;&#20854;init&#20989;&#25968;&#65292;&#33258;&#24049;&#27880;&#20876;handler</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#22312;main&#31243;&#24207;&#31616;&#21333;&#30340;&#24341;&#20837;&#35813;&#25991;&#20214;&#21363;&#21487;,&#24182;&#25171;&#24320;&#30456;&#20851;&#31471;&#21475;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#19968;&#33324;&#26469;&#35828;&#35813;&#31181;&#26041;&#24335;&#26159;&#29992;&#26469;&#20998;&#26512;web&#31243;&#24207;&#30340;&#12290;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20854;&#20182;&#27491;&#24120;&#36816;&#34892;</span>
+<span style="color: #F92672;">import</span> _ <span style="color: #E6DB74;">"net/http/pprof"</span>
+
+<span style="color: #F92672;">go</span> <span style="color: #F92672;">func</span>() {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#38656;&#35201;&#25351;&#23450;&#30456;&#20851;&#31471;&#21475;&#65292;&#33021;&#35753;&#27983;&#35272;&#22120;&#35775;&#38382;&#21040;</span>
+    http.<span style="color: #A6E22E;">ListenAndServe</span>(<span style="color: #E6DB74;">"0.0.0.0:8080"</span>, <span style="color: #AE81FF;">nil</span>)
+}()
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#22914;&#26524;&#26159;&#38750;web&#31243;&#24207;&#65292;&#21487;&#20197;&#36890;&#36807;&#30456;&#20851;&#31243;&#24207;&#26469;&#25163;&#21160;&#29983;&#25104;prof&#25991;&#20214;&#65292;&#22914;cpu</span>
+f,_ := os.<span style="color: #A6E22E;">Create</span>(<span style="color: #E6DB74;">"cpu.prof"</span>)
+pprof.<span style="color: #A6E22E;">StartCPUProfile</span>(f)
+<span style="color: #F92672;">defer</span> pprof.<span style="color: #A6E22E;">StopCPUProfile</span>()
+
+<span style="color: #75715E;">//</span><span style="color: #75715E;">&#22914;heap:</span>
+f,_ := os.<span style="color: #A6E22E;">Create</span>(<span style="color: #E6DB74;">"heap.prof"</span>)
+pprof.<span style="color: #A6E22E;">WriteHeapProfile</span>(f)
+</pre>
+</div>
+<p>
+运行完程序后，在浏览器中运行:<a href="http://localhost:8080/debug/pprof/">http://localhost:8080/debug/pprof/</a> 可以看到下边的很多数据，也可以将其中的profile下载下来。下载下来后，使用go的工具进行分析: <code>go tool pprof exe profile</code> 其中exe为go程序的可执行文件，进入该指令下后，可输入top查看cpu占用前10的函数.而输入web则可通过浏览器查看UI样的内容。
+其中生成的prof文件，也可通过以上命令进行分析。
+</p>
+</div>
+</div>
+<div id="outline-container-orgc1b991f" class="outline-2">
+<h2 id="orgc1b991f">参考</h2>
+<div class="outline-text-2" id="text-orgc1b991f">
+<p>
+<a href="https://making.pusher.com/go-tool-trace/">https://making.pusher.com/go-tool-trace/</a>
+<a href="https://www.cnblogs.com/Leo_wl/p/7426618.htmlcd">https://www.cnblogs.com/Leo_wl/p/7426618.htmlcd</a> 
+<a href="https://studygolang.com/articles/9940">https://studygolang.com/articles/9940</a>
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-08-18 Sun 11:23</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

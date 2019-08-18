@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-07-03 Wed 22:24 -->
+<!-- 2019-08-18 Sun 11:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Linux手册</title>
@@ -68,7 +68,7 @@
 <li><a href="#orgd600db0">常用if</a></li>
 <li><a href="#org0034e7b">ls</a></li>
 <li><a href="#orge5e177a">sleep</a></li>
-<li><a href="#org569243e">sed</a>
+<li><a href="#org6f79f01">sed</a>
 <ul>
 <li><a href="#org4af2c9c">[option]</a></li>
 <li><a href="#org75b2cd7">[action]</a></li>
@@ -150,7 +150,7 @@
 <li><a href="#org00e3a7b">BEGIN,END</a></li>
 </ul>
 </li>
-<li><a href="#org6f79f01">sed</a></li>
+<li><a href="#orgfe835db">sed</a></li>
 <li><a href="#orgde5ab9d">sort</a></li>
 <li><a href="#org98f3c01">wc</a></li>
 </ul>
@@ -368,10 +368,11 @@ cat &lt;&lt;EOF
 <h2 id="orgd600db0">常用if</h2>
 <div class="outline-text-2" id="text-orgd600db0">
 <ul class="org-ul">
-<li>数字相等判断 <code>if (( $a==$b ))</code></li>
+<li>数字相等判断 <code>if (( $a==$b ))</code> 双括号可以进行算术运算。</li>
 <li>字符串是否为空 <code>if [ -z "$a" ]</code> 记得加 <code>"</code></li>
 <li>字符串不为空 <code>if [ -n "$a" ]</code> 记得加 <code>"</code></li>
 <li>文件是否存在 <code>if [ -f "/data/filename" ]</code></li>
+<li>[]里面是-gt,-eq这样的比较，而[[]]双括号可以使用等号等比较，但一般都是比较字符串</li>
 </ul>
 </div>
 </div>
@@ -409,9 +410,9 @@ cat &lt;&lt;EOF
 </ul>
 </div>
 </div>
-<div id="outline-container-org569243e" class="outline-2">
-<h2 id="org569243e">sed</h2>
-<div class="outline-text-2" id="text-org569243e">
+<div id="outline-container-org6f79f01" class="outline-2">
+<h2 id="org6f79f01">sed</h2>
+<div class="outline-text-2" id="text-org6f79f01">
 <p>
 对数据进行选取,替换,删除,新增的命令
 使用方式 <code>sed [option] '[action]' filename</code>
@@ -1264,9 +1265,9 @@ user2<br />
 </div>
 </div>
 </div>
-<div id="outline-container-org6f79f01" class="outline-4">
-<h4 id="org6f79f01">sed</h4>
-<div class="outline-text-4" id="text-org6f79f01">
+<div id="outline-container-orgfe835db" class="outline-4">
+<h4 id="orgfe835db">sed</h4>
+<div class="outline-text-4" id="text-orgfe835db">
 <p>
 对数据进行选取，替换，删除 ，新增的命令
 </p>
@@ -1635,7 +1636,7 @@ until和while刚相反,until是条件成立才终止
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-07-03 Wed 22:24</p>
+<p class="date">Created: 2019-08-18 Sun 11:24</p>
 <p class="validation"></p>
 </div>
 </body>
