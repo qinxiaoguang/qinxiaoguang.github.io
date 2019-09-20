@@ -25,7 +25,7 @@ eg: =docker run hello-world=
 
 运行复杂镜像nginx:
 1. =docker pull nginx= : 拉取镜像
-2. =docker -d run nginx= : 后台运行容器
+2. =docker run -d nginx= : 后台运行容器
 3. =docker exec -it <id> bash= : 进入容器的内部，可以通过 =docker exec --help= 查看该命令的说明
 
 ** docker ps
@@ -37,6 +37,12 @@ eg: =docker run hello-world=
 运行nginx，后台运行并且将主机的8080映射到容器的80端口。
 默认运行容器使用的是Bridge模式，这个模式需要host主机和容器进行端口映射，即上述所述的。这样完成之后，就可以通过localhost:8080来访问镜像。
 
+** docker cp 
+=docker cp localdir:dockerdir=
+可以将本地的包文件发送到docker中。
+而拷贝完后，再重启项目，原有的文件就会不再了。
+但可以通过挂载的方式重启，即以下命令：
+=docker run -d -v /localdir:/dockerdir -p 8080:80 ${docker_name}=
 ** 制作镜像
 第一步 =vim Dockerfile=:
 为了描述方便，以下#表示注释(实际操作并没有)，但是其实Dockerfile是支持这种注释的

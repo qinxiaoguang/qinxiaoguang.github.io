@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-09-20 Fri 22:48 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>cargo使用</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">cargo使用</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org490b9dc">install</a></li>
+<li><a href="#org13c68ae">创建项目</a></li>
+<li><a href="#orgd4045e7">编译/运行</a></li>
+<li><a href="#org9149869">Cargo.toml</a></li>
+<li><a href="#org867f622">测试</a></li>
+<li><a href="#org42c6f69">项目布局</a></li>
+<li><a href="#org3ddd63a">参考</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org490b9dc" class="outline-2">
+<h2 id="org490b9dc">install</h2>
+<div class="outline-text-2" id="text-org490b9dc">
+<p>
+安装rustup即安装cargo:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">curl https://sh.rustup.rs -sSf | sh
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org13c68ae" class="outline-2">
+<h2 id="org13c68ae">创建项目</h2>
+<div class="outline-text-2" id="text-org13c68ae">
+<div class="org-src-container">
+<pre class="src src-shell">cargo new hello_world
+</pre>
+</div>
+<p>
+其生成的文件有:
+</p>
+<p class="verse">
+.<br />
+├── Cargo.toml  <i>/ 项目包管理文件<br />
+└── src         /</i> 代码文件目录<br />
+&#xa0;&#xa0;&#xa0;&#xa0;└── main.rs // main文件<br />
+</p>
+
+<p>
+相关命令:
+</p>
+<ul class="org-ul">
+<li><code>cargo new hello_world --bin</code> 创建程序，加上 <code>--bin</code> 和不加的效果其实是一样的</li>
+<li><code>cargo new hello_world --lib</code> 创建开发库。</li>
+<li><code>cargo new hello_world --vcs none</code> 不使用版本控制工具。</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd4045e7" class="outline-2">
+<h2 id="orgd4045e7">编译/运行</h2>
+<div class="outline-text-2" id="text-orgd4045e7">
+<ul class="org-ul">
+<li><code>cargo run</code> 使用该条指令进行编译并运行。在编译后会生成 <code>Cargo.lock</code> 文件，该文件我们不需要关心，其包含了项目的包依赖信息。</li>
+<li><code>cargo build</code> 开始编译，默认使用debug模式编译，其编译结果存放在 <code>target/debug</code> 目录下。</li>
+<li><code>cargo build --release</code> 开启编译优化进行编译，并把生成的程序放在 <code>target/release</code> 目录下。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org9149869" class="outline-2">
+<h2 id="org9149869">Cargo.toml</h2>
+<div class="outline-text-2" id="text-org9149869">
+<p>
+cargo.io 是Rust社区主要的项目注册的地方，也是查找和下载项目的地方,要依赖其中的库，可以将相关配置放在Cargo.toml文件中.
+如想要使用cargo.io中提供的time包，就可以在Cargo.toml中填入以下配置:
+</p>
+<div class="org-src-container">
+<pre class="src src-toml">[package]  // 描述你的项目信息
+name = "hello_world"
+version = "0.1.0"
+authors = ["Your Name &lt;you@example.com&gt;"]
+
+[dependencies]
+time = "0.1.12"  //指定项目名称和版本
+regex = "0.1.41" // 该项目可以在cargo.io网站上搜索到
+</pre>
+</div>
+
+<p>
+如果regex的版本更新后，使用 <code>cargo build</code> 编译项目，还是会使用老版的依赖，此时需要使用 <code>cargo update</code> 来更新依赖。
+在依赖存在后，就可以在代码中使用 <code>extern crate regex;</code> 来使用他了。
+如果要依赖github中的库，可以通过以下方式指定:
+</p>
+<div class="org-src-container">
+<pre class="src src-toml">[dependencies]
+rand = { git = "https://github.com/rust-lang-nursery/rand.git" }
+</pre>
+</div>
+<p>
+但这样会拉最新的master分支代码，所以需要指定版本，指定方式如下:
+</p>
+<div class="org-src-container">
+<pre class="src src-toml">[dependencies]
+rand = { git = "https://github.com/rust-lang-nursery/rand.git", rev = "9f35b8e" }
+</pre>
+</div>
+<p>
+也可以指定相关的其他参数，如rev,tag,branch
+</p>
+
+<p>
+如果在本地的hello_world的项目中，又创建了一个新的项目，如命名为 <code>hello_utils</code> ,即 <code>cargo new hello_utils</code> 那么指定依赖的方式如下:
+</p>
+<div class="org-src-container">
+<pre class="src src-toml">[dependencies]
+hello_utils = { path = "hello_utils" }
+</pre>
+</div>
+<p>
+其中path也可以指定其他目录，如 <code>../../github.com/hah</code>
+</p>
+</div>
+</div>
+<div id="outline-container-org867f622" class="outline-2">
+<h2 id="org867f622">测试</h2>
+<div class="outline-text-2" id="text-org867f622">
+<ul class="org-ul">
+<li><code>cargo test</code> 运行</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org42c6f69" class="outline-2">
+<h2 id="org42c6f69">项目布局</h2>
+<div class="outline-text-2" id="text-org42c6f69">
+<p class="verse">
+.<br />
+├── Cargo.lock<br />
+├── Cargo.toml<br />
+├── benches<br />
+│   └── large-input.rs<br />
+├── examples<br />
+│   └── simple.rs<br />
+├── src<br />
+│   ├── bin<br />
+│   │   └── another_executable.rs<br />
+│   ├── lib.rs<br />
+│   └── main.rs<br />
+└── tests<br />
+&#xa0;&#xa0;&#xa0;&#xa0;└── some-integration-tests.rs<br />
+</p>
+<p>
+Cargo.toml 和 Cargo.lock 存放在根目录 (package root)。
+源代码存放在 src 目录。
+默认的库文件源代码为src/lib.rs。
+默认可执行文件源代码为src/main.rs。
+其他可执行文件源代码可以存放在 src/bin/*.rs。
+集成测试代码放在 tests 目录(单元测试代码在所测试的代码文件中)。
+示例放在examples 目录。
+性能评估代码放在 benches 目录.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3ddd63a" class="outline-2">
+<h2 id="org3ddd63a">参考</h2>
+<div class="outline-text-2" id="text-org3ddd63a">
+<p>
+详细请参考:<a href="https://rustlang-cn.org/office/rust/cargo/reference/reference.html">https://rustlang-cn.org/office/rust/cargo/reference/reference.html</a>
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-09-20 Fri 22:48</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

@@ -25,6 +25,20 @@
 - /tmp 存放临时文件的目录 
 - /usr 包含了一般不需要修改的应用程序，命令程序文件、程序库、手册和其它文档。 
 - /var 包含系统产生的经常变化的文件
+* 命令自查
+** man
+man是列出unix系统中相关命令的手册，其中这些手册是分小节的，其节数在命令的括号中，如 =man who= 会看到who(1)小节的手册，其中编号为1的小节列出的是用户使用的帮助，编号为2的小节是关于系统调用的帮助，编号为5的小节是关于配置文件的帮助。可以通过 =man man= 来列出不同小节对应的信息，如:
+#+BEGIN_VERSE
+1  User Commands // 用户手册
+2  System Calls // 系统调用,如read函数，可以通过man 2 read来查看如何进行调用
+3  C Library Functions // C的标准库
+4  Devices and Special Files
+5  File Formats and Conventions
+6  Games et. Al.
+7  Miscellanea
+8  System Administration tools and Deamons
+#+END_VERSE
+使用 =man -k all= 可以搜索*all*相关的指令，使用 =man 5 who= 可以列出第5小节who的手册。
 * 目录处理命令
 ** mkdir
 #+BEGIN_VERSE
@@ -260,6 +274,11 @@ find 和 grep的区别是，find是在系统中搜索文件，grep是在文件�
 使用 =ls -l`= 列出来的文件信息，第一列的内容就是权限内容: =-rw-r--r--= .
 其中第一位表示文件类型(- 文件，d 目录， l 软链接文件)，后边三位一组，每组分别表示文件所有者的权限，所属组的权限，非所属组的权限。完整的一组权限为rwx,r表示读,w表示写,x表示执行。
 
+* 高级命令
+** stat
+显示当前文件或者文件目录的信息,其中ll命令列出的信息就是从这个命令里获取到的。
+** od
+显示当前文件的二进制信息
 * nohup加其他指令同时运行
 #+BEGIN_SRC shell
 nohup xxx & echo "hha"

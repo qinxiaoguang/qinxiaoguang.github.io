@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-09-20 Fri 22:48 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>actix-web使用</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">actix-web使用</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgaa3ebe5">使用</a></li>
+<li><a href="#org601c86a">HttpServer</a></li>
+<li><a href="#org2e7be45">Request Handlers</a></li>
+<li><a href="#org1f9b24a">Request参数</a></li>
+<li><a href="#orgb23f842">Error</a></li>
+<li><a href="#orgf0527f5">读取配置</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgaa3ebe5" class="outline-2">
+<h2 id="orgaa3ebe5">使用</h2>
+<div class="outline-text-2" id="text-orgaa3ebe5">
+<p>
+使用cargo创建一个项目，并在Cargo.toml中添加以下依赖即可:
+</p>
+<div class="org-src-container">
+<pre class="src src-toml">[dependencies]
+actix-web = "0.7"
+</pre>
+</div>
+
+<p>
+在main.rs中编写以下内容:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">actix_web</span>::{web, <span style="color: #66D9EF;">App</span>, <span style="color: #66D9EF;">HttpRequest</span>, <span style="color: #66D9EF;">HttpServer</span>, <span style="color: #66D9EF;">Responder</span>, <span style="color: #66D9EF;">HttpResponse</span>, get,guard};
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">sync</span>::<span style="color: #66D9EF;">Mutex</span>;
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">greet</span>(<span style="color: #FD971F;">req</span>: <span style="color: #66D9EF;">HttpRequest</span>) -&gt; <span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Responder</span> {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">name</span> = req.match_info().get(<span style="color: #E6DB74;">"name"</span>).unwrap_or(<span style="color: #E6DB74;">"World"</span>);
+    <span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"Hello </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">!"</span>, &amp;name)
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#27599;&#20010;&#35831;&#27714;&#22788;&#29702;&#22120;(Request Handler)&#37117;&#26159;&#19968;&#20010;&#20989;&#25968;</span>
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#35813;&#20989;&#25968;&#30340;&#20837;&#21442;&#21487;&#20197;&#26377;0&#20010;&#25110;&#22810;&#20010;&#21442;&#25968;&#65292;&#36820;&#22238;&#20540;&#26159;&#19968;&#20010;&#23454;&#29616;&#20102;Responder&#30340;&#23545;&#35937;&#12290;&#22914;HttpResponse</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>() -&gt; <span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Responder</span> {
+    <span style="color: #66D9EF;">HttpResponse</span>::<span style="color: #66D9EF;">Ok</span>().body(<span style="color: #E6DB74;">"Hello world"</span>)
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;&#23439;&#26469;&#29983;&#25104;&#36335;&#24452;,&#36890;&#36807;&#36825;&#31181;&#26041;&#24335;&#38656;&#35201;&#22312;App&#20013;&#20351;&#29992;service&#26041;&#27861;&#26469;&#27880;&#20876;</span>
+<span style="color: #F92672;">#[get(</span><span style="color: #E6DB74;">"/hello/world2"</span><span style="color: #F92672;">)]</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index2</span>() -&gt; <span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Responder</span> {
+    <span style="color: #66D9EF;">HttpResponse</span>::<span style="color: #66D9EF;">Ok</span>().body(<span style="color: #E6DB74;">"Hello world2"</span>)
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">scope&#30340;&#20351;&#29992;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">scope</span>() -&gt; <span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Responder</span> {
+    <span style="color: #66D9EF;">HttpResponse</span>::<span style="color: #66D9EF;">Ok</span>().body(<span style="color: #E6DB74;">"scope test"</span>)
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20849;&#20139;&#25968;&#25454;</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">AppData</span> {
+    app_name : <span style="color: #66D9EF;">String</span>,
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20849;&#20139;&#25968;&#25454;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">get_data</span>(data : <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Data</span>&lt;<span style="color: #66D9EF;">AppData</span>&gt;) -&gt;<span style="color: #66D9EF;">String</span>{
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">app_name</span> = &amp;data.app_name;
+    <span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"Hello </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">!"</span>, &amp;app_name)
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#37197;&#32622;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">config</span>(<span style="color: #FD971F;">cfg</span>: &amp;<span style="color: #F92672;">mut</span> <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">ServiceConfig</span>){
+     cfg.service(
+         <span style="color: #AE81FF;">web</span>::resource(<span style="color: #E6DB74;">"/qxg/qxg"</span>)
+             .route(<span style="color: #AE81FF;">web</span>::get().to(|| <span style="color: #66D9EF;">HttpResponse</span>::<span style="color: #66D9EF;">Ok</span>().body(<span style="color: #E6DB74;">"app"</span>)))
+             .route(<span style="color: #AE81FF;">web</span>::head().to(|| <span style="color: #66D9EF;">HttpResponse</span>::<span style="color: #66D9EF;">MethodNotAllowed</span>())),
+    );
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#21464;&#20849;&#20139;&#25968;&#25454;</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Counter</span> {
+    cnt : <span style="color: #66D9EF;">Mutex</span>&lt;<span style="color: #66D9EF;">i32</span>&gt;,
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#33021;&#22815;&#32479;&#35745;&#35831;&#27714;&#35813;route/&#26041;&#27861;&#30340;&#25968;&#37327;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">count</span>(data : <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Data</span>&lt;<span style="color: #66D9EF;">Counter</span>&gt;) -&gt; <span style="color: #66D9EF;">String</span>{
+    <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">cnt</span> = data.cnt.lock().unwrap();
+    *cnt += 1;
+    <span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"Request number: </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>,cnt)
+}
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#21464;&#30340;&#20849;&#20139;data</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">counter</span> = <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Data</span>::new(<span style="color: #66D9EF;">Counter</span> {
+        <span style="color: #FD971F;">cnt</span>: <span style="color: #66D9EF;">Mutex</span>::new(0),
+    });
+    <span style="color: #66D9EF;">HttpServer</span>::new(<span style="color: #F92672;">move</span> || {
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21019;&#24314;&#19968;&#20010;App&#23454;&#20363;&#65292;&#24182;&#22312;&#20854;&#20013;&#27880;&#20876;router</span>
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">&#23558;&#35813;App&#23454;&#20363;&#20256;&#36882;&#32473;Server&#21363;&#21487;&#36827;&#34892;&#32465;&#23450;&#20197;&#21450;&#25509;&#25910;&#35831;&#27714;</span>
+        <span style="color: #66D9EF;">App</span>::new()
+            <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20849;&#20139;&#30340;data&#65292;&#21518;&#36793;&#30340;&#26381;&#21153;&#37117;&#21487;&#33719;&#21462;&#35813;data</span>
+            .data(<span style="color: #66D9EF;">AppData</span> {
+                <span style="color: #FD971F;">app_name</span>: <span style="color: #66D9EF;">String</span>::from(<span style="color: #E6DB74;">"name"</span>),
+            })
+            .register_data(counter.clone()) <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#21464;&#30340;&#20849;&#20139;data&#38656;&#35201;&#27880;&#20876;</span>
+            .configure(config)  <span style="color: #75715E;">//</span><span style="color: #75715E;">&#23558;&#37096;&#20998;&#36335;&#30001;&#37197;&#32622;&#36890;&#36807;&#26041;&#27861;&#20256;&#20837;</span>
+            .route(<span style="color: #E6DB74;">"/route/cnt"</span>,<span style="color: #AE81FF;">web</span>::get().to(count))
+            .route(<span style="color: #E6DB74;">"/get/date"</span>,<span style="color: #AE81FF;">web</span>::get().to(get_data))
+            .route(<span style="color: #E6DB74;">"/"</span>, <span style="color: #AE81FF;">web</span>::get().to(index))
+            .route(<span style="color: #E6DB74;">"/test/"</span>, <span style="color: #AE81FF;">web</span>::get().to(greet))
+            .route(<span style="color: #E6DB74;">"/{name}"</span>, <span style="color: #AE81FF;">web</span>::get().to(greet)) <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#33719;&#21462;&#36335;&#30001;&#20013;&#30340;&#21517;&#23383;</span>
+            .service(index2)  <span style="color: #75715E;">//</span><span style="color: #75715E;">&#36890;&#36807;&#23439;&#26469;&#35774;&#32622;&#30340;&#36335;&#30001;</span>
+            .service(
+                <span style="color: #AE81FF;">web</span>::scope(<span style="color: #E6DB74;">"/scope"</span>) <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;scope&#26469;&#23558;&#26576;&#19968;&#31867;route&#32858;&#21512;,&#35828;&#30333;&#20102;&#23601;&#26159;&#21069;&#32512;</span>
+                .guard(<span style="color: #AE81FF;">guard</span>::<span style="color: #66D9EF;">Header</span>(<span style="color: #E6DB74;">"Host"</span>, <span style="color: #E6DB74;">"www.rust-lang.org"</span>)) <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;guard&#26469;&#36807;&#28388;&#35831;&#27714;</span>
+                .route(<span style="color: #E6DB74;">"/test"</span>,<span style="color: #AE81FF;">web</span>::get().to(scope))
+                .route(<span style="color: #E6DB74;">"/test2"</span>,<span style="color: #AE81FF;">web</span>::get().to(scope))
+            )
+    })
+    .bind(<span style="color: #E6DB74;">"127.0.0.1:8000"</span>)
+    .expect(<span style="color: #E6DB74;">"Can not bind to port 8000"</span>)
+    .run()
+    .unwrap();
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org601c86a" class="outline-2">
+<h2 id="org601c86a">HttpServer</h2>
+<div class="outline-text-2" id="text-org601c86a">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">actix_web</span>::{web, <span style="color: #66D9EF;">App</span>, <span style="color: #66D9EF;">HttpResponse</span>, <span style="color: #66D9EF;">HttpServer</span>};
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">sync</span>::mpsc;
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::thread;
+
+<span style="color: #F92672;">pub</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#31867;&#27604;golang&#30340;channel&#23601;&#23545;&#20102;&#65292;&#21035;&#22810;&#24819;</span>
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20854;&#20013;tx&#26159;&#21457;&#36865;&#22120;&#65292;rx&#26159;&#25509;&#25910;&#22120;</span>
+    <span style="color: #F92672;">let</span> (tx, rx) = <span style="color: #AE81FF;">mpsc</span>::channel();
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#24320;&#21551;&#19968;&#20010;&#26032;&#30340;&#32447;&#31243;&#65292;&#26469;&#25191;&#34892;http server</span>
+    <span style="color: #AE81FF;">thread</span>::spawn(<span style="color: #F92672;">move</span> || {
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">actix_rt&#26159;actix&#30340;runtime&#21253;</span>
+        <span style="color: #F92672;">let</span> <span style="color: #FD971F;">sys</span> = <span style="color: #AE81FF;">actix_rt</span>::<span style="color: #66D9EF;">System</span>::new(<span style="color: #E6DB74;">"http-server"</span>);
+
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">HttpServer&#26159;&#19968;&#20010;Actor,&#20854;&#20250;&#36820;&#22238;&#19968;&#20010;addr&#30340;Actor&#27169;&#22411;</span>
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#32473;&#35813;addr&#21457;&#36865;pause,resume,stop&#31561;&#28040;&#24687;</span>
+        <span style="color: #F92672;">let</span> <span style="color: #FD971F;">addr</span> = <span style="color: #66D9EF;">HttpServer</span>::new(|| {
+            <span style="color: #66D9EF;">App</span>::new().route(<span style="color: #E6DB74;">"/"</span>, <span style="color: #AE81FF;">web</span>::get().to(|| <span style="color: #66D9EF;">HttpResponse</span>::<span style="color: #66D9EF;">Ok</span>()))
+        })
+        .bind(<span style="color: #E6DB74;">"127.0.0.1:8088"</span>)
+        .unwrap()
+        .shutdown_timeout(60) <span style="color: #75715E;">// </span><span style="color: #75715E;">&lt;- Set shutdown timeout to 60 seconds</span>
+        .start();
+
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">&#23558;addr&#21457;&#36865;&#21040;channel&#20013;</span>
+        <span style="color: #F92672;">let</span> <span style="color: #FD971F;">_</span> = tx.send(addr);
+        <span style="color: #F92672;">let</span> <span style="color: #FD971F;">_</span> = sys.run();
+    });
+
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">main&#32447;&#31243;&#25509;&#25910;&#21040;addr</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">addr</span> = rx.recv().unwrap();
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21521;&#27492;addr&#21457;&#36865;pause&#28040;&#24687;&#65292;&#36827;&#34892;&#26242;&#20572;&#24037;&#20316;</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">_</span> = addr
+        .pause();
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21521;&#27492;addr&#21457;&#36865;resume&#28040;&#24687;&#65292;&#36827;&#34892;&#24674;&#22797;&#24037;&#20316;</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">_</span> = addr
+        .resume();
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21521;&#27492;addr&#21457;&#36865;stop&#28040;&#24687;&#65292;&#36827;&#34892;&#20572;&#27490;&#24037;&#20316;</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">_</span> = addr
+        .stop(<span style="color: #F92672;">true</span>);
+}
+</pre>
+</div>
+
+<p>
+actix-web默认会开启多个线程来执行程序，其数量默认为cpu核数，而可以通过worker()方法来指定个数。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">actix_web</span>::{web, <span style="color: #66D9EF;">App</span>, <span style="color: #66D9EF;">HttpResponse</span>, <span style="color: #66D9EF;">HttpServer</span>};
+
+<span style="color: #F92672;">pub</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #66D9EF;">HttpServer</span>::new(|| {
+        <span style="color: #66D9EF;">App</span>::new().route(<span style="color: #E6DB74;">"/"</span>, <span style="color: #AE81FF;">web</span>::get().to(|| <span style="color: #66D9EF;">HttpResponse</span>::<span style="color: #66D9EF;">Ok</span>()))
+    })
+    .workers(4); <span style="color: #75715E;">// </span><span style="color: #75715E;">&lt;- Start 4 workers&#65292;&#24320;&#21551;4&#20010;&#32447;&#31243;&#12290;</span>
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2e7be45" class="outline-2">
+<h2 id="org2e7be45">Request Handlers</h2>
+<div class="outline-text-2" id="text-org2e7be45">
+<p>
+请求处理器，接收0个或多个参数(impl FromRequest)，并返回 <code>impl Responder</code> ,actix-web默认为一些基础类型实现了Responder,如 'static str及String.
+如果要返回自定义类型，需要实现Responder,其中该trait中需要实现respond_to方法。如:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">actix_web</span>::{<span style="color: #66D9EF;">Error</span>, <span style="color: #66D9EF;">HttpRequest</span>, <span style="color: #66D9EF;">HttpResponse</span>, <span style="color: #66D9EF;">Responder</span>};
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">serde</span>::<span style="color: #66D9EF;">Serialize</span>;
+
+<span style="color: #F92672;">#[derive(Serialize)]</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">MyObj</span> {
+    <span style="color: #FD971F;">name</span>: &amp;'<span style="color: #F92672;">static</span> <span style="color: #66D9EF;">str</span>,
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#23454;&#29616;Responder</span>
+<span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Responder</span> <span style="color: #F92672;">for</span> <span style="color: #66D9EF;">MyObj</span> {
+    <span style="color: #F92672;">type</span> <span style="color: #66D9EF;">Error</span> = <span style="color: #66D9EF;">Error</span>;
+    <span style="color: #F92672;">type</span> <span style="color: #66D9EF;">Future</span> = <span style="color: #66D9EF;">Result</span>&lt;<span style="color: #66D9EF;">HttpResponse</span>, <span style="color: #66D9EF;">Error</span>&gt;;
+
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#23454;&#29616;respond_to</span>
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">respond_to</span>(<span style="color: #F92672;">self</span>, <span style="color: #FD971F;">_req</span>: &amp;<span style="color: #66D9EF;">HttpRequest</span>) -&gt; <span style="color: #66D9EF;">Self</span>::<span style="color: #66D9EF;">Future</span> {
+        <span style="color: #F92672;">let</span> <span style="color: #FD971F;">body</span> = <span style="color: #AE81FF;">serde_json</span>::to_string(&amp;<span style="color: #F92672;">self</span>)<span style="color: #F92672; font-weight: bold;">?</span>;
+
+        <span style="color: #75715E;">// </span><span style="color: #75715E;">Create response and set content type</span>
+        <span style="color: #66D9EF;">Ok</span>(<span style="color: #66D9EF;">HttpResponse</span>::<span style="color: #66D9EF;">Ok</span>()
+            .content_type(<span style="color: #E6DB74;">"application/json"</span>)
+            .body(body))
+    }
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">Request handler</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>() -&gt; <span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Responder</span> {
+    <span style="color: #66D9EF;">MyObj</span> { <span style="color: #FD971F;">name</span>: <span style="color: #E6DB74;">"user"</span> }
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1f9b24a" class="outline-2">
+<h2 id="org1f9b24a">Request参数</h2>
+<div class="outline-text-2" id="text-org1f9b24a">
+<p>
+可以通过直接传入Path及Json来获取请求信息:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">//</span><span style="color: #75715E;">&#33719;&#21462;path&#20449;&#24687;&#21450;json&#20449;&#24687;</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>(<span style="color: #FD971F;">path</span>: <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Path</span>&lt;(<span style="color: #66D9EF;">String</span>, <span style="color: #66D9EF;">String</span>)&gt;, <span style="color: #FD971F;">json</span>: <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Json</span>&lt;<span style="color: #66D9EF;">MyInfo</span>&gt;) -&gt; <span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Responder</span> {
+    <span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, path.0, path.1, json.id, json.username)
+}
+</pre>
+</div>
+<p>
+可以通过extract来提取相关path及json信息
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">&#20256;&#20837;HttpRequest</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">extract</span>(<span style="color: #FD971F;">req</span>: <span style="color: #66D9EF;">HttpRequest</span>) -&gt; <span style="color: #F92672;">impl</span> <span style="color: #66D9EF;">Responder</span> {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36890;&#36807;extract&#26469;&#25552;&#21462;</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">params</span> = <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Path</span>::&lt;(<span style="color: #66D9EF;">String</span>, <span style="color: #66D9EF;">String</span>)&gt;::extract(&amp;req).unwrap();
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#36890;&#36807;extract&#26469;&#25552;&#21462;</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">info</span> = <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Json</span>::&lt;<span style="color: #66D9EF;">MyInfo</span>&gt;::extract(&amp;req)
+        .wait()
+        .expect(<span style="color: #E6DB74;">"Err with reading json."</span>);
+
+    <span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"</span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;"> </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, params.0, params.1, info.username, info.id)
+}
+</pre>
+</div>
+<p>
+其中path提取url中的参数:如访问的形式是/users/{userid}/{name}，那么就可以通过web:Path&lt;(u32,String)&gt;来获取其中的userid和name.
+如:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>(<span style="color: #FD971F;">info</span>: <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Path</span>&lt;(<span style="color: #66D9EF;">u32</span>, <span style="color: #66D9EF;">String</span>)&gt;) -&gt; <span style="color: #66D9EF;">Result</span>&lt;<span style="color: #66D9EF;">String</span>&gt; {
+    <span style="color: #66D9EF;">Ok</span>(<span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"Welcome </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">, userid </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">!"</span>, info.1, info.0))
+}
+
+<span style="color: #66D9EF;">HttpServer</span>::new(|| {
+    <span style="color: #66D9EF;">App</span>::new().route(
+        <span style="color: #E6DB74;">"/users/{userid}/{friend}"</span>, <span style="color: #75715E;">// </span><span style="color: #75715E;">&lt;- define path parameters</span>
+        <span style="color: #AE81FF;">web</span>::get().to(index),
+    )
+})
+.bind(<span style="color: #E6DB74;">"127.0.0.1:8088"</span>)
+.unwrap()
+.run()
+.unwrap();
+</pre>
+</div>
+<p>
+而web::Path也可以传入自定义类型，不过该类型需要实现Deserialize,如:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">#[derive(Deserialize)]</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Info</span> {
+    <span style="color: #FD971F;">userid</span>: <span style="color: #66D9EF;">u32</span>,
+    <span style="color: #FD971F;">friend</span>: <span style="color: #66D9EF;">String</span>,
+}
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>(info : <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Path</span>&lt;<span style="color: #66D9EF;">Info</span>&gt;)
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20854;&#20182;&#30465;&#30053;</span>
+</pre>
+</div>
+<p>
+也可以通过HttpRequest的get或者query方法来获取path中的信息，如:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>(<span style="color: #FD971F;">req</span>: <span style="color: #66D9EF;">HttpRequest</span>) -&gt; <span style="color: #66D9EF;">Result</span>&lt;<span style="color: #66D9EF;">String</span>&gt; {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">get</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">name</span>: <span style="color: #66D9EF;">String</span> = req.match_info().get(<span style="color: #E6DB74;">"friend"</span>).unwrap().parse().unwrap();
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">query</span>
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">userid</span>: <span style="color: #66D9EF;">i32</span> = req.match_info().query(<span style="color: #E6DB74;">"userid"</span>).parse().unwrap();
+
+    <span style="color: #66D9EF;">Ok</span>(<span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"Welcome </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">, userid </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">!"</span>, name, userid))
+}
+</pre>
+</div>
+<p>
+通过web::Query来获取url中的filed信息:如/user?username=xxx
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">#[derive(Deserialize)]</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Info</span> {
+    <span style="color: #FD971F;">username</span>: <span style="color: #66D9EF;">String</span>,
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">this handler get called only if the request's query contains `username` field</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>(<span style="color: #FD971F;">info</span>: <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Query</span>&lt;<span style="color: #66D9EF;">Info</span>&gt;) -&gt; <span style="color: #66D9EF;">String</span> {
+    <span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"Welcome </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">!"</span>, info.username)
+}
+</pre>
+</div>
+<p>
+可以通过web::Json来获取Json数据.
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">#[derive(Deserialize)]</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">Info</span> {
+    <span style="color: #FD971F;">username</span>: <span style="color: #66D9EF;">String</span>,
+}
+
+<span style="color: #E6DB74;">/// deserialize `Info` from request's body</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>(<span style="color: #FD971F;">info</span>: <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Json</span>&lt;<span style="color: #66D9EF;">Info</span>&gt;) -&gt; <span style="color: #66D9EF;">Result</span>&lt;<span style="color: #66D9EF;">String</span>&gt; {
+    <span style="color: #66D9EF;">Ok</span>(<span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"Welcome </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">!"</span>, info.username))
+}
+</pre>
+</div>
+<p>
+通过web::Form来获取表单信息。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">#[derive(Deserialize)]</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">FormData</span> {
+    <span style="color: #FD971F;">username</span>: <span style="color: #66D9EF;">String</span>,
+}
+
+<span style="color: #E6DB74;">/// extract form data using serde</span>
+<span style="color: #E6DB74;">/// this handler gets called only if the content type is *x-www-form-urlencoded*</span>
+<span style="color: #E6DB74;">/// and the content of the request could be deserialized to a `FormData` struct</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>(<span style="color: #FD971F;">form</span>: <span style="color: #AE81FF;">web</span>::<span style="color: #66D9EF;">Form</span>&lt;<span style="color: #66D9EF;">FormData</span>&gt;) -&gt; <span style="color: #66D9EF;">Result</span>&lt;<span style="color: #66D9EF;">String</span>&gt; {
+    <span style="color: #66D9EF;">Ok</span>(<span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"Welcome </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">!"</span>, form.username))
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb23f842" class="outline-2">
+<h2 id="orgb23f842">Error</h2>
+<div class="outline-text-2" id="text-orgb23f842">
+<p>
+可以像golang那样返回error，返回的error,actix-web会自动进行渲染。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">actix_web</span>::{error, <span style="color: #66D9EF;">Result</span>};
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">failure</span>::<span style="color: #66D9EF;">Fail</span>;
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">log</span>::debug; <span style="color: #75715E;">// </span><span style="color: #75715E;">&#21487;&#20197;&#20351;&#29992;&#35813;&#20989;&#25968;&#26469;&#25171;&#21360;&#26085;&#24535;&#12290;</span>
+
+<span style="color: #F92672;">#[derive(Fail, Debug)]</span>
+<span style="color: #F92672;">#[fail(display = </span><span style="color: #E6DB74;">"my error"</span><span style="color: #F92672;">)]</span>
+<span style="color: #F92672;">pub</span> <span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">MyError</span> {
+    <span style="color: #FD971F;">name</span>: &amp;'<span style="color: #F92672;">static</span> <span style="color: #66D9EF;">str</span>,
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">Use default implementation for `error_response()` method</span>
+<span style="color: #F92672;">impl</span> <span style="color: #AE81FF;">error</span>::<span style="color: #66D9EF;">ResponseError</span> <span style="color: #F92672;">for</span> <span style="color: #66D9EF;">MyError</span> {}
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">index</span>() -&gt; <span style="color: #66D9EF;">Result</span>&lt;&amp;'<span style="color: #F92672;">static</span> <span style="color: #66D9EF;">str</span>, <span style="color: #66D9EF;">MyError</span>&gt; {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">err</span> = <span style="color: #66D9EF;">MyError</span> { <span style="color: #FD971F;">name</span>: <span style="color: #E6DB74;">"test error"</span> };
+    <span style="color: #F92672;">debug!</span>(<span style="color: #E6DB74;">"{}"</span>, err);   <span style="color: #75715E;">// </span><span style="color: #75715E;">&#20351;&#29992;debug&#23439;&#26469;&#25171;&#21360;&#38169;&#35823;&#26085;&#24535;</span>
+    <span style="color: #66D9EF;">Err</span>(err)
+}
+
+<span style="color: #F92672;">pub</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #F92672;">use</span> <span style="color: #AE81FF;">actix_web</span>::{<span style="color: #AE81FF;">middleware</span>::<span style="color: #66D9EF;">Logger</span>, web, <span style="color: #66D9EF;">App</span>, <span style="color: #66D9EF;">HttpServer</span>};
+
+    <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">env</span>::set_var(<span style="color: #E6DB74;">"RUST_LOG"</span>, <span style="color: #E6DB74;">"my_errors=debug,actix_web=info"</span>);
+    <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">env</span>::set_var(<span style="color: #E6DB74;">"RUST_BACKTRACE"</span>, <span style="color: #E6DB74;">"1"</span>);
+    <span style="color: #AE81FF;">env_logger</span>::init();
+
+    <span style="color: #66D9EF;">HttpServer</span>::new(|| {
+        <span style="color: #66D9EF;">App</span>::new()
+            .wrap(<span style="color: #66D9EF;">Logger</span>::default())
+            .route(<span style="color: #E6DB74;">"/"</span>, <span style="color: #AE81FF;">web</span>::get().to(index))
+    })
+    .bind(<span style="color: #E6DB74;">"127.0.0.1:8088"</span>)
+    .unwrap()
+    .run()
+    .unwrap();
+}
+</pre>
+</div>
+<p>
+其中ResponseError的定义如下,其只有一个函数，且有默认实现。
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">pub</span> <span style="color: #F92672;">trait</span> <span style="color: #FD971F;">ResponseError</span>: <span style="color: #66D9EF;">Fail</span> {
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">error_response</span>(&amp;<span style="color: #F92672;">self</span>) -&gt; <span style="color: #66D9EF;">HttpResponse</span> {
+        <span style="color: #66D9EF;">HttpResponse</span>::new(<span style="color: #66D9EF;">StatusCode</span>::<span style="color: #66D9EF;">INTERNAL_SERVER_ERROR</span>)
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf0527f5" class="outline-2">
+<h2 id="orgf0527f5">读取配置</h2>
+<div class="outline-text-2" id="text-orgf0527f5">
+<p>
+..
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-09-20 Fri 22:48</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

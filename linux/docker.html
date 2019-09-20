@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-08-18 Sun 11:24 -->
+<!-- 2019-09-20 Fri 22:48 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>docker使用</title>
@@ -39,6 +39,7 @@
 <li><a href="#orgec621d9">docker ps</a></li>
 <li><a href="#orgaa58bcc">docker stop &lt;id&gt;</a></li>
 <li><a href="#org6e898ec">docker run -d -p 8080:80 nginx</a></li>
+<li><a href="#orgfe826dc">docker cp</a></li>
 <li><a href="#org62c6f16">制作镜像</a></li>
 <li><a href="#org9d7cf9b">看书笔记</a></li>
 <li><a href="#org4ee12c5">Dockfile的指令</a></li>
@@ -108,7 +109,7 @@ eg: <code>docker run hello-world</code>
 </p>
 <ol class="org-ol">
 <li><code>docker pull nginx</code> : 拉取镜像</li>
-<li><code>docker -d run nginx</code> : 后台运行容器</li>
+<li><code>docker run -d nginx</code> : 后台运行容器</li>
 <li><code>docker exec -it &lt;id&gt; bash</code> : 进入容器的内部，可以通过 <code>docker exec --help</code> 查看该命令的说明</li>
 </ol>
 </div>
@@ -141,6 +142,18 @@ eg: <code>docker run hello-world</code>
 </div>
 </div>
 
+<div id="outline-container-orgfe826dc" class="outline-3">
+<h3 id="orgfe826dc">docker cp</h3>
+<div class="outline-text-3" id="text-orgfe826dc">
+<p>
+<code>docker cp localdir:dockerdir</code>
+可以将本地的包文件发送到docker中。
+而拷贝完后，再重启项目，原有的文件就会不再了。
+但可以通过挂载的方式重启，即以下命令：
+<code>docker run -d -v /localdir:/dockerdir -p 8080:80 ${docker_name}</code>
+</p>
+</div>
+</div>
 <div id="outline-container-org62c6f16" class="outline-3">
 <h3 id="org62c6f16">制作镜像</h3>
 <div class="outline-text-3" id="text-org62c6f16">
@@ -231,7 +244,7 @@ EXPOSE 80 # 该指令告诉容器，容器的应用程序会使用80端口，表
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-08-18 Sun 11:24</p>
+<p class="date">Created: 2019-09-20 Fri 22:48</p>
 <p class="validation"></p>
 </div>
 </body>
