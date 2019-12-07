@@ -132,16 +132,32 @@ ascetic 禁欲的，苦行僧 从希腊单词asketes(隐士、僧侣)
 | geras   | Greek | old age             | geriatrics(老人病学),geriatrician(老年医学专家),geriatric(老年医学的)                                                                                              |
 
 * session 7
-| name          | des          |
-|---------------+--------------|
-| phychologist  | 心理学家     |
-| psychoanalyst | 心理分析学家 |
-| orthodontist  | 矫形牙医     |
-| optometrist   | 验光师       |
-| optician      | 眼镜制造商   |
+| name          | des            |
+|---------------+----------------|
+| phychologist  | 心理学家       |
+| psychoanalyst | 心理分析学家   |
+| orthodontist  | 矫形牙医       |
+| optometrist   | 验光师         |
+| optician      | 眼镜制造商     |
+| osteopath     | 骨疗医生       |
+| chiropractor  | 脊骨神经科医生 |
+| podiatrist    | 足病医生       |
+| graphologist  | 笔迹专家       |
+| gerontologist | 老年学专家     |
 
 * 宣布放弃
 学什么英语，老子不出国，什么苦没受过，就这么凑合过日子了，出个屁国，学个屁英语，反正我也学不会。
 什么？英语文档？翻译软件啊，又不是看不懂。
 什么？失去很多好机会？我爸妈也不会英语怎么就过日子了？
 算了，不说那么绝了，没准哪天又拾起了英语。
+
+* 我又回来了
+解释一下，之前是因为知识触及到了知识盲区，在学了越来越多的内容后，发现很多知识都需要翻阅外文。特别是，有个读者在读了好和弦的视频后，问了这么个问题，说，如果让你重新安排你的学习，你会按什么流程来操作？其作者第一个推荐的事就是，一定要学好英文。
+前人踩的坑和建议不是没有道理的，你不学是因为你还没到那个层级，但是你到了那个层级后再学就晚了。
+还有这本书，太多单词不认识了，还是先打好单词基础吧！多背背4、6级单词、gre单词等等。
+* session 8
+| root         | which   | mean                    | eg                                                                                                                           |
+| psychiatrist | greek   | psyche,spirit,soul,mind | psychiatrist(-iatreia),psychologist(+ logos，sciences or study) , psychology(n. 心理学),psychological(adj. 心理的，精神上的) |
+| psyche       | english | ,n. 指精神灵魂心灵      | psychic(adj,灵魂的心灵的，超自然的，精神的)                                                                                  |
+| pathos       | greek   | suffering or disease    | psychopathic(adj. 精神病的，精神错乱的),psychopathy(n. 精神变态，心理变态)                                                   |
+| soma         | greek   | body                    | psychosomatic(adj, 受心理影响的，由精神负担导致的)                                                                                        |

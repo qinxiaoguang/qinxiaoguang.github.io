@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-12-06 Fri 15:41 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>shell如何暂停以及恢复</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">shell如何暂停以及恢复</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orge2b75a4">概述</a></li>
+<li><a href="#orgf23d505">方法</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge2b75a4" class="outline-2">
+<h2 id="orge2b75a4">概述</h2>
+<div class="outline-text-2" id="text-orge2b75a4">
+<p>
+在执行一些shell脚本的时候，可能会遇到特殊的情况，需要对当前脚本进行暂停，在某个时间后再恢复。这种情况不需要实现，通过ctrl+z,fg,kill,bg等命令即可实现。
+</p>
+</div>
+</div>
+<div id="outline-container-orgf23d505" class="outline-2">
+<h2 id="orgf23d505">方法</h2>
+<div class="outline-text-2" id="text-orgf23d505">
+<p>
+如果脚本是前台运行，使用ctrl+z即可暂停当前脚本的执行，而使用fg则可恢复当前脚本执行。如果要查看当前暂停(stop)的任务，可以使用jobs来查看。
+而如果脚本是后台运行，使用kill -stop PID来暂停，使用bg可恢复。而若stop的后台任务过多，可以通过jobs来查看相应任务的job id,通过bg %num 命令来进行恢复。如 <code>bg %2</code> 就是恢复第2个序号的任务。其中序号可以在jobs中进行查看。同样fg也可以这么操作。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-12-06 Fri 15:41</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

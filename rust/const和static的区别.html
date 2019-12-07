@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-12-06 Fri 15:40 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>const和static的区别</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">const和static的区别</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org8c84b1c">区别</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8c84b1c" class="outline-2">
+<h2 id="org8c84b1c">区别</h2>
+<div class="outline-text-2" id="text-org8c84b1c">
+<ol class="org-ol">
+<li>const类似c中的#define,会将const对应的数值硬编码到code中，而static则是变量，会在运行的时候进行初始化。</li>
+<li>const的值不允许被改变，而static的值可以被标记为mut,通过unsafe进行改变。但不建议对static的值进行更改。</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-12-06 Fri 15:40</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

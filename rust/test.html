@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-12-06 Fri 15:40 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>test方法</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">test方法</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org94f9868">cfg</a>
+<ul>
+<li><a href="#orgd40854e">单例</a></li>
+<li><a href="#orgd4f6498">集成</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org94f9868" class="outline-2">
+<h2 id="org94f9868">cfg</h2>
+<div class="outline-text-2" id="text-org94f9868">
+</div>
+<div id="outline-container-orgd40854e" class="outline-3">
+<h3 id="orgd40854e">单例</h3>
+<div class="outline-text-3" id="text-orgd40854e">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">&#30452;&#25509;&#20351;&#29992;cfg&#36827;&#34892;&#27979;&#35797;&#65292;&#20351;&#29992;cargo test&#21363;&#21487;&#36827;&#34892;&#27979;&#35797;</span>
+<span style="color: #F92672;">#[cfg(test)]</span>
+<span style="color: #F92672;">mod</span> <span style="color: #AE81FF;">tests</span> {
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">&#22914;&#26524;&#35201;&#27979;&#35797;&#26412;&#20195;&#30721;&#20013;&#30340;&#31169;&#26377;&#20989;&#25968; &#65292;&#38656;&#35201;&#20351;&#29992;use super::*;&#26469;&#24341;&#20837;&#31169;&#26377;&#20989;&#25968;</span>
+    <span style="color: #F92672;">#[test]</span>
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">it_works</span>() {
+        <span style="color: #F92672;">assert_eq!</span>(2 + 2, 4);
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd4f6498" class="outline-3">
+<h3 id="orgd4f6498">集成</h3>
+<div class="outline-text-3" id="text-orgd4f6498">
+<p>
+需要在src的同级目录中创建tests文件，并创建相关文件，使用 <code>use xxx::xx</code> 来引入src中的代码，集成测试不需要使用cfg，如下:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">adder</span>; <span style="color: #75715E;">// </span><span style="color: #75715E;">src&#30446;&#24405;&#20013;&#30340;&#21253;</span>
+
+<span style="color: #F92672;">#[test]</span>  <span style="color: #75715E;">// </span><span style="color: #75715E;">&#19981;&#38656;&#35201;cfg</span>
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">it_adds_two</span>() {
+    <span style="color: #F92672;">assert_eq!</span>(4, <span style="color: #AE81FF;">adder</span>::add_two(2));
+}
+</pre>
+</div>
+
+<p>
+使用 <code>cargo test</code> 即可进行测试。
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-12-06 Fri 15:40</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

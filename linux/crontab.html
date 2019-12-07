@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-12-06 Fri 15:41 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>crontab使用</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">crontab使用</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orge65ad2c">使用方法</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge65ad2c" class="outline-2">
+<h2 id="orge65ad2c">使用方法</h2>
+<div class="outline-text-2" id="text-orge65ad2c">
+<p>
+crontab的格式是:
+</p>
+<p class="verse">
+分钟 小时 日 月 周几 命令<br />
+</p>
+<p>
+注意不加 <code>,</code> ,加 <code>,</code> 则为同一个参数，如 <code>0,15,30,45 * * * * sh test.sh</code> 表示每个小时的0分，15分，30分，45分执行对应的命令。
+也可以用 <code>/</code> 符号来表示每，如分钟位使用 <code>*/5</code> 表示每5分钟。
+其中各个地方的取值:
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">名称</th>
+<th scope="col" class="org-right">取值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">分钟</td>
+<td class="org-right">0-59</td>
+</tr>
+
+<tr>
+<td class="org-left">hour</td>
+<td class="org-right">0-23</td>
+</tr>
+
+<tr>
+<td class="org-left">day of month</td>
+<td class="org-right">1-31</td>
+</tr>
+
+<tr>
+<td class="org-left">month</td>
+<td class="org-right">1-12</td>
+</tr>
+
+<tr>
+<td class="org-left">day of week</td>
+<td class="org-right">0-6,0/7表示周日</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-12-06 Fri 15:41</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

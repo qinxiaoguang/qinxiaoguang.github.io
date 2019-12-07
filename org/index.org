@@ -1,7 +1,63 @@
 #+TITLE: 佛系少年
 
+* 人生杂谈
+  * [2019-12-06 Fri] [[file:人生杂谈/领悟.org][悟]]
+  * [2019-11-07 Thu] [[file:人生杂谈/台式电脑配置.org][台式电脑配置]]
+  * [2019-10-24 Thu] [[file:人生杂谈/杂记.org][杂记]]
+  * [2019-10-16 Wed] [[file:人生杂谈/book.org][book]]
+  * [2019-10-08 Tue] [[file:人生杂谈/film.org][电影/剧推荐]]
+  * [2019-09-28 Sat] [[file:人生杂谈/点子.org][点子]]
+  * [2019-09-23 Mon] [[file:人生杂谈/暴饮暴食.org][如何避免暴饮暴食]]
+  * [2019-09-20 Fri] [[file:人生杂谈/房.org][关于买房]]
+  * [2019-07-23 Tue] [[file:人生杂谈/blog.org][关于博客]]
+  * [2019-07-19 Fri] [[file:人生杂谈/孩童记忆.org][孩童时光]]
+  * [2019-06-05 Wed] [[file:人生杂谈/脸皮厚.org][人生在世,脸皮要厚,面子一点不值钱]]
+  * [2019-04-18 Thu] [[file:人生杂谈/失眠.org][失眠]]
+* study
+  * [2019-12-05 Thu] [[file:study/leetcode.org][leetcode题解]]
+  * [2019-10-24 Thu] [[file:study/吉他笔记.org][吉他笔记]]
+  * [2019-10-10 Thu] [[file:study/社会性动物读书笔记.org][社会性动物读书笔记]]
+  * [2019-10-10 Thu] [[file:study/自控力.org][自控力学习笔记]]
+  * [2019-10-09 Wed] [[file:study/word-power-made-easy.org][word power made easy学习笔记]]
+  * [2019-10-08 Tue] [[file:study/开车心得.org][开车心得]]
+  * [2019-08-11 Sun] [[file:study/亲密关系.org][亲密关系读书笔记]]
+  * [2019-06-03 Mon] [[file:study/双拼学习.org][双拼学习]]
+* rust
+  * [2019-12-05 Thu] [[file:rust/网页设计.org][网页设计中的小问题]]
+  * [2019-11-28 Thu] [[file:rust/rust异步.org][rust异步]]
+  * [2019-11-28 Thu] [[file:rust/智能指针.org][智能指针]]
+  * [2019-11-27 Wed] [[file:rust/string相关操作.org][string操作]]
+  * [2019-11-26 Tue] [[file:rust/继承.org][没有继承，怎么实现继承]]
+  * [2019-11-26 Tue] [[file:rust/const和static的区别.org][const和static的区别]]
+  * [2019-11-15 Fri] [[file:rust/json.org][struct json转换]]
+  * [2019-11-15 Fri] [[file:rust/reqwest.org][reqwest http库]]
+  * [2019-11-15 Fri] [[file:rust/test.org][test方法]]
+  * [2019-11-15 Fri] [[file:rust/lazy_static.org][lazy_static 全局变量]]
+  * [2019-11-15 Fri] [[file:rust/rust读写.org][rust读写数据]]
+  * [2019-11-07 Thu] [[file:rust/rust学习笔记.org][rust学习笔记]]
+  * [2019-08-31 Sat] [[file:rust/actix-web.org][actix-web使用]]
+  * [2019-08-29 Thu] [[file:rust/cargo.org][cargo使用]]
+* 底层架构
+  * [2019-12-04 Wed] [[file:底层架构/关于协程.org][关于协程]]
+  * [2019-07-12 Fri] [[file:底层架构/内存屏障.org][内存屏障]]
+* 规划
+  * [2019-11-28 Thu] [[file:规划/rust项目.org][rust项目]]
+  * [2019-10-15 Tue] [[file:规划/产品.org][理想中的产品]]
+  * [2019-09-23 Mon] [[file:规划/遗愿目标.org][遗愿目标]]
+  * [2019-06-05 Wed] [[file:规划/总职业规划.org][职业规划]]
+  * [2019-04-16 Tue] [[file:规划/2019年度规划.org][2019年度规划]]
+* 工作心得
+  * [2019-11-28 Thu] [[file:工作心得/编程.org][关于编程]]
+  * [2019-11-06 Wed] [[file:工作心得/工作上的那些事情.org][工作上的那些事情]]
+  * [2019-04-16 Tue] [[file:工作心得/沟通.org][沟通心得]]
 * linux
-  * [2019-09-20 Fri] [[file:linux/unix读书笔记.org][unix读书笔记]]
+  * [2019-11-27 Wed] [[file:linux/unicode和utf-8的区别.org][unicode和utf-8的区别]]
+  * [2019-10-22 Tue] [[file:linux/shell暂停.org][shell如何暂停以及恢复]]
+  * [2019-10-18 Fri] [[file:linux/trap.org][shell中使用trap来捕获信号]]
+  * [2019-10-09 Wed] [[file:linux/pssh.org][pssh使用]]
+  * [2019-09-29 Sun] [[file:linux/cloud.org][云相关名词解释]]
+  * [2019-09-27 Fri] [[file:linux/crontab.org][crontab使用]]
+  * [2019-09-25 Wed] [[file:linux/unix读书笔记.org][unix读书笔记]]
   * [2019-09-20 Fri] [[file:linux/comm.org][comm命令，求交集]]
   * [2019-09-05 Thu] [[file:linux/Linux手册.org][Linux手册]]
   * [2019-09-04 Wed] [[file:linux/expect.org][expect自动化工具]]
@@ -20,47 +76,12 @@
   * [2019-05-27 Mon] [[file:linux/tmux.org][tmux使用]]
   * [2019-05-15 Wed] [[file:linux/core_dump.org][core dump相关]]
   * [2019-05-04 Sat] [[file:linux/shell并发.org][shell 并发]]
-* 人生杂谈
-  * [2019-09-20 Fri] [[file:人生杂谈/房.org][关于买房]]
-  * [2019-09-19 Thu] [[file:人生杂谈/就是不高兴.org][就是不高兴]]
-  * [2019-09-19 Thu] [[file:人生杂谈/领悟.org][悟]]
-  * [2019-08-28 Wed] [[file:人生杂谈/book.org][book]]
-  * [2019-08-16 Fri] [[file:人生杂谈/film.org][电影/剧推荐]]
-  * [2019-08-11 Sun] [[file:人生杂谈/亲密关系.org][亲密关系读书笔记]]
-  * [2019-07-23 Tue] [[file:人生杂谈/blog.org][关于博客]]
-  * [2019-07-19 Fri] [[file:人生杂谈/孩童记忆.org][孩童时光]]
-  * [2019-07-12 Fri] [[file:人生杂谈/点子.org][点子]]
-  * [2019-06-05 Wed] [[file:人生杂谈/脸皮厚.org][人生在世,脸皮要厚,面子一点不值钱]]
-  * [2019-04-18 Thu] [[file:人生杂谈/失眠.org][失眠]]
-* 规划
-  * [2019-09-20 Fri] [[file:规划/遗愿目标.org][遗愿目标]]
-  * [2019-07-15 Mon] [[file:规划/产品.org][理想中的产品]]
-  * [2019-06-05 Wed] [[file:规划/总职业规划.org][职业规划]]
-  * [2019-04-16 Tue] [[file:规划/2019年度规划.org][2019年度规划]]
-* study
-  * [2019-09-19 Thu] [[file:study/leetcode.org][leetcode题解]]
-  * [2019-07-22 Mon] [[file:study/吉他笔记.org][吉他笔记]]
-  * [2019-07-17 Wed] [[file:study/word-power-made-easy.org][word power made easy学习笔记]]
-  * [2019-06-03 Mon] [[file:study/双拼学习.org][双拼学习]]
-* rust
-  * [2019-08-31 Sat] [[file:rust/actix-web.org][actix-web使用]]
-  * [2019-08-29 Thu] [[file:rust/cargo.org][cargo使用]]
-  * [2019-07-17 Wed] [[file:rust/rust异步.org][rust异步]]
-  * [2019-06-14 Fri] [[file:rust/rust学习笔记.org][rust学习笔记]]
-* 底层架构
-  * [2019-07-17 Wed] [[file:底层架构/关于协程.org][关于协程]]
-  * [2019-07-12 Fri] [[file:底层架构/内存屏障.org][内存屏障]]
-* 前端
-  * [2019-06-12 Wed] [[file:前端/js.org][js常见问题]]
-* git
-  * [2019-05-31 Fri] [[file:git/gitFAQ.org][git常见问题]]
-  * [2019-04-17 Wed] [[file:git/git-push到多个仓库.org][git-push到多个仓库]]
 * other
+  * [2019-10-15 Tue] [[file:other/mac软件.org][mac软件汇总]]
   * [2019-07-15 Mon] [[file:other/搜索技巧.org][搜索技巧]]
-* 工作心得
-  * [2019-08-01 Thu] [[file:工作心得/工作上的那些事情.org][工作上的那些事情]]
-  * [2019-06-24 Mon] [[file:工作心得/编程.org][关于编程]]
-  * [2019-04-16 Tue] [[file:工作心得/沟通.org][沟通心得]]
+* 编程工具
+  * [2019-08-16 Fri] [[file:编程工具/regex.org][正则]]
+  * [2019-06-04 Tue] [[file:编程工具/vscode.org][vscode使用手册]]
 * go
   * [2019-08-14 Wed] [[file:go/连接超时.org][go服务持续出现连接超时问题排查]]
   * [2019-08-14 Wed] [[file:go/gotrace.org][go trace/pprof]]
@@ -75,6 +96,8 @@
   * [2019-06-18 Tue] [[file:go/复杂json转struct.org][struct嵌套解json]]
   * [2019-06-17 Mon] [[file:go/flag.org][flag使用方法]]
   * [2019-04-24 Wed] [[file:go/time包.org][time包相关方法]]
-* 编程工具
-  * [2019-08-16 Fri] [[file:编程工具/regex.org][正则]]
-  * [2019-06-04 Tue] [[file:编程工具/vscode.org][vscode使用手册]]
+* git
+  * [2019-05-31 Fri] [[file:git/gitFAQ.org][git常见问题]]
+  * [2019-04-17 Wed] [[file:git/git-push到多个仓库.org][git-push到多个仓库]]
+* 前端
+  * [2019-06-12 Wed] [[file:前端/js.org][js常见问题]]

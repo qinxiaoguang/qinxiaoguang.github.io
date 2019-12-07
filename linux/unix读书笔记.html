@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-09-20 Fri 22:48 -->
+<!-- 2019-12-06 Fri 15:41 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>unix读书笔记</title>
@@ -109,13 +109,42 @@ unix网络编程
 <li>三个基本的重定向操作：1. who&gt;userlist,将stdout连接到一个文件 2. sort &lt; date, 将stdin连接到一个文件。3. who | sort 将stdout和stdin连接。</li>
 <li>每个进程都保存一个文件描述符的数组，其中一般012都被分配给了终端的stdin,stdout,sdterr的连接,再次分配时，都会先分配当前数组中可用的最小位置。</li>
 <li>将stdin连接到文件有以下几种方法。1. close-then-open,即先关闭文件描述符0,再打开文件，因为分配最低位置，所以会将0描述符分配给该文件。2.open-close-dup-close,先打开文件，分配一个描述符，再关闭0,再复制一份，此时复制的分配了0 ，再把之前的关闭。</li>
+<li>进程创建一个管道，会使用两个文件描述符.但一般都是通过fork和pipe来共用，使用pipe创建一个管道，使用fork来复制进程环境，同时复制pipe创建的管道，此时子进程和父进程可以共享该管道，一个读一个写。</li>
+<li>管道并非文件。linux中的管道与golang中channel是很相似的。</li>
+<li>unix提供接口来处理来自不同数据源的数据：磁盘文件/设备文件(open,read,write)、管道(pipe创建,fork共享,read,write)、sockets(socket,listen,connect,read, write).</li>
+<li>可以使用fdopen来打开一个fd文件,传入的是fd的id,而popen是打开一个shell指令，并使用文件的方式与该shell指令相连。如FILE* fp = popen("ls","w"); 即popen与进程连接，可以与进程的输入输出进行交互。</li>
+<li>管道在一个进程中进行创建，通过fork在两个进程间进行共享，即管道只能连接在同一台机器上的相关进程。Socket则是另外一种进程间通信的方式，其可以在不同种类的进程中创建类似管道的连接，且可以连接两个不同机器间的进程。</li>
+<li>telnet就像一部电话，与远程主机的某个端口进行相连，并把键盘的输入通过连接发送过去，将输出展示在屏幕上。</li>
+<li>文件/etc/services中定义了众所周知服务端口号的列表。</li>
+<li>socket创建一个通信端点并返回一个标识符，这个标识符可以在/proc/${pid}/fd文件中找到。之后使用bind来将相关的地址和端口号绑定到对应的sockek上。listen请求内核允许指定的socket接收呼叫，并不是所有的socket都能接收呼叫,并指定允许接入连接的数目，接入的连接会放到相应的队列中去。使用accept来接收调用，他会阻塞当前进程，在接受到请求后会返回一个文件描述符，并用该文件描述符进行读写操作。而connect则是客户端的一个操作，其连接到远程服务器，并返回一个fd，并通过该fd进行读写操作。</li>
+<li>基于socket的客户/服务器系统大多是类似的，虽然电子邮件、文件传输、远程登录和分布式数据库以及其他的internet服务在屏幕显示的内容相异，但他们的运作原理是一致的。</li>
+<li>一般的服务器运行有两种方式，一种是通过socket的队列来限制连接数，来请求后不创建新的进程，而是自己去实现相关逻辑。另外一种方式是通过代理的方式，来请求后创建一个进程(fork,exec)来调用相关逻辑，代理的方式会多次进行系统调用。</li>
+<li>说到代理，就想到了反向代理和正向代理的关系，这里插几句，正向代理是代理的客户端，如vpn，客户端无法进行fq,但是可以通过代理进行，这是正向代理，而反向代理则是代理的服务器，如nginx.</li>
+<li>常规管道(pipe创建)由进程创建的单向数据流，并由最后一个进程关闭。而命名管道则可以连接两个不相关的进程，并且可以独立于进程存在，这种命名管道被称为FIFO(由mkfifo创建),命名管道是一个队列而不是常规文件。其类似golang中的channel.</li>
+<li>共享内存是进程间通信的一个手段，两个进程维护指针指向同一个内存段，并可以有权限的进行访问。并不是在golang定义个全局变量就是共享内存，需要通过相关的函数来创建或者查找共享内存段。</li>
+<li>信号量是一个内核变量，它可以被系统中的任何进程所访问，信号两是系统级的全局变量。使用semget来创建信号量。</li>
+<li>命名socket又称Unix域Socket,它使用文件名做为地址而不是主机和端口号，它们仅仅可以连接到一个机器上的进程。有面向消息和面向流两个版本。面向消息的如信号(kill-signal)。</li>
+<li>IPC(进程间通信的方式)
+<ul class="org-ul">
+<li>environ: 系统环境变量，在使用fork时，子进程可以将父进程的环境变量复制，但不能改变父进程的环境变量，所以可以用于父进程传递给子进程</li>
+<li>pipe: 管道，单向数据流，面向流的</li>
+<li>kill - signal: 信号，通过kill发送，非信号量</li>
+<li>网络socket: 连接两个不同主机的进程，创建的时候需要指定主机名和端口号。通过相关的socket来进行通信。可以面向流和消息，双向通信。</li>
+<li>Unix域socket： 创建的时候指定文件名，连接同一主机的两个无关进程，支持面向流和消息，双向传输。</li>
+<li>命名管道(Named pipes):通过mkfifo来创建的，可以连接两个无关的进程，命名管道由文件名来标志，通过read/write来传输数据，只能单向传输数据，面向流的。</li>
+<li>File locks: 进程可以对文件的某段进行加锁，利用锁的机制可以实现进程间的通信。</li>
+<li>共享内存:进程可以通过shmget和shmat来创建可以被多个进程共享的内存段，这是IPC最为有效的办法，因为所有的通信并不需要数据的传输。</li>
+<li>信号量：系统级的变量，进程可以对信号量做增1减1等的操作，或者等待信号量到达某个特定的值。</li>
+<li>消息队列。</li>
+<li>文件。</li>
+</ul></li>
 </ol>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-09-20 Fri 22:48</p>
+<p class="date">Created: 2019-12-06 Fri 15:41</p>
 <p class="validation"></p>
 </div>
 </body>

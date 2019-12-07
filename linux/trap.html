@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-12-06 Fri 15:41 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>shell中使用trap来捕获信号</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">shell中使用trap来捕获信号</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgb4e6676">概述</a></li>
+<li><a href="#org2465c0b">使用</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgb4e6676" class="outline-2">
+<h2 id="orgb4e6676">概述</h2>
+<div class="outline-text-2" id="text-orgb4e6676">
+<p>
+在一个shell中执行whie循环的时候，会遇到执行ctrl-c无法中断的情况，而使用kill -9可以退出。为了避免这种情况，使用trap来捕捉SIGINT信号(ctrl-c 就是发送了SIGINT).
+</p>
+</div>
+</div>
+<div id="outline-container-org2465c0b" class="outline-2">
+<h2 id="org2465c0b">使用</h2>
+<div class="outline-text-2" id="text-org2465c0b">
+<p>
+<code>trap 'commond-list' signal</code>
+</p>
+
+<p>
+其中signal是要捕获的信号，可以通过kill -l来查看本机可捕获的信号，如:
+</p>
+<p class="verse">
+[qxg@lalallala tmp]$ kill -l<br />
+&#xa0;1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP<br />
+&#xa0;6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL     10) SIGUSR1<br />
+11) SIGSEGV     12) SIGUSR2     13) SIGPIPE     14) SIGALRM     15) SIGTERM<br />
+16) SIGSTKFLT   17) SIGCHLD     18) SIGCONT     19) SIGSTOP     20) SIGTSTP<br />
+21) SIGTTIN     22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ<br />
+26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO       30) SIGPWR<br />
+31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN+1  36) SIGRTMIN+2  37) SIGRTMIN+3<br />
+38) SIGRTMIN+4  39) SIGRTMIN+5  40) SIGRTMIN+6  41) SIGRTMIN+7  42) SIGRTMIN+8<br />
+43) SIGRTMIN+9  44) SIGRTMIN+10 45) SIGRTMIN+11 46) SIGRTMIN+12 47) SIGRTMIN+13<br />
+48) SIGRTMIN+14 49) SIGRTMIN+15 50) SIGRTMAX-14 51) SIGRTMAX-13 52) SIGRTMAX-12<br />
+53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9  56) SIGRTMAX-8  57) SIGRTMAX-7<br />
+58) SIGRTMAX-6  59) SIGRTMAX-5  60) SIGRTMAX-4  61) SIGRTMAX-3  62) SIGRTMAX-2<br />
+63) SIGRTMAX-1  64) SIGRTMAX<br />
+</p>
+<p>
+如:在写while循环前加上这么一段代码:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #F92672;">trap</span> <span style="color: #E6DB74;">'exit 0'</span> SIGINT
+</pre>
+</div>
+<p>
+即可在键入ctrl-c正常退出
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-12-06 Fri 15:41</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

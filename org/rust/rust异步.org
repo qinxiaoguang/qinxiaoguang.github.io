@@ -34,5 +34,8 @@ g.next(); // 返回 {value:'2', done: false}
 g.next(); // 返回 {value:'3', done: true}
 g.next(); // 返回 {value:'undefined', done: true},后边返回都一样。
 #+END_SRC
+* 基础库
+** rayon
+将iter变为parallel_iter,如 =a.iter()= -> =a.par_iter()=
 * 参考
 https://www.jianshu.com/p/b5e347b3a17c

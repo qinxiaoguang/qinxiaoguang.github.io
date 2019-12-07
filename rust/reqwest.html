@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-12-06 Fri 15:40 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>reqwest http库</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">reqwest http库</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgbce775e">概述</a></li>
+<li><a href="#org36faa8a">get方法</a></li>
+<li><a href="#org0056948">post</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbce775e" class="outline-2">
+<h2 id="orgbce775e">概述</h2>
+<div class="outline-text-2" id="text-orgbce775e">
+<p>
+rust中的http库有actix_http,http,hyper等，但使用起来都不太顺手，偶然间看到reqwest库，这个库挺符合心意，遂拿来编码。
+在网络编程方面，如果你不知道某个功能使用哪个库，可以在这个地方来找相应的库:<a href="https://lib.rs/web-programming">https://lib.rs/web-programming</a>
+</p>
+
+<p>
+以下内容，你可以在文档: <a href="https://docs.rs/reqwest/0.9.22/reqwest/">https://docs.rs/reqwest/0.9.22/reqwest/</a> 中找到，但为了方便，稍作记录。
+</p>
+</div>
+</div>
+<div id="outline-container-org36faa8a" class="outline-2">
+<h2 id="org36faa8a">get方法</h2>
+<div class="outline-text-2" id="text-org36faa8a">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">//</span><span style="color: #75715E;">&#33719;&#21462;body</span>
+<span style="color: #AE81FF;">client</span>::get(url).text()
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21457;&#36865;&#24102;header&#30340;&#35831;&#27714;&#65292;&#35831;&#21442;&#32771;&#19979;&#36793;&#30340;post&#26041;&#27861;</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org0056948" class="outline-2">
+<h2 id="org0056948">post</h2>
+<div class="outline-text-2" id="text-org0056948">
+<p>
+创建携带header的client
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">&#21019;&#24314;client</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">client</span> = <span style="color: #AE81FF;">reqwest</span>::<span style="color: #66D9EF;">Client</span>::builder()
+    .default_headers(headers)
+    .build()
+    .expect(<span style="color: #E6DB74;">"cant build"</span>);
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">post&#20256;&#21442;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">params</span> = [
+    (<span style="color: #E6DB74;">"client_id"</span>, &amp;<span style="color: #66D9EF;">GLOBAL_CONF</span>.github.client_id),
+    (<span style="color: #E6DB74;">"client_secret"</span>, &amp;<span style="color: #66D9EF;">GLOBAL_CONF</span>.github.client_secret),
+    (<span style="color: #E6DB74;">"code"</span>, &amp;code.to_string()),
+];
+<span style="color: #75715E;">// </span><span style="color: #75715E;">headers</span>
+<span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">headers</span> = <span style="color: #AE81FF;">header</span>::<span style="color: #66D9EF;">HeaderMap</span>::new();
+headers.insert(
+    <span style="color: #AE81FF;">header</span>::<span style="color: #66D9EF;">ACCEPT</span>,
+    <span style="color: #AE81FF;">header</span>::<span style="color: #66D9EF;">HeaderValue</span>::from_static(<span style="color: #E6DB74;">"application/json"</span>),
+);
+<span style="color: #75715E;">// </span><span style="color: #75715E;">url</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">url</span> = <span style="color: #E6DB74;">"https://github.com/login/oauth/access_token"</span>.to_string();
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#21457;&#36865;&#35831;&#27714;&#24182;&#22788;&#29702;&#32467;&#26524;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">res</span> = <span style="color: #F92672;">match</span> client.post(&amp;url).form(&amp;params).send() {
+    <span style="color: #66D9EF;">Ok</span>(<span style="color: #F92672;">mut</span> res) =&gt; {
+        res.text().unwrap()
+    }
+    <span style="color: #66D9EF;">Err</span>(e) =&gt; {
+        <span style="color: #F92672;">return</span> <span style="color: #66D9EF;">None</span>;
+    }
+};
+</pre>
+</div>
+<p>
+使用默认client，每次发送请求携带相应的header:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">let</span> <span style="color: #FD971F;">client</span> = <span style="color: #AE81FF;">reqwest</span>::<span style="color: #66D9EF;">Client</span>::new();
+<span style="color: #75715E;">//</span><span style="color: #75715E;">post</span>
+client.post(&amp;url).header(<span style="color: #AE81FF;">header</span>::<span style="color: #66D9EF;">AUTHORIZATION</span>,<span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"token </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, access_token)).send()
+<span style="color: #75715E;">// </span><span style="color: #75715E;">get</span>
+client.get(&amp;url).header(<span style="color: #AE81FF;">header</span>::<span style="color: #66D9EF;">AUTHORIZATION</span>,<span style="color: #F92672;">format!</span>(<span style="color: #E6DB74;">"token </span><span style="color: #E6DB74; font-style: italic;">{}</span><span style="color: #E6DB74;">"</span>, access_token)).send()
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-12-06 Fri 15:40</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

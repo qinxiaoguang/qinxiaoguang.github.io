@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-12-06 Fri 15:41 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>rust读写数据</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">rust读写数据</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org9bba410">文件读写</a>
+<ul>
+<li><a href="#org1bd9c90">toml解码</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org9bba410" class="outline-2">
+<h2 id="org9bba410">文件读写</h2>
+<div class="outline-text-2" id="text-org9bba410">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">fs</span>::<span style="color: #66D9EF;">File</span>;
+<span style="color: #F92672;">use</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">io</span>::<span style="color: #AE81FF;">prelude</span>::*;
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#25171;&#24320;&#25991;&#20214;</span>
+<span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">file</span> = <span style="color: #F92672;">match</span> <span style="color: #66D9EF;">File</span>::open(file_path) {
+    <span style="color: #66D9EF;">Ok</span>(f) =&gt; f,
+    <span style="color: #66D9EF;">Err</span>(e) =&gt; <span style="color: #F92672;">panic!</span>(<span style="color: #E6DB74;">"no such file {} exception:{}"</span>, file_path, e),
+};
+<span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">str_val</span> = <span style="color: #66D9EF;">String</span>::new();
+<span style="color: #75715E;">//</span><span style="color: #75715E;">&#35835;&#21462;&#25991;&#20214;</span>
+<span style="color: #F92672;">match</span> file.read_to_string(&amp;<span style="color: #F92672;">mut</span> str_val) {
+    <span style="color: #66D9EF;">Ok</span>(s) =&gt; s,
+    <span style="color: #66D9EF;">Err</span>(e) =&gt; <span style="color: #F92672;">panic!</span>(<span style="color: #E6DB74;">"Error Reading file: {}"</span>, e),
+};
+</pre>
+</div>
+</div>
+<div id="outline-container-org1bd9c90" class="outline-3">
+<h3 id="org1bd9c90">toml解码</h3>
+<div class="outline-text-3" id="text-org1bd9c90">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #75715E;">// </span><span style="color: #75715E;">&#25509;&#19978;&#31687;&#65292;&#22312;&#25991;&#20214;&#35835;&#21462;&#23436;&#20869;&#23481;&#21518;&#65292;&#23558;&#20869;&#23481;decode&#21363;&#21487;&#65292;&#27880;&#24847;&#36820;&#22238;&#20540;&#19968;&#23450;&#35201;&#26377;&#27880;&#37322;&#65292;&#22240;&#20026;&#36820;&#22238;&#20540;&#26159;&#36890;&#36807;&#27867;&#22411;&#20256;&#36827;&#21435;&#30340;</span>
+<span style="color: #F92672;">let</span> <span style="color: #FD971F;">app</span>: <span style="color: #66D9EF;">AppConf</span> = <span style="color: #AE81FF;">toml</span>::from_str(&amp;str_val).unwrap();
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2019-12-06 Fri 15:41</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>
