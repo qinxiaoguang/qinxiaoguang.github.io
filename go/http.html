@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-06-27 Thu 12:58 -->
+<!-- 2020-01-19 Sun 20:16 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>http请求</title>
@@ -31,6 +31,7 @@
 <ul>
 <li><a href="#orgf762aea">get</a></li>
 <li><a href="#org881c807">post</a></li>
+<li><a href="#org5506ee3">query</a></li>
 </ul>
 </div>
 </div>
@@ -193,10 +194,25 @@ postman如果要设置host需要下载postman interceptor插件，并在postman�
 </p>
 </div>
 </div>
+<div id="outline-container-org5506ee3" class="outline-2">
+<h2 id="org5506ee3">query</h2>
+<div class="outline-text-2" id="text-org5506ee3">
+<p>
+如果要传递url?xx=xx 类似这样的请求，需要使用以下方法:
+</p>
+<div class="org-src-container">
+<pre class="src src-go">q := req.URL.<span style="color: #A6E22E;">Query</span>()
+q.<span style="color: #A6E22E;">Add</span>(<span style="color: #E6DB74;">"name"</span>, <span style="color: #E6DB74;">"xxx"</span>)
+q.<span style="color: #A6E22E;">Add</span>(<span style="color: #E6DB74;">"para2"</span>, <span style="color: #E6DB74;">"xxx"</span>)
+req.URL.RawQuery = q.<span style="color: #A6E22E;">Encode</span>()
+</pre>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-06-27 Thu 12:58</p>
+<p class="date">Created: 2020-01-19 Sun 20:16</p>
 <p class="validation"></p>
 </div>
 </body>

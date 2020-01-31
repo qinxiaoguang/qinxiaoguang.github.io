@@ -129,3 +129,11 @@ func(){
 不能将host设置到req.Header中，而是使用req.Host来进行设置。
 
 postman如果要设置host需要下载postman interceptor插件，并在postman中启用。
+* query
+如果要传递url?xx=xx 类似这样的请求，需要使用以下方法:
+#+BEGIN_SRC go
+    q := req.URL.Query()
+    q.Add("name", "xxx")
+    q.Add("para2", "xxx")
+    req.URL.RawQuery = q.Encode()
+#+END_SRC
