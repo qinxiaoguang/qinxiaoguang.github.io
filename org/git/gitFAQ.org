@@ -192,3 +192,6 @@ master分支pull完代码后合并到qxg分支出现冲突，解决完冲突后g
 * refs/for
 refs/for不是git的规则，而是gerrit的规则，使用refs/for的需要进行评审，或叫做code review才能进行合并。
 refs/heads 则不需要code review,如上所述， =git push origin master= 实际就是 =git push origin refs/heads/master:refs/heads/master= 的缩写
+* git log
+精简模式显示: =git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit=
+可以将其保存到系统的 =alias= 中,或者使用git config为其做个新的命名: =git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"=

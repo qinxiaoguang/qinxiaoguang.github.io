@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-02-18 Tue 16:19 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>?的运用</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">?的运用</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgbb234bb">概述</a></li>
+<li><a href="#org2065a7d">解释</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbb234bb" class="outline-2">
+<h2 id="orgbb234bb">概述</h2>
+<div class="outline-text-2" id="text-orgbb234bb">
+<p>
+<code>?</code> 在rust中可以简化很多代码，他是什么意思呢，应该怎么用呢，依我慢慢道来。
+</p>
+</div>
+</div>
+<div id="outline-container-org2065a7d" class="outline-2">
+<h2 id="org2065a7d">解释</h2>
+<div class="outline-text-2" id="text-org2065a7d">
+<p>
+在不使用 <code>?</code> 运算符的时候，对于一些Result&lt;&gt;的返回值而言，一般需要使用match来进行处理。如以下代码:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>() -&gt; <span style="color: #66D9EF;">Result</span>&lt;<span style="color: #AE81FF;">io</span>::<span style="color: #66D9EF;">File</span>, <span style="color: #AE81FF;">io</span>::<span style="color: #66D9EF;">Error</span>&gt; {
+    <span style="color: #F92672;">let</span> <span style="color: #FD971F;">f</span> = <span style="color: #F92672;">match</span> <span style="color: #66D9EF;">File</span>::open(<span style="color: #E6DB74;">"src/main.rs"</span>){
+        <span style="color: #66D9EF;">Ok</span>(f) =&gt; f,
+        <span style="color: #66D9EF;">Err</span>(e) =&gt; <span style="color: #F92672;">return</span> <span style="color: #66D9EF;">Err</span>(e);
+    };
+    <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">s</span> = <span style="color: #66D9EF;">String</span>::new();
+    <span style="color: #F92672;">match</span> f.read_to_string(&amp;<span style="color: #F92672;">mut</span> s) {
+        <span style="color: #66D9EF;">Ok</span>(_) =&gt; <span style="color: #66D9EF;">Ok</span>(s),
+        <span style="color: #66D9EF;">Err</span>(e) =&gt; <span style="color: #F92672;">return</span> <span style="color: #66D9EF;">Err</span>(e);
+    }
+}
+</pre>
+</div>
+<p>
+代码的含义解决是，当遇到错误的时候，返回该错误，否则正常运行，如果你平常写代码的时候，经常要使用match来处理Result的返回值，且处理的模式基本一样，那么就会写很多模式相同的重复代码，为了解决这个问题，rust使用 <code>?</code> 运算符来简化代码，如:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #66D9EF;">File</span>::open(<span style="color: #E6DB74;">"src/main.rs"</span>)<span style="color: #F92672; font-weight: bold;">?</span>;
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#19978;&#36848;&#20195;&#30721;&#30340;&#20316;&#29992;&#19982;&#20197;&#19979;&#20195;&#30721;&#19968;&#26679;</span>
+<span style="color: #F92672;">match</span> <span style="color: #66D9EF;">File</span>::open(<span style="color: #E6DB74;">"src/main.rs"</span>) {
+    <span style="color: #66D9EF;">Ok</span>(f) =&gt; f,
+    <span style="color: #66D9EF;">Err</span>(e) =&gt; <span style="color: #F92672;">return</span> <span style="color: #66D9EF;">Err</span>(e),
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#26377;&#20102;?&#25805;&#20316;&#31526;&#65292;&#23601;&#21487;&#20197;&#23558;&#19978;&#36793;&#30340;&#20363;&#23376;&#26356;&#20026;&#31616;&#21270;,&#20351;&#29992; ?.</span>
+<span style="color: #66D9EF;">File</span>::open(<span style="color: #E6DB74;">"src/main.rs"</span>)<span style="color: #F92672; font-weight: bold;">?</span>.read_to_string(&amp;<span style="color: #F92672;">mut</span> s)<span style="color: #F92672; font-weight: bold;">?</span>;
+</pre>
+</div>
+
+<p>
+但是值得注意的是，现实的代码中，很多函数返回的Err类型与你的函数的Err类型并不一样，那么你使用 <code>?</code> 时就会有限制并报错，所以需要了解下 <code>?</code> 的原理是什么。 <code>?</code> 是调用 <code>Result&lt;T,E&gt;</code> 中的 <code>E::from(e)</code> 来进行操作的，即要求 <code>E</code> 已实现了对应的 <code>From trait</code> , 在 <code>std::convert::From</code> 中，有这么一个实现， <code>impl &lt;T&gt; From&lt;T&gt; for T</code> , 即所有类型均给自己实现了对应的 <code>From trait</code> ,所以对于一个类型T的变量t,  <code>T::from(t)</code> 返回的还是他自己。如:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">#[derive(Debug)]</span>
+<span style="color: #F92672;">struct</span> <span style="color: #66D9EF;">MyError</span>(<span style="color: #66D9EF;">String</span>);
+
+<span style="color: #F92672;">impl</span> <span style="color: #AE81FF;">std</span>::<span style="color: #AE81FF;">convert</span>::<span style="color: #66D9EF;">From</span>&lt;<span style="color: #AE81FF;">io</span>::<span style="color: #66D9EF;">Error</span>&gt; <span style="color: #F92672;">for</span> <span style="color: #66D9EF;">MyError</span> {
+    <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">from</span>(<span style="color: #FD971F;">err</span>: <span style="color: #AE81FF;">io</span>::<span style="color: #66D9EF;">Error</span>) -&gt; <span style="color: #66D9EF;">MyError</span> {
+        <span style="color: #66D9EF;">MyError</span>(<span style="color: #E6DB74;">"test"</span>.to_string())
+    }
+}
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>() -&gt; <span style="color: #66D9EF;">Result</span>&lt;<span style="color: #66D9EF;">String</span>, <span style="color: #66D9EF;">MyError</span>&gt; {
+    <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">s</span> = <span style="color: #66D9EF;">String</span>::new();
+    <span style="color: #75715E;">// </span><span style="color: #75715E;">?&#20250;&#33258;&#21160;&#35843;&#29992;MyError::from(e),&#20854;&#20013;e&#30340;&#31867;&#22411;&#26159;io::Error</span>
+    <span style="color: #66D9EF;">File</span>::open(<span style="color: #E6DB74;">"src/main.rs"</span>)<span style="color: #F92672; font-weight: bold;">?</span>.read_to_string(&amp;<span style="color: #F92672;">mut</span> s)<span style="color: #F92672; font-weight: bold;">?</span>;
+    <span style="color: #66D9EF;">Ok</span>(s)
+}
+</pre>
+</div>
+
+<p>
+根据这一特性，给返回的统一Error类型实现上 <code>From trait</code> , 就可以在代码里疯狂的使用 <code>?</code> ,虽然说疯狂使用不好，但是对于我这种小白而言，管他好不好，浪就够了。
+另外因为对于 <code>Box</code> 类型而言 ，在 <code>std::boxed::Box</code> 的包中，为大部分类型都实现了 <code>From trait</code> 所以对于返回类型是 <code>Result&lt;_, Box&lt;_&gt;&gt;</code> 而言 ，其也是可以使用 <code>?</code> 运算符的。
+</p>
+
+<p>
+所以此时你应该可以理解，为什么函数在返回Result&lt;T,Box&lt;dyn Error&gt;&gt;时，内部可以疯狂使用 <code>?</code> 了吧，原因就是Box为所有类型实现了From trait
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2020-02-18 Tue 16:19</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

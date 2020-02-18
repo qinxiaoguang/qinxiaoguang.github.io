@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-06-04 Tue 00:03 -->
+<!-- 2020-02-18 Tue 16:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>git常见问题</title>
@@ -79,6 +79,7 @@
 <li><a href="#orga7765a3">git使用A账户commit,git push时报错，非本人操作</a></li>
 <li><a href="#orge8ef334">.gitignore失效问题</a></li>
 <li><a href="#org35cc8a9">refs/for</a></li>
+<li><a href="#org08d024b">git log</a></li>
 </ul>
 </div>
 </div>
@@ -564,10 +565,19 @@ refs/heads 则不需要code review,如上所述， <code>git push origin master<
 </p>
 </div>
 </div>
+<div id="outline-container-org08d024b" class="outline-2">
+<h2 id="org08d024b">git log</h2>
+<div class="outline-text-2" id="text-org08d024b">
+<p>
+精简模式显示: <code>git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit</code>
+可以将其保存到系统的 <code>alias</code> 中,或者使用git config为其做个新的命名: <code>git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit"</code>
+</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: qxg</p>
-<p class="date">Created: 2019-06-04 Tue 00:03</p>
+<p class="date">Created: 2020-02-18 Tue 16:19</p>
 <p class="validation"></p>
 </div>
 </body>

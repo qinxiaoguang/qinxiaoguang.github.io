@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-02-18 Tue 16:19 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fn、FnMut、FnOnce的区别和联系</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">Fn、FnMut、FnOnce的区别和联系</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org7973a55">区别和联系</a></li>
+<li><a href="#org4055ad2">fn和Fn</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org7973a55" class="outline-2">
+<h2 id="org7973a55">区别和联系</h2>
+<div class="outline-text-2" id="text-org7973a55">
+<p>
+Fn、FnMut、FnOnce都是trait,看下源码就大致明白其中的区别和联系:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">pub</span> <span style="color: #F92672;">trait</span> <span style="color: #66D9EF;">FnOnce</span>&lt;<span style="color: #66D9EF;">Args</span>&gt; {
+    <span style="color: #E6DB74;">/// The returned type after the call operator is used.</span>
+    <span style="color: #F92672;">#[stable(feature = </span><span style="color: #E6DB74;">"fn_once_output"</span><span style="color: #F92672;">, since = </span><span style="color: #E6DB74;">"1.12.0"</span><span style="color: #F92672;">)]</span>
+    <span style="color: #F92672;">type</span> <span style="color: #66D9EF;">Output</span>;
+
+    <span style="color: #E6DB74;">/// Performs the call operation.</span>
+    <span style="color: #F92672;">#[unstable(feature = </span><span style="color: #E6DB74;">"fn_traits"</span><span style="color: #F92672;">, issue = </span><span style="color: #E6DB74;">"29625"</span><span style="color: #F92672;">)]</span>
+    <span style="color: #F92672;">extern</span> <span style="color: #E6DB74;">"rust-call"</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">call_once</span>(<span style="color: #F92672;">self</span>, <span style="color: #FD971F;">args</span>: <span style="color: #66D9EF;">Args</span>) -&gt; <span style="color: #66D9EF;">Self</span>::<span style="color: #66D9EF;">Output</span>;
+}
+
+<span style="color: #F92672;">pub</span> <span style="color: #F92672;">trait</span> <span style="color: #66D9EF;">FnMut</span>&lt;<span style="color: #66D9EF;">Args</span>&gt;: <span style="color: #66D9EF;">FnOnce</span>&lt;<span style="color: #66D9EF;">Args</span>&gt; {
+    <span style="color: #E6DB74;">/// Performs the call operation.</span>
+    <span style="color: #F92672;">#[unstable(feature = </span><span style="color: #E6DB74;">"fn_traits"</span><span style="color: #F92672;">, issue = </span><span style="color: #E6DB74;">"29625"</span><span style="color: #F92672;">)]</span>
+    <span style="color: #F92672;">extern</span> <span style="color: #E6DB74;">"rust-call"</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">call_mut</span>(&amp;<span style="color: #F92672;">mut</span> <span style="color: #F92672;">self</span>, <span style="color: #FD971F;">args</span>: <span style="color: #66D9EF;">Args</span>) -&gt; <span style="color: #66D9EF;">Self</span>::<span style="color: #66D9EF;">Output</span>;
+}
+
+<span style="color: #F92672;">pub</span> <span style="color: #F92672;">trait</span> <span style="color: #66D9EF;">Fn</span>&lt;<span style="color: #66D9EF;">Args</span>&gt;: <span style="color: #66D9EF;">FnMut</span>&lt;<span style="color: #66D9EF;">Args</span>&gt; {
+    <span style="color: #E6DB74;">/// Performs the call operation.</span>
+    <span style="color: #F92672;">#[unstable(feature = </span><span style="color: #E6DB74;">"fn_traits"</span><span style="color: #F92672;">, issue = </span><span style="color: #E6DB74;">"29625"</span><span style="color: #F92672;">)]</span>
+    <span style="color: #F92672;">extern</span> <span style="color: #E6DB74;">"rust-call"</span> <span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">call</span>(&amp;<span style="color: #F92672;">self</span>, <span style="color: #FD971F;">args</span>: <span style="color: #66D9EF;">Args</span>) -&gt; <span style="color: #66D9EF;">Self</span>::<span style="color: #66D9EF;">Output</span>;
+}
+</pre>
+</div>
+
+<p>
+继承关系: Fn &lt;- FnMut &lt;- FnOnce,也即Fn可以被当作FnMut及FnOnce,但FnMut不能被当作Fn来用。
+再看其中的方法Fn是捕获的 <code>&amp;self</code> ,所以在调用一次Fn的方法后，没有消耗掉其生命周期，所以还能继续使用，同样的FnMut不仅能继续重复调用，还能修改其环境，而FnOnce则只能调用一次,且不能修改其环境。
+</p>
+
+
+<p>
+但是FnMut 是怎么修改其环境的呢，这不就是一个函数吗，函数修改自己的什么环境呢。其实不是函数修改自己的环境，而是函数内部的代码修改外部的环境，比如外部有一个变量Vec,那么使用FnMut的话，该代码里就可以改变外部的Vec变量，如代码举例:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">main</span>() {
+    <span style="color: #F92672;">let</span> <span style="color: #F92672;">mut</span> <span style="color: #FD971F;">v</span>: <span style="color: #66D9EF;">Vec</span>&lt;<span style="color: #66D9EF;">String</span>&gt; = <span style="color: #66D9EF;">Vec</span>::new();
+    test(<span style="color: #F92672;">move</span> || v.push(<span style="color: #E6DB74;">"haha"</span>.to_string()))
+}
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>&lt;<span style="color: #66D9EF;">F</span>&gt;(<span style="color: #F92672;">mut</span> <span style="color: #FD971F;">f</span>: <span style="color: #66D9EF;">F</span>)
+<span style="color: #F92672;">where</span>
+    <span style="color: #FD971F;">F</span>: <span style="color: #66D9EF;">FnMut</span>(),
+{
+    f();
+}
+</pre>
+</div>
+<p>
+如果闭包里的变量使用到了mut类型，那么该闭包就是mut类型。如上述demo,其中的 <code>v.push()</code> 使用到的v就是mut类型，所以此时的闭包 <code>||v.push()</code> 就是FnMut类型。
+</p>
+
+<p>
+而对于move而言，可以将闭包理解为一个结构体，当使用move修饰的时候，会将对应的变量move到对应的结构体中，类似创建了一个包含变量的Fn/FnMut/FnOnce的结构体。如可以将 <code>move || v.push("haha".to_string())</code> 看做 <code>FnMut{v}</code> 因为变量v被move了，所以后边不能再被使用。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4055ad2" class="outline-2">
+<h2 id="org4055ad2">fn和Fn</h2>
+<div class="outline-text-2" id="text-org4055ad2">
+<p>
+fn是函数指针,是一个类型，不是trait，他实现了Fn/FnMut/FnOnce三个trait,所以参数是Fn/FnMut/FnOnce都可以将函数传递过去,如:
+</p>
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">p</span>(){
+    <span style="color: #F92672;">println!</span>(<span style="color: #E6DB74;">"haha"</span>);
+}
+
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>(<span style="color: #FD971F;">f</span>:<span style="color: #F92672;">fn</span>()){
+    f();
+}
+
+
+<span style="color: #F92672;">fn</span> <span style="color: #A6E22E;">test</span>&lt;<span style="color: #FD971F;">F</span>:<span style="color: #66D9EF;">Fn</span>()&gt;(<span style="color: #FD971F;">f</span>:<span style="color: #66D9EF;">F</span>){
+    f();
+}
+
+<span style="color: #75715E;">// </span><span style="color: #75715E;">&#20197;&#19979;&#20989;&#25968;&#22343;&#29983;&#25928;</span>
+<span style="color: #75715E;">//    </span><span style="color: #75715E;">test2(p);</span>
+<span style="color: #75715E;">//    </span><span style="color: #75715E;">test2(||{println!("heiei")});</span>
+<span style="color: #75715E;">//    </span><span style="color: #75715E;">test(p); // &#22240;&#20026;&#20989;&#25968;&#23454;&#29616;&#20102;Fn&#65292;&#25152;&#20197;&#21487;&#20197;&#23558;p&#20256;&#36882;&#32473;test&lt;F:Fn()&gt;(f:F)</span>
+<span style="color: #75715E;">//    </span><span style="color: #75715E;">test(||{println!("heiei")});</span>
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2020-02-18 Tue 16:19</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-02-18 Tue 16:19 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>sized与?sized</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="qxg" />
+<link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/readtheorg.css"/><link rel="stylesheet" type="text/css" href="/static/css/orgstyle.css"/>
+<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="/static/js/readtheorg.js"></script>
+<script type="text/javascript" src="/static/js/orgscript.js"></script>
+</head>
+<body>
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="/index.html"> UP </a>
+ |
+ <a accesskey="H" href="/index.html"> HOME </a>
+</div><div id="content">
+<h1 class="title">sized与?sized</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgcdfaa15">解释</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgcdfaa15" class="outline-2">
+<h2 id="orgcdfaa15">解释</h2>
+<div class="outline-text-2" id="text-orgcdfaa15">
+<p>
+rust在编译时就要知道类型的实际大小。而很多类型只有在运行时才能确定大小，如"str"类型及部分trait。
+</p>
+
+<p>
+像这些在编译时不能确定其大小的类型，叫动态大小类型。其有一个黄金规则:必须将动态大小类型的值置于某种指针之后。如str类型不能直接被创建，像代码 <code>let s:str = "aaa"</code> 是不被允许的，但可以将其放在指针后,如 <code>let s:&amp;str = "aaa"</code> ,当然智能指针也是指针的一种，所以Box&lt;str&gt;,Rc&lt;str&gt;也是合法的。
+</p>
+
+<p>
+Rust 有一个特定的 trait 来决定一个类型的大小是否在编译时可知，这就是Sized, 其表示某个类型在编译器能确定大小。Rust 隐式的为每一个泛型函数增加了 <code>Sized bound</code>, 即 <code>fn test&lt;T&gt;(t:T)</code> 会被自动编译为 <code>fn test&lt;T:Sized&gt;(t:T)</code>, 而与 <code>Sized</code> 相对立的还有一个类型是 <code>?Sized</code>, 这种语法只能用在 <code>Sized</code> 上，其表示对应的类型可能是 <code>Sized</code> 也可能不是。所以对于 <code>?Sized</code> 类型来说，在泛型函数上，只能将类型用在指针后，因为在编译时不确定其类型大小，即 <code>fn test&lt;T:?Sized&gt;test(t:&amp;T)</code>
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: qxg</p>
+<p class="date">Created: 2020-02-18 Tue 16:19</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>
