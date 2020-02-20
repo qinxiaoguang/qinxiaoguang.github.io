@@ -1,6 +1,7 @@
 #+TITLE: 宏
 
 * 定义宏
+常用的定义宏的方式
 eg:
 #+BEGIN_SRC rust
 #[macro_export] // 表明宏是可导出的，可被外部使用的
@@ -16,4 +17,90 @@ macro_rules! vec2 {
         }
     };
 }
+#+END_SRC
+* 派生宏
+即使用 =#[derive()]= 的宏：示例结构:
+#+BEGIN_SRC rust
+hello_macro
+├── Cargo.lock
+├── Cargo.toml
+├── hello_macro_derive  // 实现宏的包
+│   ├── Cargo.lock
+│   ├── Cargo.toml
+│   └── src
+│       └── lib.rs
+├── src
+│   └── lib.rs
+└── target
+    ├── debug
+    └── rls
+#+END_SRC
+
+其中在hello_macro/src/lib.rs中代码如:
+#+BEGIN_SRC rust
+//该包下的trait起到类似声明的含义
+pub trait HelloMacro {
+    fn hello_macro();
+}
+#+END_SRC
+
+在hello_macro/hello_macro_derive/cargo.toml中加入,实现派生宏需要三个包:proc_macro,syn,quote,其中proc_macro是自带的:
+#+BEGIN_SRC rust
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "0.14.4"
+quote = "0.6.3"
+#+END_SRC
+在hello_macro/hello_macro_derive/src/lib.rs中添加如下代码:
+#+BEGIN_SRC rust
+extern crate proc_macro;
+
+use crate::proc_macro::TokenStream;
+use quote::quote;
+use syn;
+
+#[proc_macro_derive(HelloMacro)] // 生成HelloMacro,会自动生成trait HelloMacro,所以前边的包中的trait HelloMacro不能添加到这个包中
+pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
+    // 构建 Rust 代码所代表的语法树
+    // 以便可以进行操作
+    let ast = syn::parse(input).unwrap();
+
+    // 构建 trait 实现
+    impl_hello_macro(&ast)
+}
+
+fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
+    let name = &ast.ident;
+    let gen = quote! { // quote包含的是希望生成的代码
+        impl HelloMacro for #name { // #name 用name的值 来替换
+            fn hello_macro() {
+                println!("这是生成的代码?");
+                println!("Hello, Macro! My name is {}", stringify!(#name));
+            }
+        }
+    };
+    gen.into()
+}
+#+END_SRC
+使用时，将上述两个包都导入即可，如:
+#+BEGIN_SRC rust
+[dependencies]
+hello_macro = { path = "../hello_macro" }
+hello_macro_derive = { path = "../hello_macro/hello_macro_derive" 
+#+END_SRC
+而此时就可以通过 =#[derive(HelloMacro)]= 来进行派生了
+
+* 类属性宏
+与派生宏类似，只不过在实现的时候将#[proc_macro_derive(xx)]换成#[proc_macro_attribute]而对应的方法名则为属性宏的名称，如:
+#+BEGIN_SRC rust
+#[proc_macro_attribute]
+pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
+#+END_SRC
+其他保持不变即可，同样也是通过quote!来生成你想要的代码。之后就可以使用该宏进行注解，如:
+#+BEGIN_SRC rust
+#[route(GET, "/")]
+fn index() {
 #+END_SRC
